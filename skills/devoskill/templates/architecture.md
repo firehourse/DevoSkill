@@ -1,60 +1,123 @@
-# [Project Name] Architecture Blueprint
+# [Project Name] Effective Architecture
 
-Briefly describe the objective of this architecture blueprint. State what the system does and why this architecture was chosen.
+This document contains the currently effective architecture only. It is written for future execution sessions, not for preserving every design conversation.
 
-## 1. System Objectives
-List the 3-5 high-level goals of this architectural design.
-* [Goal 1]: Objective description.
-* [Goal 2]: Objective description.
-* [Goal 3]: Objective description.
+## 1. Planning Mode
+- Mode: `[Greenfield | Existing System | Hybrid]`
+- Current Phase: `[Part 1 | Part 2 | ...]`
+- Objective: `[One-paragraph description of the outcome this architecture serves]`
 
-## 2. High-Level Architecture
-Provide a Mermaid flowchart diagram showing the macro components and data flow.
+## 2. Success Criteria
+- [Criterion 1]
+- [Criterion 2]
+- [Criterion 3]
+
+## 3. Current Reality / As-Is
+Only include what a later execution session must know.
+
+- Existing components:
+- Existing data/control flow:
+- Existing constraints:
+- Immovable boundaries:
+
+If this is a true greenfield project, state that there is no inherited runtime architecture yet.
+
+## 4. Target Shape / To-Be
+Describe the approved target architecture for the active scope.
+
 ```mermaid
 graph TD
-    subgraph Client Layer
-        Client[Frontend/Client HTTP]
-    end
+    Client[Client]
+    Entry[Entry Point]
+    Core[Core Component]
+    Store[State / Storage]
 
-    subgraph Service Layer
-        API[API Gateway]
-        Process[Core Processing]
-    end
-
-    Client -->|Request| API
-    API -->|Data| Process
+    Client --> Entry
+    Entry --> Core
+    Core --> Store
 ```
 
-## 3. Core Design
-Detail the critical logic paths or algorithms being used.
+## 5. Delta Scope
+- In scope:
+- Out of scope:
+- Explicitly deferred:
 
-### 3.1 [Core Component 1]
-* Design Choice: Explain the 'why' and 'how'.
-* Optimization: Details on performance choices.
+## 6. Component Responsibilities
+### 6.1 [Component Name]
+- Responsibility:
+- Inputs:
+- Outputs:
+- Dependencies:
+- Notes:
 
-### 3.2 [Core Component 2]
-* Design Choice: Further explanation of the stack or database strategy.
+### 6.2 [Component Name]
+- Responsibility:
+- Inputs:
+- Outputs:
+- Dependencies:
+- Notes:
 
-## 4. Benchmarks / KPIs
-Define the metrics that will determine if this architecture is successful.
-| Metric | Target | Current | Notes |
-|---|---|---|---|
-| P50 Latency | < 250ms | ~1.5s | Goal is to reduce by 6x |
-| CPU Usage | < 10% | ~30% | Offload to GPU |
+## 7. Key Flows
+Capture only the flows needed to implement or review this scope.
 
-## 5. Project Layout
-Show the target directory structure.
+### 7.1 Main Flow
+```mermaid
+sequenceDiagram
+    participant A as Client
+    participant B as Service
+    participant C as Dependency
+
+    A->>B: Request
+    B->>C: Call
+    C-->>B: Result
+    B-->>A: Response
+```
+
+### 7.2 State / Lifecycle Flow
+Use this section when task state, event ordering, or lifecycle transitions are important.
+
+## 8. Constraints and Boundaries
+- Technical constraints:
+- Pattern/style constraints:
+- External contracts or schemas required from the user:
+- Operational constraints:
+
+## 9. Open Questions
+List only unresolved items that block or shape implementation.
+
+- [Question]
+- [Question]
+
+Once resolved, move the answer into the effective sections above and remove the question.
+
+## 10. Phased Delivery Plan
+Use this section whenever the scope is too large for one execution pass.
+
+### Part 1
+- Goal:
+- Components touched:
+- Must not change:
+- Exit condition:
+
+### Part 2
+- Goal:
+- Components touched:
+- Must not change:
+- Exit condition:
+
+## 11. Project Layout
+Show only the relevant target or affected structure.
+
 ```text
 /
 ├── component1/
-│   └── main.py
 ├── component2/
-└── docker-compose.yml
+└── docs/
 ```
 
-## 6. Resource Strategy
-* Memory/VRAM: Expected footprint.
-* CPU: Threading strategy or scaling limits.
+## 12. Verification Surface
+State how later sessions should judge whether the architecture has been respected.
 
----
-Architectural Notes: Any final remarks, warnings, or transition notes for the developer.
+- Key files/modules to inspect:
+- Key flows to verify:
+- Human-provided inputs still required:

@@ -8,29 +8,42 @@ When invoking a Subagent (e.g., `planner`, `developer`, `reviewer`), you must:
 1. **Explicitly Specify the Target Files:** A Subagent only needs the *exact* subset of documents relevant to its task. Do not pass the entire project space.
 2. **Define the Expected Output:** The Subagent must return discrete file modifications (`task.md`, `architecture.md`, `src/*.py`)—not a conversational summary.
 3. **Assert the 600-line Rule:** Every Subagent call implicitly carries the `< 600 lines per file` global constraint.
+4. **Pass Only Effective Planning Context:** Default context is the active phase in `task.md`, the effective sections of `architecture.md`, and any directly required code or contracts. Do not pass planning history unless the task explicitly requires it.
+5. **Respect Human Handoffs:** If schema, credentials, production state, or sensitive operations depend on the user, the subagent must stop at that boundary.
 
 ## 2. Core Subagent Definitions & Required Contexts
 
 ### The Planner Subagent
-**Role:** Generates software blueprints and atomic task lists (`architecture.md`, `task.md`).
+**Role:** Generates effective architecture and active task plans (`architecture.md`, `task.md`).
 **Required Inputs:**
 - User intent/specifications.
-- If existing project: `As-Is vs To-Be Diagram` of current flow vs requested delta.
+- Thinking Phase classification.
+- If existing or hybrid project: current reality and allowed delta.
 - Standard Template: `DevoSkill/templates/architecture.md`.
 
 ### The Developer Subagent
 **Role:** Executes code line-by-line exactly as dictated by the pre-approved `task.md`.
 **Required Inputs:**
-- The finalized `task.md`.
+- The active phase in `task.md`.
+- The effective architecture sections referenced by that phase.
 - Ensure `.devoskill/` symlink exists to the centralized `skilldocs/<project_name>` folder.
 - *Strict Rule:* The Developer does not alter the architecture. If architecture changes are required, it must halt and return control to the Orchestrator/Planner.
 
 ### The Reviewer Subagent
-**Role:** Reviews the git diffs against the `architecture.md` to ensure structural alignment.
+**Role:** Reviews the git diffs against the effective `architecture.md` and active `task.md` to ensure structural alignment.
 **Required Inputs:**
 - The updated source code (or diffs).
-- The `architecture.md` and `task.md` references.
+- The effective architecture sections.
+- The active task phase.
 
 ## 3. Session Isolation Mechanism
 When communicating with the user or transitioning between phases, explicitly state:
 *"Delegating to [Subagent Name] with context [File List]. Output expects [File Updates]."*
+
+## 4. Context Budget Rule
+The orchestrator is responsible for preventing context explosion.
+
+- Prefer passing file excerpts, phase summaries, and specific interfaces over entire repositories.
+- Prefer the current phase over all phases.
+- Prefer effective architecture over planning history.
+- If a subagent needs more context, expand narrowly and explicitly instead of sending everything.

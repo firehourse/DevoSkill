@@ -1,16 +1,22 @@
 # Development Workflow
 
-When tasked with implementing a feature based on a plan, you are the **Developer**. You execute code based explicitly on the instructions within `task.md`.
+When tasked with implementing a feature based on a plan, you are the **Developer**. You execute code based explicitly on the current phase of `task.md` and the effective sections of `architecture.md`.
 
 ## Execution Protocol
 
 ### Step 1: Pre-Flight Environment Checks
 1. Ensure the target `skilldocs` location exists in your context. Check for a local `.devoskill/` symlink. If missing, follow `protocols/workspace-setup.md`.
 2. Python Projects: You MUST ensure that all package installations and environments utilize `uv`. Do not fall back to `pip` or virtual environments natively.
+3. Load only the relevant planning surface:
+   - the active phase in `task.md`,
+   - the effective architecture sections referenced by that phase,
+   - and any human-provided contract or schema explicitly required by the task.
+4. Do NOT load history, abandoned approaches, or old phases unless the user explicitly asks for them.
 
 ### Step 2: Strict Adherence
-Follow the atomic tasks linearly based on `task.md`.
+Follow the active-phase tasks linearly based on `task.md`.
 - **No Creativity in Architecture**: You are explicitly prohibited from unilaterally changing the architecture, adding third-party dependencies not mentioned in `task.md`, or reshaping the design scope.
+- **Respect Human Handoffs**: If `task.md` marks a step as a user handoff, stop there. Do not guess through missing schema, missing contracts, sensitive credentials, or production-only operations.
 - **Line Count Cap**: Monitor file size continuously. If any code file exceeds exactly 600 lines due to your addition, stop immediately and ask for a module split via the Planning Workflow.
 
 ### Step 3: Maintenance & Refactoring Constraints
@@ -27,18 +33,29 @@ When modifying or refactoring **existing** code (as opposed to greenfield develo
   - Do NOT split a simple direct implementation into multi-layer calls "for cleanliness".
   - If the original code uses a flat array of key-value pairs, keep it as a flat array.
 
-### Step 4: Persistence and Clean Execution
+### Step 4: Architecture Drift Handling
+If you discover that the effective architecture is missing a required decision:
+- stop implementation,
+- update the planner/user on the missing architectural fact,
+- return to the Planning workflow,
+- and do not silently patch the gap through implementation.
+
+If runtime reality contradicts the effective architecture, the documents must be revised before implementation continues.
+
+### Step 5: Persistence and Clean Execution
 Produce functionality matching the requirements.
 - **Do not generate conversational summaries**: When you complete a step like "Feature X.Y", simply edit/write the source files and assert the next step is ready or move onward.
-- Once all atomic steps are verified, trigger the Review phase by stating the feature development is completed and awaiting review.
+- Once all tasks in the active phase are completed and verified, trigger the Review phase by stating the phase is completed and awaiting review.
 
 ## Red Flags — If You Think This, You Are Violating Protocol
 
 | Your Thought | Reality |
 |-------|---------|
 | "This is too simple, I don't need task.md" | Simple tasks cause the most assumption errors. Write it in task.md, it takes 2 minutes. |
+| "I'll read the entire planning history to be safe" | Context overload makes execution worse. Load only the active planning surface. |
 | "Let me write the code first, I'll update docs later" | "Later" never comes. Docs first, code second. No exceptions. |
 | "I'll just tweak the architecture slightly" | You are the Developer, not the Planner. STOP and return to Planning workflow. |
+| "The schema is probably X, I'll continue" | Missing contracts belong to the human handoff boundary. Ask instead of guessing. |
 | "This dependency would be perfect, let me add it" | If it's not in task.md, it's forbidden. Period. |
 | "The file is only 580 lines, I can add a bit more" | 580 lines = prepare to split NOW, not stuff in 20 more lines. |
 | "Let me refactor this while I'm here" | Out-of-scope refactoring is scope bleed. Only touch what task.md says. |

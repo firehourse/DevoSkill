@@ -19,6 +19,7 @@ When presented with a user request, identify the appropriate phase and read the 
 
 - **For New Project Planning / Architecture Design:**
   - Read `workflows/01-planning.md`
+  - During planning, you MUST complete the Thinking Phase and then select exactly one planning mode: Greenfield, Existing System, or Hybrid.
 - **For Executing Development Tasks:**
   - Read `workflows/02-development.md`
 - **For Maintaining, Refactoring, or Modifying Existing Code:**
@@ -32,3 +33,4 @@ When presented with a user request, identify the appropriate phase and read the 
 To properly isolate workspace paths, map the directories for document persistence (`skilldocs`), and interface with subagents:
 - For Workspace/Directories Configuration (`skilldocs`, `.devoskill`): Read `protocols/workspace-setup.md`
 - For Subagent Orchestration (Planning, Developing): Read `protocols/subagent-orchestration.md`
+- For Thinking Phase and planning-mode routing: Read `protocols/thinking-phase.md` and the relevant planning-mode protocol selected by `workflows/01-planning.md`

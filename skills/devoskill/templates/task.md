@@ -1,39 +1,69 @@
-# [Project/Feature Name] Execution Task List
+# [Project/Feature Name] Active Task Plan
 
-This document acts as the sole source of truth for the Developer subagent. All actions must map to architecture.md.
+This document contains only the currently active executable work. It is the source of truth for the Developer subagent during the current phase.
 
-Global Constraints Reminder
+## Global Constraints Reminder
 - NO FILE shall exceed 600 lines. Split tasks if necessary.
-- Adhere to Python ecosystem rules (uv) if applicable.
+- Adhere to Python ecosystem rules (`uv`) if applicable.
+- If `architecture.md` and `task.md` disagree, stop and return to planning.
+- Do not load history or abandoned plans unless the user explicitly asks for them.
 
-## 1. Setup & Environment
-* [Setup 1.1]: Create .devoskill symlink if not already present.
-* [Setup 1.2]: Initialize pyproject.toml with uv (if Python).
-  * Packages: fastapi, uvicorn, etc.
+## 1. Active Phase Summary
+- Current Phase: `[Part 1 | Part 2 | ...]`
+- Goal:
+- Depends on architecture sections:
+- User inputs still required:
+- Stop and ask the user if:
 
-## 2. Core Implementation Tasks
+## 2. Setup and Preconditions
+- [ ] `.devoskill` symlink verified if required
+- [ ] Required schema / contract / sample payload from user collected
+- [ ] Existing pattern decision confirmed: `[Follow Existing Patterns | Adopt New Patterns]`
+- [ ] Environment prerequisites confirmed
 
-### 2.1 [Module Name, e.g., Gateway Service]
-* [Task 2.1.1]: File: src/api.py
-  * Dependency: FastAPI
-  * Logic: Expose POST endpoint /api/v1/process.
-* [Task 2.1.2]: File: src/core/image.py
-  * Logic: Implement fixed 512x512 resize logic using cv2.INTER_LINEAR.
+## 3. Execution Tasks
 
-### 2.2 [Module Name, e.g., Backend Integration]
-* [Task 2.2.1]: File: src/core/grpc_client.py
-  * Logic: Instantiate client and send FP32 tensors asynchronously.
-  * Validation: Must handle connection retries natively.
+### 3.1 [Task Group / Component]
+- Scope:
+- Files / modules:
+- Constraints:
 
-### 2.3 [Deployment]
-* [Task 2.3.1]: File: docker-compose.yml
-  * Logic: Orchestrate services setting explicit resource limits.
+- [ ] **Task 3.1.1**
+  - Target:
+  - Action:
+  - Expected output:
+  - Verification:
 
----
+- [ ] **Task 3.1.2**
+  - Target:
+  - Action:
+  - Expected output:
+  - Verification:
 
-Developer Check-Off Protocol
-- [ ] Symlink .devoskill validated.
-- [ ] Task 1.1 - 1.2 Completed.
-- [ ] Task 2.1.1 - 2.1.2 Code is clean and under 600 lines.
-- [ ] Task 2.3.1 Deployment configurations created.
-- [ ] Review Request Generated.
+### 3.2 [Task Group / Component]
+- Scope:
+- Files / modules:
+- Constraints:
+
+- [ ] **Task 3.2.1**
+  - Target:
+  - Action:
+  - Expected output:
+  - Verification:
+
+## 4. Human Handoff Points
+List any steps the agent must not guess through.
+
+- [ ] Human provides schema / contract / credentials / sample data
+- [ ] Human approves boundary change
+- [ ] Human executes sensitive environment step
+
+## 5. Out of Scope for This Phase
+- [Item]
+- [Item]
+
+## 6. Completion Criteria for This Phase
+- [ ] All tasks in the active phase are completed
+- [ ] No file exceeds 600 lines
+- [ ] Work matches the active architecture sections
+- [ ] Remaining work is either moved to the next phase or handed back to the user

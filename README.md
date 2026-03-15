@@ -9,15 +9,27 @@ It prevents AI "hallucinations" and "context explosion" by shifting the agent's 
 2. **File Size Limits:** No single file (code or markdown) shall exceed 600 lines. The agent will proactively split files to enforce modularity.
 3. **Python Ecosystem:** If the project uses Python, the agent is mandated to use `uv` for all dependency and environment management.
 4. **Document Persistence (SkillDocs):** The agent will not generate useless conversational summaries. The project state is maintained entirely via writing to `architecture.md` and `task.md` centralized in a `skilldocs` directory, isolating it from your source code repository.
+5. **Effective Planning Surface:** `architecture.md` stores only the current effective architecture, and `task.md` stores only the active executable phase. History is not part of the default context.
 
 ## How It Works
 
 DevoSkill acts as a lightweight router. Instead of loading a massive prompt into your context window—which causes context pollution—you only load `skills/devoskill/SKILL.md`. 
 
 When the agent detects what phase of development you are in, it dynamically reads the exact workflow required for that moment:
-- **For Planning (`skills/devoskill/workflows/01-planning.md`):** It generates an "As-Is vs To-Be" diagram and creates an `architecture.md`.
-- **For Development (`skills/devoskill/workflows/02-development.md`):** It blindly implements the approved `task.md` sequentially.
-- **For Performance Debugging (`skills/devoskill/workflows/04-performance-debugging.md`):** It utilizes flame graphs, establishes baselines, and refactors logic based on quantitative metrics.
+- **For Planning (`skills/devoskill/workflows/01-planning.md`):** It enters a Thinking Phase, classifies the work as Greenfield, Existing System, or Hybrid, then writes an effective `architecture.md` and an active-phase `task.md`.
+- **For Development (`skills/devoskill/workflows/02-development.md`):** It executes only the active phase, using the minimum effective planning context required.
+- **For Review (`skills/devoskill/workflows/03-review.md`):** It verifies that code matches the effective architecture, active phase tasks, and declared boundaries.
+- **For Performance Debugging (`skills/devoskill/workflows/04-performance-debugging.md`):** It establishes quantitative baselines and writes only effective benchmark and optimization changes back into the planning files.
+
+## Planning Philosophy
+
+DevoSkill is optimized for collaboration with LLMs under context pressure, not for storing every discussion artifact.
+
+- **Thinking Phase First:** Before planning, the agent must build the minimum reality model required to reason safely.
+- **Mode-Aware Planning:** New systems, existing systems, and hybrid changes use different planning logic.
+- **Phase-Based Execution:** Large changes are split into architecture parts and task phases so later sessions can reload them cleanly.
+- **Human Boundary Respect:** If DB schema, production contracts, credentials, or sensitive runtime state are missing, the agent asks the user instead of guessing.
+- **Minimal Default Context:** Future sessions should be able to read only the effective architecture and current task phase, not a pile of planning history.
 
 ## Installation & Usage
 
@@ -56,14 +68,18 @@ DevoSkill/
         ├── config/
         │   └── workspace-registry.md         # Tracks where documentation is saved per-project
         ├── protocols/
+        │   ├── thinking-phase.md             # Converge on reality before writing planning docs
+        │   ├── planning-greenfield.md        # Planning rules for net-new systems
+        │   ├── planning-existing.md          # Planning rules for changes to existing systems
+        │   ├── planning-hybrid.md            # Planning rules for new capability inside old systems
         │   ├── subagent-orchestration.md     # Rules for the AI to delegate tasks
         │   └── workspace-setup.md            # Rules for creating symlinks and skilldocs
         ├── workflows/
-        │   ├── 01-planning.md                # Architecture and task generation
-        │   ├── 02-development.md             # Strict code execution
-        │   ├── 03-review.md                  # Validation checks
-        │   └── 04-performance-debugging.md   # Profiling, baselining, and flame graphs
-        └── templates/                        # Best-practice outlines for md generation
+        │   ├── 01-planning.md                # Thinking phase + effective architecture/task generation
+        │   ├── 02-development.md             # Active-phase execution rules
+        │   ├── 03-review.md                  # Effective-architecture compliance checks
+        │   └── 04-performance-debugging.md   # Profiling, baselining, and benchmark-driven refactoring
+        └── templates/                        # Effective architecture and active task templates
 ```
 
 ## Contributing

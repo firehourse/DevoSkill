@@ -20,5 +20,6 @@ If debugging a backend or inference service:
 
 ## 4. Documentation & Reporting
 - Do not output lengthy text summaries.
-- Update the Benchmarks table in `skilldocs/<Project_Name>/architecture.md` with "Before vs After" results.
-- Translate any findings from the flame graph directly into actionable refactoring steps in `task.md`.
+- Update the effective `architecture.md` with only the benchmark and constraint changes that future execution sessions must know.
+- Translate findings into the active phase of `task.md` or create a new phase if the optimization scope is too broad.
+- If performance work reveals an architectural boundary change, return to the Planning workflow before implementation continues.
