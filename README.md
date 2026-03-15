@@ -49,11 +49,25 @@ Whenever Cursor Chat opens, the `.mdc` file forces the AI to consult `skills/dev
 For Claude Code environments, you can inject DevoSkill directly via the provided configuration:
 - Copy the `.claude.json` configuration to your repository or merge it with your `.clauderc` to establish the `projectDependencies`. 
 
-### 3. CLI Agents (Codex / OpenCode / Gemini)
-You can directly instruct the agent to fetch the execution protocol from GitHub using the provided `.codex/INSTALL.md` method:
-```text
-Fetch and follow the action-based execution protocol defined in https://raw.githubusercontent.com/firehourse/DevoSkill/main/skills/devoskill/SKILL.md
+### 3. Codex (Bootstrap via AGENTS.md)
+Codex does not use Cursor rule files. To make DevoSkill load automatically in Codex, install the provided bootstrap `AGENTS.md` into the workspace root that Codex runs from.
+
+1. Clone DevoSkill into a stable local path, for example `~/workspace/DevoSkill`
+2. Copy the bootstrap template:
+   ```bash
+   cp ~/workspace/DevoSkill/.codex/AGENTS.bootstrap.md /path/to/your/workspace/AGENTS.md
+   ```
+3. Replace `{{DEVOSKILL_ROOT}}` with your local clone path
+
+When Codex starts inside that workspace, the bootstrap file instructs it to load `skills/devoskill/SKILL.md` before doing any work.
+
+If you also want DevoSkill discoverable as a registered local skill, create:
+```bash
+mkdir -p ~/.agents/skills
+ln -s ~/workspace/DevoSkill/skills/devoskill ~/.agents/skills/devoskill
 ```
+
+See `.codex/INSTALL.md` for the complete Codex bootstrap instructions.
 
 ## Directory Structure
 ```text

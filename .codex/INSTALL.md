@@ -1,16 +1,36 @@
 # Codex Installation & Usage
 
-To enforce DevoSkill within Codex, initialize your session with the following command to bootstrap the context from the remote repository.
+Codex does not consume Cursor `.mdc` rules. To make DevoSkill auto-start in Codex, bootstrap it with an `AGENTS.md` file that points at the local DevoSkill clone.
 
-```test
-Fetch and rigorously adhere to the constraints defined in:
-https://raw.githubusercontent.com/firehourse/DevoSkill/main/skills/devoskill/SKILL.md
+## Recommended: workspace bootstrap
 
-Do not proceed with any task until you have read the global constraints and understood the Dynamic Workflow Routing.
-```
+1. Clone DevoSkill somewhere stable, for example:
+   ```bash
+   git clone git@github.com:firehourse/DevoSkill.git ~/workspace/DevoSkill
+   ```
+2. Copy the bootstrap template into the workspace root where Codex will run:
+   ```bash
+   cp ~/workspace/DevoSkill/.codex/AGENTS.bootstrap.md /path/to/your/workspace/AGENTS.md
+   ```
+3. Replace `{{DEVOSKILL_ROOT}}` in `AGENTS.md` with the absolute path to the local clone.
 
-If DevoSkill is cloned locally, run:
+Once present, Codex will read that `AGENTS.md` on startup for that workspace and load DevoSkill before handling requests.
+
+## Optional: skill registration
+
+If you also want DevoSkill to appear in Codex skill discovery, register it as a local skill:
+
 ```bash
-/add path/to/DevoSkill/skills/devoskill/SKILL.md
+mkdir -p ~/.agents/skills
+ln -s ~/workspace/DevoSkill/skills/devoskill ~/.agents/skills/devoskill
 ```
-Then instruct Codex: "You are the DevoSkill Orchestrator. Await my next instruction based on the SKILL.md rules."
+
+This registration helps discovery, but the `AGENTS.md` bootstrap is what makes DevoSkill mandatory at startup.
+
+## Manual fallback
+
+If you cannot write `AGENTS.md`, start the session with this instruction:
+
+```text
+Load and follow the DevoSkill entrypoint at /absolute/path/to/DevoSkill/skills/devoskill/SKILL.md before doing anything else.
+```
