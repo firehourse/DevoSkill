@@ -21,24 +21,28 @@ When the agent detects what phase of development you are in, it dynamically read
 
 ## Installation & Usage
 
-### Standard Installation (Git Clone)
-Since DevoSkill is a collection of Markdown protocols, you can clone it directly into your workspace or a centralized tools path.
+DevoSkill provides native, plug-and-play integrations for the most popular AI agents to ensure global constraints are applied automatically.
 
-```bash
-git clone git@github.com:firehourse/DevoSkill.git ~/workspace/DevoSkill
-```
+### 1. Cursor IDE (Native Rule Integration)
+To have Cursor automatically follow DevoSkill on any project:
+1. Clone the repository into your workspace: `git clone git@github.com:firehourse/DevoSkill.git ~/workspace/DevoSkill`
+2. **Auto-Load:** Copy or symlink the specific agent rule into your target project:
+   ```bash
+   mkdir -p .cursor/rules
+   cp ~/workspace/DevoSkill/.cursor/rules/devoskill.mdc .cursor/rules/
+   ```
+Whenever Cursor Chat opens, the `.mdc` file forces the AI to consult `SKILL.md` before generating code.
 
-### Usage in Cursor
-When starting a new session in Cursor, simply reference the `SKILL.md` file as the context entry point.
-1. Open Cursor Chat.
-2. Type `@SKILL.md` (pointing to the cloned DevoSkill directory) and say: *"Let's plan a new project based on this skill."* 
-3. The agent will read the global constraints and route itself to the `01-planning` workflow automatically.
+### 2. Claude Code Integration
+For Claude Code environments, you can inject DevoSkill directly via the provided configuration:
+- Copy the `.claude.json` configuration to your repository or merge it with your `.clauderc` to establish the `projectDependencies`. 
 
-### Usage in CLI Agents (Codex / OpenCode)
-You can directly instruct the agent to fetch the execution protocol from GitHub:
+### 3. CLI Agents (Codex / OpenCode / Gemini)
+You can directly instruct the agent to fetch the execution protocol from GitHub using the provided `.codex/INSTALL.md` method:
 ```text
 Fetch and follow the action-based execution protocol defined in https://raw.githubusercontent.com/firehourse/DevoSkill/main/SKILL.md
 ```
+
 
 ## Directory Structure
 ```text

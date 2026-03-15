@@ -1,0 +1,17 @@
+---
+description: DevoSkill Execution Protocol - triggers automatically for planning, development, and reviews. 
+globs: *
+alwaysApply: true
+---
+
+# DevoSkill Agent Loader
+
+You are operating under the **DevoSkill Orchestration Engine**.
+Your standard behavior is overridden by DevoSkill's strict action-based execution protocol.
+
+## Immediate Directive
+1. Before attempting to solve the user's prompt or writing *any* code, you MUST locate and read the global constraints in `SKILL.md`.
+2. Determine where DevoSkill is installed (usually linked via `.devoskill` or located centrally in the workspace).
+3. Follow the `Dynamic Workflow Routing` dictated in `SKILL.md` precisely. Do NOT hallucinate architectures or skip the `task.md` generation phase.
+
+If no `SKILL.md` is found in the project root, ask the user to configure DevoSkill or verify their workspace registry.
