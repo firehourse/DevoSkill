@@ -21,6 +21,8 @@ When presented with a user request, identify the appropriate phase and read the 
   - Read `workflows/01-planning.md`
 - **For Executing Development Tasks:**
   - Read `workflows/02-development.md`
+- **For Maintaining, Refactoring, or Modifying Existing Code:**
+  - Read `workflows/02-development.md` — Pay special attention to **Step 3: Maintenance & Refactoring Constraints**.
 - **For Diagnostics, Profiling, or Performance Bottlenecks:**
   - Read `workflows/04-performance-debugging.md`
 - **For Reviewing Code against Architecture:**

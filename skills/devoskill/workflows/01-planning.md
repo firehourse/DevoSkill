@@ -22,3 +22,15 @@ Deconstruct the fully approved `architecture.md` into discrete, executable atomi
 Use `DevoSkill/templates/task.md`.
 Ensure exact file names and logics are specified.
 No task should result in a file exceeding 600 lines. Focus heavily on modularization.
+
+## Red Flags — If You Think This, You Are Violating Protocol
+
+| Your Thought | Reality |
+|-------|---------|
+| "The user's intent is obvious, I can skip the As-Is diagram" | Assumptions kill projects. If the project exists, the As-Is diagram is mandatory. |
+| "I'll start coding and plan as I go" | Planning is a prerequisite, not a suggestion. No code without approved architecture.md. |
+| "This architecture detail is minor, I'll decide it myself" | ALL technical decisions go into architecture.md for user approval. You do not have autonomy here. |
+| "I'll generate task.md later once I understand the codebase better" | task.md is generated DURING planning, not after you start coding. |
+| "One big task is fine, it's all related" | Atomic steps only. If a task touches more than 2 concepts, split it. |
+| "The user will probably want X too, let me include it" | Do not assume. Ask. Scope creep starts with 'probably'. |
+
