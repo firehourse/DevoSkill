@@ -1,4 +1,4 @@
 {
-  "projectDependencies": ["DevoSkill/SKILL.md"],
-  "customInstructions": "You are enhanced by DevoSkill. Never write code without consulting your target SKILLDOCS directory's task.md. If planning, output an architecture.md and task.md. See DevoSkill/SKILL.md for strict adherence routes."
+  "projectDependencies": ["DevoSkill/skills/devoskill/SKILL.md"],
+  "customInstructions": "You are enhanced by DevoSkill. Never write code without consulting your target SKILLDOCS directory's task.md. If planning, output an architecture.md and task.md. See DevoSkill/skills/devoskill/SKILL.md for strict adherence routes."
 }

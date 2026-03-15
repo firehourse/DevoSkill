@@ -12,12 +12,12 @@ It prevents AI "hallucinations" and "context explosion" by shifting the agent's 
 
 ## How It Works
 
-DevoSkill acts as a lightweight router. Instead of loading a massive prompt into your context window—which causes context pollution—you only load `SKILL.md`. 
+DevoSkill acts as a lightweight router. Instead of loading a massive prompt into your context window—which causes context pollution—you only load `skills/devoskill/SKILL.md`. 
 
 When the agent detects what phase of development you are in, it dynamically reads the exact workflow required for that moment:
-- **For Planning (`workflows/01-planning.md`):** It generates an "As-Is vs To-Be" diagram and creates an `architecture.md`.
-- **For Development (`workflows/02-development.md`):** It blindly implements the approved `task.md` sequentially.
-- **For Performance Debugging (`workflows/04-performance-debugging.md`):** It utilizes flame graphs, establishes baselines, and refactors logic based on quantitative metrics.
+- **For Planning (`skills/devoskill/workflows/01-planning.md`):** It generates an "As-Is vs To-Be" diagram and creates an `architecture.md`.
+- **For Development (`skills/devoskill/workflows/02-development.md`):** It blindly implements the approved `task.md` sequentially.
+- **For Performance Debugging (`skills/devoskill/workflows/04-performance-debugging.md`):** It utilizes flame graphs, establishes baselines, and refactors logic based on quantitative metrics.
 
 ## Installation & Usage
 
@@ -31,7 +31,7 @@ To have Cursor automatically follow DevoSkill on any project:
    mkdir -p .cursor/rules
    cp ~/workspace/DevoSkill/.cursor/rules/devoskill.mdc .cursor/rules/
    ```
-Whenever Cursor Chat opens, the `.mdc` file forces the AI to consult `SKILL.md` before generating code.
+Whenever Cursor Chat opens, the `.mdc` file forces the AI to consult `skills/devoskill/SKILL.md` before generating code.
 
 ### 2. Claude Code Integration
 For Claude Code environments, you can inject DevoSkill directly via the provided configuration:
@@ -40,25 +40,30 @@ For Claude Code environments, you can inject DevoSkill directly via the provided
 ### 3. CLI Agents (Codex / OpenCode / Gemini)
 You can directly instruct the agent to fetch the execution protocol from GitHub using the provided `.codex/INSTALL.md` method:
 ```text
-Fetch and follow the action-based execution protocol defined in https://raw.githubusercontent.com/firehourse/DevoSkill/main/SKILL.md
+Fetch and follow the action-based execution protocol defined in https://raw.githubusercontent.com/firehourse/DevoSkill/main/skills/devoskill/SKILL.md
 ```
-
 
 ## Directory Structure
 ```text
 DevoSkill/
-├── SKILL.md                          # The lightweight entry point & router
-├── config/
-│   └── workspace-registry.md         # Tracks where documentation is saved per-project
-├── protocols/
-│   ├── subagent-orchestration.md     # Rules for the AI to delegate tasks
-│   └── workspace-setup.md            # Rules for creating symlinks and skilldocs
-├── workflows/
-│   ├── 01-planning.md                # Architecture and task generation
-│   ├── 02-development.md             # Strict code execution
-│   ├── 03-review.md                  # Validation checks
-│   └── 04-performance-debugging.md   # Profiling, baselining, and flame graphs
-└── templates/                        # Best-practice outlines for md generation
+├── .cursor/rules/devoskill.mdc       # Native IDE Rule Integration
+├── .claude.json                      # Claude Configuration Block
+├── .codex/INSTALL.md                 # CLI Install script
+├── README.md                         # This file
+└── skills/
+    └── devoskill/
+        ├── SKILL.md                          # The lightweight entry point & router
+        ├── config/
+        │   └── workspace-registry.md         # Tracks where documentation is saved per-project
+        ├── protocols/
+        │   ├── subagent-orchestration.md     # Rules for the AI to delegate tasks
+        │   └── workspace-setup.md            # Rules for creating symlinks and skilldocs
+        ├── workflows/
+        │   ├── 01-planning.md                # Architecture and task generation
+        │   ├── 02-development.md             # Strict code execution
+        │   ├── 03-review.md                  # Validation checks
+        │   └── 04-performance-debugging.md   # Profiling, baselining, and flame graphs
+        └── templates/                        # Best-practice outlines for md generation
 ```
 
 ## Contributing
