@@ -9,8 +9,9 @@ This is the entry point for DevoSkill. It defines the absolute minimum constrain
 
 ## 1. Global Constraints
 - **File Limits:** No single file (code or markdown) shall exceed 600 lines. Refactor immediately if crossed.
+- **Workspace Registry:** Before any file generation or planning, you MUST read `config/workspace-registry.md` to dynamically map the current workspace to its designated `skilldocs` directory.
 - **Python Ecosystem:** If utilizing Python, `uv` is mandatory for dependency and script execution.
-- **No Idle Summaries:** Maintain project state exclusively via file modifications in `skilldocs`.
+- **No Idle Summaries:** Maintain project state exclusively via file modifications in the mapped `skilldocs`.
 - **Pre-Requisite Planning:** Do not write code without an explicit `task.md`.
 
 ## 2. Dynamic Workflow Routing
