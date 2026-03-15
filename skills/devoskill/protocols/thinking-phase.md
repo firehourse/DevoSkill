@@ -73,4 +73,4 @@ Do NOT promote:
 - every intermediate thought,
 - obsolete plans from earlier iterations.
 
-If history matters, store it separately so future sessions do not load it by default.
+If history matters, store it separately under `<SKILLDOCS_DIR>/notes/` so future sessions do not load it by default.
