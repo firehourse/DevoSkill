@@ -20,6 +20,8 @@ When presented with a user request, identify the appropriate phase and read the 
   - Read `workflows/01-planning.md`
 - **For Executing Development Tasks:**
   - Read `workflows/02-development.md`
+- **For Diagnostics, Profiling, or Performance Bottlenecks:**
+  - Read `protocols/performance-debugging.md`
 - **For Reviewing Code against Architecture:**
   - Read `workflows/03-review.md`
 
