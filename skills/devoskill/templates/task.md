@@ -14,7 +14,11 @@ This document contains only the currently active executable work. It is the sour
 - Depends on architecture sections:
 - Implementation approval status: `[Planning only | Approved to implement]`
 - Explicit go-ahead required before code changes: `[Yes | No]`
+- Execution status: `[Not started | In progress | Blocked | Ready for review | Completed]`
+- Last writeback timestamp / session note:
 - User inputs still required:
+- Current blocker:
+- Next user handoff:
 - Stop and ask the user if:
 
 ## 2. Setup and Preconditions
@@ -23,6 +27,7 @@ This document contains only the currently active executable work. It is the sour
 - [ ] Existing pattern decision confirmed: `[Follow Existing Patterns | Adopt New Patterns]`
 - [ ] Environment prerequisites confirmed
 - [ ] Explicit implementation go-ahead recorded from the user
+- [ ] Writeback expectations for `task.md` / `architecture.md` confirmed
 
 ## 3. Execution Tasks
 
@@ -36,12 +41,14 @@ This document contains only the currently active executable work. It is the sour
   - Action:
   - Expected output:
   - Verification:
+  - Status / writeback note:
 
 - [ ] **Task 3.1.2**
   - Target:
   - Action:
   - Expected output:
   - Verification:
+  - Status / writeback note:
 
 ### 3.2 [Task Group / Component]
 - Scope:
@@ -53,6 +60,7 @@ This document contains only the currently active executable work. It is the sour
   - Action:
   - Expected output:
   - Verification:
+  - Status / writeback note:
 
 ## 4. Human Handoff Points
 List any steps the agent must not guess through.
@@ -70,4 +78,6 @@ List any steps the agent must not guess through.
 - [ ] All tasks in the active phase are completed
 - [ ] Effective planning markdown files remain under 600 lines
 - [ ] Work matches the active architecture sections
+- [ ] `task.md` writeback reflects actual execution status and verification
+- [ ] `architecture.md` is updated if implementation changed effective architecture
 - [ ] Remaining work is either moved to the next phase or handed back to the user

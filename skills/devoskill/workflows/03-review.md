@@ -14,14 +14,19 @@ When tasked with verifying implemented code against its original plan, you act a
 Perform the checks:
 1. **Scope Bleed**: Confirm the code does not introduce architectural paradigms unsaid in the blueprint. No new DBs, no new untracked frameworks, no crossing of declared human handoff boundaries.
 2. **Planning Surface Size Check**: Confirm the effective planning markdown files (`architecture.md`, `task.md`, and any loaded `notes/*.md`) do not exceed 600 lines. Flag them if they do, since oversized planning docs pollute future context.
-3. **Task Completion**: Assert each active task inside `task.md` has been successfully implemented functionally.
-4. **Over-Abstraction Check**: Compare the abstraction level of modified code against the original. Flag if:
+3. **Task Writeback Check**: Confirm `task.md` reflects what actually happened in code:
+   - completed work is marked complete,
+   - verification results are recorded,
+   - blockers and handoff states are current.
+4. **Architecture Writeback Check**: If the code changed the effective architecture, confirm `architecture.md` was updated accordingly. If not, flag the mismatch explicitly.
+5. **Task Completion**: Assert each active task inside `task.md` has been successfully implemented functionally.
+6. **Over-Abstraction Check**: Compare the abstraction level of modified code against the original. Flag if:
    - Inline data structures were extracted into unnecessary wrappers (const, functions, classes).
    - New indirection layers were introduced that did not exist before (factories, builders, adapters).
    - Simple direct calls were replaced with multi-hop delegation chains.
-5. **Style Conformance**: If `task.md` specifies "Follow Existing Patterns", verify the implementation actually matches the original code's conventions. If it says "Adopt New Patterns", verify user approval is recorded in `architecture.md`.
-6. **Architecture Alignment**: Verify the effective `architecture.md` still describes the resulting code. If code and architecture diverge, do not silently accept it.
-7. **Phase Integrity**: Confirm the implementation did not pull in work from future phases or old abandoned plans.
+7. **Style Conformance**: If `task.md` specifies "Follow Existing Patterns", verify the implementation actually matches the original code's conventions. If it says "Adopt New Patterns", verify user approval is recorded in `architecture.md`.
+8. **Architecture Alignment**: Verify the effective `architecture.md` still describes the resulting code. If code and architecture diverge, do not silently accept it.
+9. **Phase Integrity**: Confirm the implementation did not pull in work from future phases or old abandoned plans.
 
 ### Step 3: Actionable Output
 If discrepancies exist, write an itemized feedback list (e.g., "File api.py handles logic and db requests; this violates `architecture.md` API Gateway model.")
@@ -36,6 +41,7 @@ Do not write or rewrite code directly. Provide the review report and hand off.
 | "The implementation needed more than the architecture said, so I'll assume that's fine" | If the architecture was insufficient, return to planning. Do not normalize drift. |
 | "This deviation is an improvement, I'll let it slide" | Improvements not in task.md are scope bleed. Flag it. |
 | "I'll fix this small issue myself instead of reporting it" | Reviewers do not write code. Report and hand off. |
+| "The code changed, but the docs are close enough" | Stale planning files are a review failure. Require writeback before sign-off. |
 | "The over-abstraction is cleaner, it's fine" | Cleaner is subjective. If task.md said follow existing patterns, over-abstraction is a violation. |
 | "Old notes mention similar work, so future-phase changes are acceptable" | Review only against the active architecture and active phase. |
 | "Checking line counts is tedious, the files look reasonable" | Run the actual count. 'Looks reasonable' is not a number. |

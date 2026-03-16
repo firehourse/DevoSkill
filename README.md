@@ -84,7 +84,8 @@ DevoSkill/
     └── devoskill/
         ├── SKILL.md                          # The lightweight entry point & router
         ├── config/
-        │   └── workspace-registry.md         # Tracks where documentation is saved per-project
+        │   ├── workspace-map.example.json    # Example schema for local workspace mapping state
+        │   └── workspace-registry.md         # Legacy reference; local mapping state is preferred
         ├── protocols/
         │   ├── thinking-phase.md             # Converge on reality before writing planning docs
         │   ├── planning-greenfield.md        # Planning rules for net-new systems

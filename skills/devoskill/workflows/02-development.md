@@ -46,8 +46,14 @@ If runtime reality contradicts the effective architecture, the documents must be
 
 ### Step 5: Persistence and Clean Execution
 Produce functionality matching the requirements.
-- **Do not generate conversational summaries**: When you complete a step like "Feature X.Y", simply edit/write the source files and assert the next step is ready or move onward.
-- Once all tasks in the active phase are completed and verified, trigger the Review phase by stating the phase is completed and awaiting review.
+- **Do not generate conversational summaries**: Persist project state by updating the planning files, not by writing long chat recaps.
+- **Mandatory Task Writeback**: After each meaningful implementation step, update `task.md` to reflect reality:
+  - mark completed tasks and verification status,
+  - record blockers or pending user handoffs,
+  - update the active phase summary if the current execution state changed.
+- **Conditional Architecture Writeback**: If the finished implementation changed the effective architecture, constraints, boundaries, key flows, or approved target shape, update `architecture.md` before declaring the phase complete.
+- **No Silent Completion**: If code changed but `task.md` still reads like the work has not started, the phase is not complete.
+- Once all tasks in the active phase are completed, writeback is done, and verification is recorded, trigger the Review phase by stating the phase is completed and awaiting review.
 
 ## Red Flags — If You Think This, You Are Violating Protocol
 
@@ -57,6 +63,8 @@ Produce functionality matching the requirements.
 | "There is a task.md now, so I can start coding" | A task plan is not approval. Wait for explicit user authorization. |
 | "I'll read the entire planning history to be safe" | Context overload makes execution worse. Load only the active planning surface. |
 | "Let me write the code first, I'll update docs later" | "Later" never comes. Docs first, code second. No exceptions. |
+| "The code is done, I don't need to touch task.md" | Execution without writeback leaves the planning surface stale. Update `task.md` before claiming progress. |
+| "The code drifted a bit, but architecture.md can stay as-is" | Effective architecture must describe the resulting system. Update it or return to planning. |
 | "I'll just tweak the architecture slightly" | You are the Developer, not the Planner. STOP and return to Planning workflow. |
 | "The schema is probably X, I'll continue" | Missing contracts belong to the human handoff boundary. Ask instead of guessing. |
 | "This dependency would be perfect, let me add it" | If it's not in task.md, it's forbidden. Period. |

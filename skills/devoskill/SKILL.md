@@ -9,7 +9,7 @@ This is the entry point for DevoSkill. It defines the absolute minimum constrain
 
 ## 1. Global Constraints
 - **Planning Document Limits:** Effective planning and note files (`architecture.md`, `task.md`, and files under `notes/`) should stay under 600 lines each. Split or trim them immediately if crossed.
-- **Workspace Registry:** Before any file generation or planning, you MUST read `config/workspace-registry.md` to dynamically map the current workspace to its designated `skilldocs` directory.
+- **Workspace Mapping State:** Before any file generation or planning, resolve the current workspace's `skilldocs` location from the local state file `config/workspace-map.local.json` when it exists. If it does not exist, dynamically derive the mapping, then write it back to that local file for later sessions.
 - **Python Ecosystem:** If utilizing Python, `uv` is mandatory for dependency and script execution.
 - **No Idle Summaries:** Maintain project state exclusively via file modifications in the mapped `skilldocs`.
 - **Pre-Requisite Planning:** Do not write code without an explicit `task.md`.

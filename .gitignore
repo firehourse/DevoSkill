@@ -5,3 +5,6 @@ __pycache__/
 
 # 測試用臨時目錄
 /tmp
+
+# DevoSkill 本地 workspace state
+skills/devoskill/config/workspace-map.local.json

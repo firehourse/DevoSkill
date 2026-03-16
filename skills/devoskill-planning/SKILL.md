@@ -18,6 +18,6 @@ Use this skill when the current request is about planning rather than implementa
 
 ## Required Behavior
 - Complete the Thinking Phase before writing or rewriting `architecture.md` or `task.md`.
-- Use the mapped SkillDocs location and local `.devoskill` symlink rules.
+- Use the local workspace mapping state and `.devoskill` symlink rules.
 - Keep planning output limited to the effective architecture and the active executable phase.
 - After planning documents are updated, stop and wait for explicit user approval before implementation begins.
