@@ -65,6 +65,8 @@ Codex does not use Cursor rule files. To make DevoSkill load automatically in Co
 
 When Codex starts inside that workspace, the bootstrap file instructs it to load `skills/devoskill/SKILL.md` before doing any work.
 
+On first use in a workspace, DevoSkill will derive the `skilldocs` location dynamically and persist that machine-local mapping in `skills/devoskill/config/workspace-map.local.json`. That file is local state, should stay gitignored, and can be deleted when you want to simulate a fresh install on the same machine.
+
 If you also want DevoSkill discoverable as a registered local skill, create:
 ```bash
 mkdir -p ~/.agents/skills
@@ -72,6 +74,8 @@ ln -s ~/workspace/DevoSkill/skills/devoskill ~/.agents/skills/devoskill
 ```
 
 See `.codex/INSTALL.md` for the complete Codex bootstrap instructions.
+
+To simulate a clean-machine reinstall later, remove the workspace `AGENTS.md`, `.devoskill` symlink, optional `~/.agents/skills/devoskill` registration, and the local `workspace-map.local.json`, then repeat the bootstrap steps.
 
 ## Directory Structure
 ```text
