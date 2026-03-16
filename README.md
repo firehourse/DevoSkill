@@ -2,24 +2,28 @@
 
 DevoSkill is a standardized, prompt-based Orchestration Engine designed to impose strict engineering discipline on AI Code Agents (like Cursor, Codex, Gemini, or Claude). 
 
-It prevents AI "hallucinations" and "context explosion" by shifting the agent's behavior from *role-playing* to an **Action-Based Execution Protocol**. It forces the AI to plan before coding, strictly adhere to approved architecture, keep file sizes under 600 lines, and isolate documentation from source code.
+It prevents AI "hallucinations" and "context explosion" by shifting the agent's behavior from *role-playing* to an **Action-Based Execution Protocol**. It forces the AI to plan before coding, strictly adhere to approved architecture, keep effective planning markdown small, and isolate documentation from source code.
 
 ## Core Philosophy (The Hard Rules)
 1. **No Code Without Docs:** The agent will refuse to write code without a pre-approved `task.md`.
-2. **File Size Limits:** No single file (code or markdown) shall exceed 600 lines. The agent will proactively split files to enforce modularity.
+2. **Planning Document Limits:** Effective planning markdown such as `architecture.md`, `task.md`, and `notes/*.md` should stay under 600 lines each so future sessions can reload them cleanly.
 3. **Python Ecosystem:** If the project uses Python, the agent is mandated to use `uv` for all dependency and environment management.
 4. **Document Persistence (SkillDocs):** The agent will not generate useless conversational summaries. The project state is maintained entirely via writing to `architecture.md` and `task.md` centralized in a `skilldocs` directory, isolating it from your source code repository.
 5. **Effective Planning Surface:** `architecture.md` stores only the current effective architecture, and `task.md` stores only the active executable phase. History is not part of the default context.
 
 ## How It Works
 
-DevoSkill acts as a lightweight router. Instead of loading a massive prompt into your context window—which causes context pollution—you only load `skills/devoskill/SKILL.md`. 
+DevoSkill acts as a lightweight router. Instead of loading a massive prompt into your context window, you load `skills/devoskill/SKILL.md`, which then routes into smaller sibling skills.
 
-When the agent detects what phase of development you are in, it dynamically reads the exact workflow required for that moment:
-- **For Planning (`skills/devoskill/workflows/01-planning.md`):** It enters a Thinking Phase, classifies the work as Greenfield, Existing System, or Hybrid, then writes an effective `architecture.md` and an active-phase `task.md`.
-- **For Development (`skills/devoskill/workflows/02-development.md`):** It executes only the active phase, using the minimum effective planning context required.
-- **For Review (`skills/devoskill/workflows/03-review.md`):** It verifies that code matches the effective architecture, active phase tasks, and declared boundaries.
-- **For Performance Debugging (`skills/devoskill/workflows/04-performance-debugging.md`):** It establishes quantitative baselines and writes only effective benchmark and optimization changes back into the planning files.
+When the agent detects what phase of development you are in, it first loads the matching sibling skill, then reads only the exact workflow required for that moment:
+- **Planning (`skills/devoskill-planning/SKILL.md`)**
+- **Development (`skills/devoskill-development/SKILL.md`)**
+- **Review (`skills/devoskill-review/SKILL.md`)**
+- **Performance Debugging (`skills/devoskill-performance/SKILL.md`)**
+- **Workspace Setup (`skills/devoskill-workspace-setup/SKILL.md`)**
+- **Thinking Phase (`skills/devoskill-thinking-phase/SKILL.md`)**
+
+This keeps the top-level skill small while making each execution mode independently discoverable and reusable.
 
 ## Planning Philosophy
 
@@ -94,6 +98,18 @@ DevoSkill/
         │   ├── 03-review.md                  # Effective-architecture compliance checks
         │   └── 04-performance-debugging.md   # Profiling, baselining, and benchmark-driven refactoring
         └── templates/                        # Effective architecture and active task templates
+    ├── devoskill-planning/
+    │   └── SKILL.md                          # Planning skill entry point
+    ├── devoskill-development/
+    │   └── SKILL.md                          # Development skill entry point
+    ├── devoskill-review/
+    │   └── SKILL.md                          # Review skill entry point
+    ├── devoskill-performance/
+    │   └── SKILL.md                          # Performance skill entry point
+    ├── devoskill-workspace-setup/
+    │   └── SKILL.md                          # SkillDocs and symlink setup skill
+    └── devoskill-thinking-phase/
+        └── SKILL.md                          # Request classification and boundary-confirmation skill
 ```
 
 ## Contributing

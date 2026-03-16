@@ -53,7 +53,15 @@ Write `<SKILLDOCS_DIR>/task.md` using `templates/task.md`.
 
 If the change is large, the task file MUST be phase-based. Do not flatten a multi-stage migration into one monolithic checklist.
 
-## Step 6: Keep the Planning Surface Clean
+## Step 6: Approval Gate Before Development
+Once `architecture.md` and `task.md` are written, summarize only the effective delta and explicitly ask the user whether implementation should begin now.
+
+Until the user gives a clear go-ahead to start coding, remain in Planning mode.
+- Do NOT auto-switch to `workflows/02-development.md`.
+- Do NOT treat `task.md` existence as implementation approval.
+- Do NOT begin "small safe edits" before approval.
+
+## Step 7: Keep the Planning Surface Clean
 The planning surface must stay small enough for later sessions to reload.
 
 Default document loading priority:
@@ -73,3 +81,4 @@ Do not pollute the default planning files with content that future sessions shou
 | "I'll write one big plan and let the developer figure out the order" | Large deltas require phased architecture and phased tasks. |
 | "I'll generate task.md later once I understand the codebase better" | task.md is part of planning, not an afterthought. |
 | "The user will probably want X too, let me include it" | Do not assume. Ask. Scope creep starts with 'probably'. |
+| "The docs are done, I'll just start implementing" | Planning output is not execution approval. Stop and wait for the user's go-ahead. |

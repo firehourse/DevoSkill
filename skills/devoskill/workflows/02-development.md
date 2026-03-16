@@ -12,12 +12,14 @@ When tasked with implementing a feature based on a plan, you are the **Developer
    - the effective architecture sections referenced by that phase,
    - and any human-provided contract or schema explicitly required by the task.
 4. Do NOT load history, abandoned approaches, or old phases unless the user explicitly asks for them.
+5. Confirm that implementation is explicitly approved in the active planning surface or by the user's current instruction. If approval is missing or ambiguous, stop and ask the user whether to begin implementation now.
 
 ### Step 2: Strict Adherence
 Follow the active-phase tasks linearly based on `task.md`.
 - **No Creativity in Architecture**: You are explicitly prohibited from unilaterally changing the architecture, adding third-party dependencies not mentioned in `task.md`, or reshaping the design scope.
 - **Respect Human Handoffs**: If `task.md` marks a step as a user handoff, stop there. Do not guess through missing schema, missing contracts, sensitive credentials, or production-only operations.
-- **Line Count Cap**: Monitor file size continuously. If any code file exceeds exactly 600 lines due to your addition, stop immediately and ask for a module split via the Planning Workflow.
+- **Respect the Approval Gate**: A finished `task.md` is necessary but not sufficient. No code edits begin until the user has explicitly authorized implementation.
+- **Planning Surface Discipline**: If implementation requires expanding `architecture.md`, `task.md`, or loaded notes beyond 600 lines, stop and split or trim the planning surface before continuing.
 
 ### Step 3: Maintenance & Refactoring Constraints
 When modifying or refactoring **existing** code (as opposed to greenfield development), additional rules apply:
@@ -52,12 +54,13 @@ Produce functionality matching the requirements.
 | Your Thought | Reality |
 |-------|---------|
 | "This is too simple, I don't need task.md" | Simple tasks cause the most assumption errors. Write it in task.md, it takes 2 minutes. |
+| "There is a task.md now, so I can start coding" | A task plan is not approval. Wait for explicit user authorization. |
 | "I'll read the entire planning history to be safe" | Context overload makes execution worse. Load only the active planning surface. |
 | "Let me write the code first, I'll update docs later" | "Later" never comes. Docs first, code second. No exceptions. |
 | "I'll just tweak the architecture slightly" | You are the Developer, not the Planner. STOP and return to Planning workflow. |
 | "The schema is probably X, I'll continue" | Missing contracts belong to the human handoff boundary. Ask instead of guessing. |
 | "This dependency would be perfect, let me add it" | If it's not in task.md, it's forbidden. Period. |
-| "The file is only 580 lines, I can add a bit more" | 580 lines = prepare to split NOW, not stuff in 20 more lines. |
+| "The planning doc is only 580 lines, I can keep stuffing context into it" | 580 lines = split phases or move history out now, before the planning surface becomes unusable. |
 | "Let me refactor this while I'm here" | Out-of-scope refactoring is scope bleed. Only touch what task.md says. |
 | "This code would be cleaner if I extracted it into a function" | Did the original code use that pattern? If not, you are over-abstracting. Stop. |
 | "I'll reorganize the data structures for better readability" | Structural changes require user approval via architecture.md. You cannot decide this. |

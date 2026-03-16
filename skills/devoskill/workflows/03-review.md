@@ -13,7 +13,7 @@ When tasked with verifying implemented code against its original plan, you act a
 ### Step 2: Compliance Verification
 Perform the checks:
 1. **Scope Bleed**: Confirm the code does not introduce architectural paradigms unsaid in the blueprint. No new DBs, no new untracked frameworks, no crossing of declared human handoff boundaries.
-2. **File Size Check**: Run a line-count check. Confirm NO FILE exceeds 600 lines. Alert heavily if so.
+2. **Planning Surface Size Check**: Confirm the effective planning markdown files (`architecture.md`, `task.md`, and any loaded `notes/*.md`) do not exceed 600 lines. Flag them if they do, since oversized planning docs pollute future context.
 3. **Task Completion**: Assert each active task inside `task.md` has been successfully implemented functionally.
 4. **Over-Abstraction Check**: Compare the abstraction level of modified code against the original. Flag if:
    - Inline data structures were extracted into unnecessary wrappers (const, functions, classes).

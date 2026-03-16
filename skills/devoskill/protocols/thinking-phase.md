@@ -43,6 +43,13 @@ Examples:
 
 If a database, queue, external API, or member/account state is involved, prefer requesting human-provided schema or contract details over inventing them.
 
+Before any planning document is treated as executable, the planner MUST also confirm the execution boundary with the user:
+- whether this session is planning-only,
+- whether the user wants `architecture.md` / `task.md` drafted first and reviewed before coding,
+- and what explicit phrase or approval should be treated as permission to start implementation.
+
+If the user has not clearly authorized code changes, default to planning-only. Never interpret the existence of `task.md` as automatic approval to implement.
+
 ## Step 4: Define the Delta
 State the requested change in one bounded form:
 - what will change,
@@ -74,3 +81,5 @@ Do NOT promote:
 - obsolete plans from earlier iterations.
 
 If history matters, store it separately under `<SKILLDOCS_DIR>/notes/` so future sessions do not load it by default.
+
+After promoting the effective planning output, stop and hand control back to the user if implementation approval has not been explicitly granted.
