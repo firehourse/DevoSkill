@@ -1,0 +1,1 @@
+We need a plan for adding a new auth subsystem with clear phases and approval gates.

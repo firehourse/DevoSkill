@@ -15,6 +15,8 @@ It prevents AI "hallucinations" and "context explosion" by shifting the agent's 
 
 DevoSkill acts as a lightweight router. Instead of loading a massive prompt into your context window, you load `skills/devoskill/SKILL.md`, which then routes into smaller sibling skills.
 
+The router should not depend on the user naming a skill explicitly. Its job is to read a natural project/task description such as "I have this project, I need to add auth, help me plan it" and infer the smallest correct mode from that description.
+
 When the agent detects what phase of development you are in, it first loads the matching sibling skill, then reads only the exact workflow required for that moment:
 - **Planning (`skills/devoskill-planning/SKILL.md`)**
 - **Development (`skills/devoskill-development/SKILL.md`)**
@@ -24,6 +26,34 @@ When the agent detects what phase of development you are in, it first loads the 
 - **Thinking Phase (`skills/devoskill-thinking-phase/SKILL.md`)**
 
 This keeps the top-level skill small while making each execution mode independently discoverable and reusable.
+
+### Routing Rule
+
+DevoSkill should classify requests from three signals in the user's description:
+- **Project state:** new project, existing codebase, approved work, broken behavior, or uncertain direction
+- **Immediate intent:** plan, implement, review, or debug
+- **Expected output:** docs, code, discrepancy report, or benchmark/debug findings
+
+This keeps classification aligned with how users actually ask for help, while still loading only the smallest relevant context.
+
+## Productization Improvements
+
+This repository is evolving beyond a hidden workflow framework into a more triggerable skill set.
+
+- **Clearer trigger language:** entry skills should say exactly when they apply, even from short prompts.
+- **Planning as interrogation:** planning should pressure-test the user request before docs are written, instead of treating questioning as a separate router mode.
+
+`skills/devoskill-grill/SKILL.md` remains useful, but as a support module for planning rather than a top-level route.
+
+## Lightweight Testing
+
+DevoSkill should validate trigger behavior without becoming a heavyweight test framework.
+
+- Keep trigger tests focused on short, natural prompts.
+- Run one routing test at a time instead of maintaining a large always-loaded matrix.
+- Treat long specs and full workflows as planning/development tests, not trigger tests.
+
+See [tests/README.md](tests/README.md) and `tests/skill-triggering/` for the minimal harness.
 
 ## Planning Philosophy
 
@@ -111,6 +141,8 @@ DevoSkill/
     │   └── SKILL.md                          # Review skill entry point
     ├── devoskill-performance/
     │   └── SKILL.md                          # Performance skill entry point
+    ├── devoskill-grill/
+    │   └── SKILL.md                          # Planning support module for user grilling
     ├── devoskill-workspace-setup/
     │   └── SKILL.md                          # SkillDocs and symlink setup skill
     └── devoskill-thinking-phase/

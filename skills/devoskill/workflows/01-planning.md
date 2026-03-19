@@ -16,6 +16,15 @@ The Thinking Phase exists to reduce hallucinated planning. It determines:
 - what the user must clarify,
 - and whether the work must be split into phases.
 
+## Step 2.5: Grill the User Before Writing Docs
+Planning in DevoSkill is not a passive note-taking exercise. It is an active interrogation of the user until the request is concrete enough to plan safely.
+
+Rules for this step:
+- Ask one high-value question at a time.
+- Prioritize missing constraints, hidden assumptions, boundary changes, rollback risk, and test expectations.
+- If the answer can be discovered from the codebase or existing planning docs, inspect those instead of asking the user.
+- Do not start `architecture.md` or `task.md` until the important ambiguity has been reduced enough to write effective documents.
+
 ## Step 3: Detect Planning Mode
 After the Thinking Phase, classify the request into exactly one mode:
 - **Greenfield**: A new project or a net-new subsystem with minimal inherited constraints.
@@ -76,6 +85,7 @@ Do not pollute the default planning files with content that future sessions shou
 | Your Thought | Reality |
 |-------|---------|
 | "The user's intent is obvious, I can skip the Thinking Phase" | Assumptions create hallucinated architecture. Run the Thinking Phase first. |
+| "I already understand enough, I don't need to grill the user" | Planning without interrogation leaves hidden constraints untouched. Pressure-test first. |
 | "I'll record all the discussion so future sessions have context" | Overloaded context is harmful. Preserve only effective decisions in the main files. |
 | "This feels like both greenfield and maintenance, I'll just freestyle it" | Use the proper planning mode. If needed, classify it as Hybrid explicitly. |
 | "I'll write one big plan and let the developer figure out the order" | Large deltas require phased architecture and phased tasks. |

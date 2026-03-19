@@ -1,0 +1,1 @@
+Grill this refactor idea until the risky assumptions are obvious.
