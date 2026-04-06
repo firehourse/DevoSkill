@@ -55,6 +55,12 @@ Produce functionality matching the requirements.
 - **No Silent Completion**: If code changed but `task.md` still reads like the work has not started, the phase is not complete.
 - Once all tasks in the active phase are completed, writeback is done, and verification is recorded, trigger the Review phase by stating the phase is completed and awaiting review.
 
+### Step 6: Pre-phase Completion Quality Gate
+
+Before marking any implementation phase complete, load `../devoskill-quality/SKILL.md` and apply every relevant category in `workflows/05-quality.md` against the produced code. Fix any failures before writing back to `task.md`.
+
+---
+
 ## Red Flags — If You Think This, You Are Violating Protocol
 
 | Your Thought | Reality |

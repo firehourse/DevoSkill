@@ -13,6 +13,7 @@ This is the entry point for DevoSkill. It defines the absolute minimum constrain
 - Use `../devoskill-development/SKILL.md` when the user wants implementation work on an already approved task.
 - Use `../devoskill-review/SKILL.md` when the user wants validation, comparison against intended architecture, or drift checking.
 - Use `../devoskill-performance/SKILL.md` when the user is chasing bottlenecks, failures, or measured runtime issues.
+- Use `../devoskill-quality/SKILL.md` as a pre-completion gate at the end of any implementation phase to verify technical correctness (resource lifecycle, validation, fault tolerance, operational hygiene, identity, frontend patterns).
 
 ## 1. Global Constraints
 - **Planning Document Limits:** Effective planning and note files (`architecture.md`, `task.md`, and files under `notes/`) should stay under 600 lines each. Split or trim them immediately if crossed.
@@ -51,6 +52,7 @@ Examples of natural routing:
 
 ## 3. Shared Support Modules
 Load these support skills when the phase requires them:
+- For Pre-completion Technical Quality Gate: Read `../devoskill-quality/SKILL.md`, then load any matching language-specific quality skill (`../devoskill-quality-go/SKILL.md`, `../devoskill-quality-node/SKILL.md`) for each language present in the implementation
 - For Workspace/Directories Configuration (`skilldocs`, `.devoskill`): Read `../devoskill-workspace-setup/SKILL.md`
 - For Thinking Phase classification and boundary confirmation: Read `../devoskill-thinking-phase/SKILL.md`
 - For planning-time user interrogation and assumption pressure-testing: Read `../devoskill-grill/SKILL.md` only as a support module inside planning

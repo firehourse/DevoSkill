@@ -22,6 +22,9 @@ When the agent detects what phase of development you are in, it first loads the 
 - **Development (`skills/devoskill-development/SKILL.md`)**
 - **Review (`skills/devoskill-review/SKILL.md`)**
 - **Performance Debugging (`skills/devoskill-performance/SKILL.md`)**
+- **Quality Gate (`skills/devoskill-quality/SKILL.md`)** — invoked as a pre-completion support module at the end of every development phase; contains language-neutral principles and positive/negative examples across resource lifecycle, configuration application, input validation, fault tolerance, operational hygiene, identity, and frontend async patterns; automatically loads language-specific sub-skills for each language present in the implementation
+  - **Go Quality (`skills/devoskill-quality-go/SKILL.md`)** — Go-specific checks: signal handling, context propagation, goroutine lifecycle, concurrency patterns, deferred cleanup
+  - **Node.js Quality (`skills/devoskill-quality-node/SKILL.md`)** — Node.js/TypeScript-specific checks: async error boundaries, HTTP status codes, RabbitMQ connection management, top-level await sequencing, ioredis patterns
 - **Workspace Setup (`skills/devoskill-workspace-setup/SKILL.md`)**
 - **Thinking Phase (`skills/devoskill-thinking-phase/SKILL.md`)**
 
@@ -131,7 +134,10 @@ DevoSkill/
         │   ├── 01-planning.md                # Thinking phase + effective architecture/task generation
         │   ├── 02-development.md             # Active-phase execution rules
         │   ├── 03-review.md                  # Effective-architecture compliance checks
-        │   └── 04-performance-debugging.md   # Profiling, baselining, and benchmark-driven refactoring
+        │   ├── 04-performance-debugging.md   # Profiling, baselining, and benchmark-driven refactoring
+        │   ├── 05-quality.md                 # Pre-completion technical quality gate (language-neutral)
+        │   ├── quality-go.md                 # Go-specific quality checks
+        │   └── quality-node.md               # Node.js/TypeScript-specific quality checks
         └── templates/                        # Effective architecture and active task templates
     ├── devoskill-planning/
     │   └── SKILL.md                          # Planning skill entry point
@@ -141,6 +147,12 @@ DevoSkill/
     │   └── SKILL.md                          # Review skill entry point
     ├── devoskill-performance/
     │   └── SKILL.md                          # Performance skill entry point
+    ├── devoskill-quality/
+    │   └── SKILL.md                          # Pre-completion technical quality gate skill (language-neutral)
+    ├── devoskill-quality-go/
+    │   └── SKILL.md                          # Go-specific quality rules
+    ├── devoskill-quality-node/
+    │   └── SKILL.md                          # Node.js/TypeScript-specific quality rules
     ├── devoskill-grill/
     │   └── SKILL.md                          # Planning support module for user grilling
     ├── devoskill-workspace-setup/
