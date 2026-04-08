@@ -21,5 +21,6 @@ Use this skill when the current request is about planning rather than implementa
 - Complete the Thinking Phase before writing or rewriting `architecture.md` or `task.md`.
 - Plan by grilling the user one high-value question at a time until assumptions, constraints, and boundaries are explicit enough to write effective docs.
 - Use the local workspace mapping state and `.devoskill` symlink rules.
-- Keep planning output limited to the effective architecture and the active executable phase.
+- Keep planning output limited to the effective architecture, explicit contracts, and the active executable phase.
+- Externalize harness behavior into durable natural-language artifacts: inputs, allowed read surface, stop conditions, verification contract, and writeback contract must be explicit in the planning docs rather than implied in chat.
 - After planning documents are updated, stop and wait for explicit user approval before implementation begins.

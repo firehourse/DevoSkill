@@ -5,7 +5,8 @@ When tasked with verifying implemented code against its original plan, you act a
 ## Execution Protocol
 
 ### Step 1: Reconcile Sources
-- Obtain the `architecture.md` and `task.md` for the current project.
+- Identify the active feature folder (e.g. `.devoskill/delete-conversation/`). If not specified, ask before loading.
+- Load `<feature-folder>/task.md` and `<feature-folder>/architecture.md` (if present). Then load the project-level `architecture.md` for baseline context.
 - Load only the currently effective architecture sections and the active phase in `task.md`.
 - Generate or examine the `git diff` for recent modifications or read the targeted executed files.
 - If the request is an existing-system or hybrid change, confirm that the implementation stayed within the declared delta and boundaries.
@@ -27,6 +28,10 @@ Perform the checks:
 7. **Style Conformance**: If `task.md` specifies "Follow Existing Patterns", verify the implementation actually matches the original code's conventions. If it says "Adopt New Patterns", verify user approval is recorded in `architecture.md`.
 8. **Architecture Alignment**: Verify the effective `architecture.md` still describes the resulting code. If code and architecture diverge, do not silently accept it.
 9. **Phase Integrity**: Confirm the implementation did not pull in work from future phases or old abandoned plans.
+10. **Engineering Standards**: Load `workflows/engineering-standards.md` and verify every category against the produced code — including the language-specific section matching the implementation stack (Node.js or Go). Check for layer separation violations, naming clarity, error context, structured logging, magic values, API response shape consistency, and file discipline (400-line limit per source file). Flag violations the same way as architecture drift — do not silently accept them.
+11. **Behavior Contract Check**: Reconcile the implemented endpoints, job flows, state transitions, ownership boundaries, and negative paths against `architecture.md`, `design.md`, and any loaded contract artifact. Missing a documented boundary check is a review failure.
+12. **Evidence Surface Check**: Verify that any claimed verification result is backed by `verification.md`, another declared durable artifact, or directly inspectable repository state. If `task.md` claims success but the trace, file tree, or verification artifact is missing, flag it.
+13. **Artifact Hygiene Check**: Verify that tracked source paths do not contain runtime-generated artifacts, dependency directories, build output, uploads, or other pollution unless the contract explicitly permits them.
 
 ### Step 3: Actionable Output
 If discrepancies exist, write an itemized feedback list (e.g., "File api.py handles logic and db requests; this violates `architecture.md` API Gateway model.")
@@ -45,3 +50,5 @@ Do not write or rewrite code directly. Provide the review report and hand off.
 | "The over-abstraction is cleaner, it's fine" | Cleaner is subjective. If task.md said follow existing patterns, over-abstraction is a violation. |
 | "Old notes mention similar work, so future-phase changes are acceptable" | Review only against the active architecture and active phase. |
 | "Checking line counts is tedious, the files look reasonable" | Run the actual count. 'Looks reasonable' is not a number. |
+| "The engineering violations are minor style issues, I'll let them slide" | Engineering standards are structural contracts, not preferences. A controller querying the DB directly is an architecture violation, not a style preference. Flag it. |
+| "The file is 420 lines but it's clean code" | The limit exists for context manageability, not aesthetics. Split it before sign-off. |

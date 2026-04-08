@@ -1,6 +1,6 @@
 ---
 name: devoskill-quality-go
-description: Go-specific quality rules for DevoSkill. Load alongside devoskill-quality when the implementation includes Go code. Covers context propagation, goroutine lifecycle, signal handling, and concurrency patterns.
+description: Go-specific quality and engineering rules for DevoSkill. Load alongside devoskill-quality when the implementation includes Go code. Covers signal handling, context propagation, goroutine lifecycle, concurrency, deferred cleanup, structured logging (slog), package structure, and interface placement.
 ---
 
 # DevoSkill Quality — Go

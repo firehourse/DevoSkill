@@ -62,3 +62,16 @@ Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
 | ✅ | `new Redis(url, { maxRetriesPerRequest: null })` for subscriber clients |
 | ❌ | `redis.set(key, value)` fire-and-forget in a transactional path |
 | ✅ | `await redis.set(key, value)` and handle the error |
+
+---
+
+## 6. Resource Authorization at HTTP and Stream Boundaries
+
+**Principle:** Node services often validate ownership on CRUD endpoints but forget streaming, upload, replay, or cancel-adjacent paths. Every boundary that accepts user-controlled identifiers must enforce the same authorization contract before exposing data or mutating resource state.
+
+| | Example |
+|---|---|
+| ❌ | `GET /tasks/:id` checks owner, but `GET /tasks/:id/events` or `DELETE /tasks/:id` skips the same ownership rule |
+| ✅ | Shared service/repository checks enforce the owner boundary across all task-scoped endpoints |
+| ❌ | Upload route trusts the task ID and writes to storage before verifying the task belongs to the caller |
+| ✅ | Ownership and state validation occur before irreversible side effects such as file writes or job publishes |

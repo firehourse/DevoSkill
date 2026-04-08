@@ -16,7 +16,29 @@ During active development, it is highly inconvenient to navigate back and forth 
   Command: `ln -s <MAPPED_SKILLDOCS_PATH>/<Project_Name> .devoskill`
 - **Git Rules**: Once created, append `.devoskill` to the target project's `.gitignore` file to ensure the symlink is never tracked by git.
 
-## 3. Creating a New Project Profile
+## 3. Project and Feature Folder Structure
+
+Every project has a two-level layout inside `<SKILLDOCS_PATH>/<Project_Name>/`:
+
+```
+<Project_Name>/
+  architecture.md          # project-level baseline: existing system overview, stable constraints
+  <feature-name>/          # one folder per feature, task, or change set
+    task.md                # executable work for this feature only
+    verification.md        # durable verification evidence for this feature/run
+    architecture.md        # feature delta — only needed if the change has its own design decisions
+    notes/                 # history, abandoned approaches, decision logs
+```
+
+Rules:
+- `architecture.md` at the **project root** describes the existing system. It is updated only when the baseline itself changes, not per-feature.
+- Each feature or change set gets its **own named folder**. Never add a new `task.md` to the project root for a second feature — create a new folder instead.
+- Each feature folder also owns its verification evidence. Do not bury runtime proof only in chat transcripts or the root project docs.
+- Feature folder names are short, kebab-case, and describe the change: `delete-conversation`, `add-export-api`, `migrate-auth`.
+- A feature-level `architecture.md` is only created when the change introduces new components, boundaries, or design decisions that need to be recorded. Small changes that only modify existing code do not need one.
+- The `.devoskill` symlink points to `<Project_Name>/` (project root), not a feature folder.
+
+## 4. Creating a New Project Profile
 When an AI transitions into Planning mode for a new project:
 1. Identify the project name and the workspace root.
    - Default to the repository or target folder name if the user does not provide a better project name.
@@ -26,8 +48,9 @@ When an AI transitions into Planning mode for a new project:
    - prefer `<WORKSPACE_ROOT>/docs` when it is acceptable for this workspace,
    - otherwise choose a user-approved adjacent or dedicated SkillDocs base path,
    - then write the resolved mapping into `config/workspace-map.local.json`.
-4. Ensure the mapped base directory exists first, then execute `mkdir -p <MAPPED_SKILLDOCS_PATH>/<Project_Name>`.
-5. If `<MAPPED_SKILLDOCS_PATH>/<Project_Name>` already exists, reuse it and update only the effective planning files instead of re-bootstrapping blindly.
-6. Bootstrap `task.md` and `architecture.md` according to the core `DevoSkill/templates/`.
-7. Create or refresh the local `.devoskill` symlink to point at `<MAPPED_SKILLDOCS_PATH>/<Project_Name>`.
-8. If historical notes are needed, create `mkdir -p <MAPPED_SKILLDOCS_PATH>/<Project_Name>/notes` and keep those files outside the default planning load path.
+4. Ensure the mapped base directory exists, then create `<MAPPED_SKILLDOCS_PATH>/<Project_Name>/`.
+5. If `<Project_Name>/` already exists, reuse it — do not re-bootstrap blindly.
+6. Bootstrap `architecture.md` at the project root using `templates/architecture.md`.
+7. Create the feature folder: `mkdir -p <Project_Name>/<feature-name>/` and bootstrap `task.md` and `verification.md` inside it using the matching templates.
+8. Create or refresh the `.devoskill` symlink to point at `<Project_Name>/` (not the feature folder).
+9. Historical notes go under `<Project_Name>/<feature-name>/notes/`, not at the project root.

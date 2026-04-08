@@ -9,10 +9,13 @@ Use this skill when the request is to verify implementation compliance.
 
 ## Load Order
 1. Read `../devoskill/workflows/03-review.md`
-2. Load the active phase in `task.md`
-3. Load only the effective architecture sections needed for that phase
+2. Read `../devoskill/workflows/engineering-standards.md` — load the language-specific section matching the implementation stack
+3. Identify the active feature folder (e.g. `.devoskill/delete-conversation/`); ask if not specified
+4. Load `<feature-folder>/task.md` (active phase only) and `<feature-folder>/architecture.md` if present
+5. Load project-level `architecture.md` for baseline context
 
 ## Required Behavior
 - Review for scope bleed, architecture drift, phase integrity, and file size violations.
 - Treat `architecture.md` and `task.md` as the source of truth, not "working code".
 - If code and architecture diverge, return a concrete discrepancy list instead of normalizing the drift.
+- Verify the durable evidence surface as part of review. A phase is not complete if claims in `task.md` cannot be traced to repository state or persisted verification artifacts.

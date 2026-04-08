@@ -7,4 +7,6 @@ __pycache__/
 /tmp
 
 # DevoSkill 本地 workspace state
+config/workspace-map.local.json
+skills/config/workspace-map.local.json
 skills/devoskill/config/workspace-map.local.json

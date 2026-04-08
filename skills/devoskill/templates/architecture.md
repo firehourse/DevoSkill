@@ -12,6 +12,14 @@ This document contains the currently effective architecture only. It is written 
 - [Criterion 2]
 - [Criterion 3]
 
+## 2.5 Harness Contract
+- Authoritative inputs:
+- Forbidden implementation inputs:
+- Required durable artifacts:
+- Verification artifact path:
+- Required verification evidence:
+- Forbidden shortcuts:
+
 ## 3. Current Reality / As-Is
 Only include what a later execution session must know.
 
@@ -76,11 +84,16 @@ sequenceDiagram
 ### 7.2 State / Lifecycle Flow
 Use this section when task state, event ordering, or lifecycle transitions are important.
 
+### 7.3 Authorization / Ownership Flow
+Use this section when user-scoped resources, streaming endpoints, replay buffers, or job ownership matter.
+
 ## 8. Constraints and Boundaries
 - Technical constraints:
 - Pattern/style constraints:
 - External contracts or schemas required from the user:
 - Operational constraints:
+- Authorization and ownership constraints:
+- Artifact hygiene constraints:
 
 ## 9. Open Questions
 List only unresolved items that block or shape implementation.
@@ -120,4 +133,6 @@ State how later sessions should judge whether the architecture has been respecte
 
 - Key files/modules to inspect:
 - Key flows to verify:
+- Key authorization / ownership boundaries:
+- Required durable artifacts to inspect:
 - Human-provided inputs still required:

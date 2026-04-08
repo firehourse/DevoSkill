@@ -20,3 +20,4 @@ Use this skill as a pre-completion gate after implementation work is done and be
 - Use the principle in each category to reason and the examples to pattern-match.
 - If any item fails, fix it before declaring the phase complete.
 - Do not skip a category because it "probably doesn't apply" — verify, then skip if confirmed irrelevant.
+- Treat verification as contract execution, not a vibe check. If the evidence surface is missing, the quality gate has not passed.

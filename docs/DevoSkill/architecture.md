@@ -3,22 +3,29 @@
 ## Current Reality
 - DevoSkill is a router-style skill framework under `skills/`.
 - The core value is phase discipline: planning, approval, development, review, and performance.
-- The current structure is strong on protocol routing, but weaker on short-trigger usability and task-specific entry points.
+- The current structure is strong on protocol routing, but the execution contract has recently expanded beyond the old trigger-testing slice.
+- The implementation now includes stronger workspace setup rules, explicit design/verification artifacts, durable evidence requirements, and engineering standards, but the project-level planning docs had not been written back to describe that broader shape.
+- Multiple accidental local-state paths (`config/`, `skills/config/`) appeared alongside the canonical `skills/devoskill/config/workspace-map.local.json`, which risks repo pollution and inconsistent workspace mapping behavior.
 
 ## Approved Target Shape
 - Keep the existing router and phase model intact.
-- Improve skill discoverability with clearer trigger-oriented descriptions and quick-start guidance.
-- Make the top-level router classify from natural project/task descriptions instead of depending on explicit skill names.
-- Make planning use user-grilling by default rather than treating grilling as an independent router mode.
-- Keep `devoskill-grill` only as a compact support module for planning-time interrogation.
-- Add a lightweight trigger-testing skeleton that validates short prompts without importing a heavyweight test harness.
-- Update top-level documentation so the new capability is visible without reading the whole tree.
+- Keep the existing router and phase model intact while hardening the execution contract.
+- Make the planning surface explicitly document:
+  - the active feature folder model under `.devoskill`,
+  - `design.md` as the binding implementation contract,
+  - `verification.md` as the durable evidence surface,
+  - engineering standards as mandatory review/development gates,
+  - artifact hygiene and ownership/authorization checks as first-class review concerns.
+- Keep local workspace state canonical at `skills/devoskill/config/workspace-map.local.json` and treat any duplicate local-state path as legacy pollution to clean up rather than preserve.
+- Keep the lightweight trigger-testing skeleton, but treat it as only one slice of the product, not the whole effective architecture.
 
 ## Boundaries
-- Do not redesign the overall DevoSkill workflow model in this slice.
-- Do not change unrelated skills or overwrite existing user edits.
-- Keep the new skill compact and compatible with the existing sibling-skill pattern.
+- Do not redesign the overall DevoSkill workflow model.
+- Do not introduce a heavyweight test harness or unrelated product features.
+- Do not track machine-local workspace mapping state in git.
+- Keep the new contract-oriented rules compatible with the existing sibling-skill pattern and concise enough to reload quickly.
 
 ## Execution Shape
 - Phase 1: Add the new grill skill and improve trigger surfacing in the entrypoint docs.
 - Phase 2: Add a minimal trigger-testing skeleton and document the low-context testing principle.
+- Phase 3: Harden DevoSkill into a document-driven execution contract by adding project/feature folder rules, design/verification artifacts, engineering standards, review evidence checks, and artifact-hygiene expectations.

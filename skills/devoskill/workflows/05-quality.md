@@ -59,6 +59,8 @@ Apply this workflow as a pre-completion gate at the end of any implementation ph
 | ✅ | Publisher holds a shared long-lived channel; retries on error before reconnecting |
 | ❌ | A side-channel subscriber (e.g. cancel, config broadcast) has no reconnect — treated as "less important" |
 | ✅ | Side-channel subscribers are wrapped in the same reconnect loop as primary consumers |
+| ❌ | `case msg, open := <-pubSub.Channel(): if !open { return }` — goroutine exits on channel close, subscription is never re-established |
+| ✅ | Channel close is treated as a disconnect signal; the goroutine loops back and re-subscribes with backoff |
 
 ---
 
@@ -92,7 +94,22 @@ Apply this workflow as a pre-completion gate at the end of any implementation ph
 
 ---
 
-## 7. Graceful Shutdown
+## 7. Authorization Surface
+
+**Principle:** Every read, stream, subscription, replay, and mutation surface that is scoped to a user-owned resource must enforce ownership explicitly. Streaming endpoints and recovery channels are data access surfaces, not infrastructure exceptions. If a task, document, or job belongs to a user, every path that exposes its state must verify that relationship.
+
+| | Example |
+|---|---|
+| ❌ | `GET /tasks/:id/events` subscribes by `taskId` only and never checks the current user owns that task |
+| ✅ | The stream path validates `taskId` ownership before subscribing or replaying buffered content |
+| ❌ | History fetch checks ownership but SSE replay and cancel paths do not |
+| ✅ | CRUD, stream, replay, cancel, and background callbacks all enforce the same resource boundary |
+| ❌ | "The gateway already has a cookie" used as justification to skip per-resource authorization |
+| ✅ | Cookie/session establishes identity; each resource path still checks authorization against that identity |
+
+---
+
+## 8. Graceful Shutdown
 
 **Principle:** Every long-running process must intercept OS termination signals and propagate them to in-flight work before the process exits. Without this, a container orchestrator's graceful stop window is wasted — the process is force-killed mid-job, dropping work silently. The signal should cancel a root cancellation token or channel that all workers and loops already respect.
 
@@ -105,7 +122,7 @@ Apply this workflow as a pre-completion gate at the end of any implementation ph
 
 ---
 
-## 8. Frontend Async Hygiene
+## 9. Frontend Async Hygiene
 
 **Principle:** Every async operation that drives UI state must handle both success and failure explicitly. A missing `catch` or `finally` leaves loading flags permanently set and the UI frozen. Every long-lived browser connection must be closed when the component that owns it is torn down.
 
@@ -115,3 +132,20 @@ Apply this workflow as a pre-completion gate at the end of any implementation ph
 | ✅ | `try { ... } catch (e) { errorMessage.value = e.message } finally { creating.value = false }` |
 | ❌ | `eventSource = new EventSource(url)` with no teardown |
 | ✅ | `onBeforeUnmount(() => eventSource?.close())` |
+
+---
+
+## 10. Verification Evidence and Harness Hygiene
+
+**Principle:** A phase is only verifiable when the claimed results can be re-checked from durable artifacts or directly inspectable repository state. Build output, dependency directories, uploads, and other runtime byproducts must not pollute the tracked implementation tree unless the planning contract explicitly requires them. In meta-harness style work, preserving raw evidence is good; preserving accidental artifacts is not.
+
+| | Example |
+|---|---|
+| ❌ | `task.md` says "SSE verified" but there is no command log, trace, verification note, or reproducible repo state to inspect |
+| ✅ | `task.md` points to `verification.md` or another declared evidence artifact that later review can inspect |
+| ❌ | `dist/`, `node_modules/`, compiled binaries, or uploaded fixtures are left in the generated source tree and treated as harmless |
+| ✅ | Artifact paths are either ignored, excluded, or moved to a declared evidence location in `skilldocs` |
+| ❌ | Review relies on "looks done" because the implementation summary sounds plausible |
+| ✅ | Review can compare contract, file tree, and evidence without relying on chat memory |
+| ❌ | Verification commands were run, but their evidence lives only in chat and disappears next session |
+| ✅ | `verification.md` records the checks, results, and remaining gaps in a reusable form |

@@ -18,9 +18,12 @@ This is the entry point for DevoSkill. It defines the absolute minimum constrain
 ## 1. Global Constraints
 - **Planning Document Limits:** Effective planning and note files (`architecture.md`, `task.md`, and files under `notes/`) should stay under 600 lines each. Split or trim them immediately if crossed.
 - **Workspace Mapping State:** Before any file generation or planning, resolve the current workspace's `skilldocs` location from the local state file `config/workspace-map.local.json` when it exists. If it does not exist, dynamically derive the mapping, then write it back to that local file for later sessions.
-- **Python Ecosystem:** If utilizing Python, `uv` is mandatory for dependency and script execution.
+- **Python Ecosystem:** See `templates/design-python.md` for all Python/uv rules.
 - **No Idle Summaries:** Maintain project state exclusively via file modifications in the mapped `skilldocs`.
+- **Explicit Contracts:** Treat `architecture.md`, `task.md`, `design.md`, and any required verification artifact as an executable harness contract. Do not treat them as loose narrative notes.
+- **Durable Evidence:** Verification claims must be backed by durable artifacts in `skilldocs` or directly inspectable repository state. Avoid status lines that only say "verified" with no checkable surface.
 - **Pre-Requisite Planning:** Do not write code without an explicit `task.md`.
+- **Engineering Standards:** All code must conform to `workflows/engineering-standards.md`. The minimum required layer structure is Router → Controller → Service → Repository. For Node.js: interfaces and enums in `types/`, no bare string constants in business logic, helpers extracted to `util/`.
 
 ## 2. Dynamic Workflow Routing
 When presented with a user request, identify the appropriate phase and load the corresponding sibling skill first. Each sibling skill then points to the exact workflow and protocol documents required for that phase.

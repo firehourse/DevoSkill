@@ -6,20 +6,32 @@ When tasked with implementing a feature based on a plan, you are the **Developer
 
 ### Step 1: Pre-Flight Environment Checks
 1. Ensure the target `skilldocs` location exists in your context. Check for a local `.devoskill/` symlink. If missing, follow `protocols/workspace-setup.md`.
-2. Python Projects: You MUST ensure that all package installations and environments utilize `uv`. Do not fall back to `pip` or virtual environments natively.
-3. Load only the relevant planning surface:
-   - the active phase in `task.md`,
-   - the effective architecture sections referenced by that phase,
-   - and any human-provided contract or schema explicitly required by the task.
+2. Identify the active feature folder. The `.devoskill` symlink points to the project root (`<Project_Name>/`). The active feature folder is a named subdirectory inside it (e.g. `.devoskill/delete-conversation/`). If the user has not specified which feature is active, ask before loading any planning files.
+3. Python Projects: Follow `templates/design-python.md` — `uv` is the only allowed package manager.
+4. Load only the relevant planning surface in this order:
+   - `<feature-folder>/design.md` — folder structure and class diagram; this is the binding implementation contract
+   - the active phase in `<feature-folder>/task.md`
+   - `<feature-folder>/verification.md` — the required evidence contract and output surface
+   - `<feature-folder>/architecture.md` if it exists, then project-level `architecture.md` for baseline context
+   - any human-provided contract or schema explicitly required by the task
+5. Before writing any file, verify that its name and location match `design.md` exactly. If a discrepancy exists, update `design.md` and confirm with the user before proceeding.
+6. Before coding, derive a short implementation checklist from the planning contract:
+   - behavior contract entries,
+   - authorization and ownership boundaries,
+   - state transitions and lifecycle rules,
+   - verification artifacts that must exist at the end.
 4. Do NOT load history, abandoned approaches, or old phases unless the user explicitly asks for them.
 5. Confirm that implementation is explicitly approved in the active planning surface or by the user's current instruction. If approval is missing or ambiguous, stop and ask the user whether to begin implementation now.
 
 ### Step 2: Strict Adherence
 Follow the active-phase tasks linearly based on `task.md`.
 - **No Creativity in Architecture**: You are explicitly prohibited from unilaterally changing the architecture, adding third-party dependencies not mentioned in `task.md`, or reshaping the design scope.
+- **Engineering Standards**: All produced code must conform to `workflows/engineering-standards.md`. Layer hierarchy (Router → Controller → Service → Repository), naming clarity, error context, structured logging, no magic values, API response shape, and file discipline (400 lines) are non-negotiable regardless of what task.md says. Language-specific sections (Node.js, Go) in the same file also apply.
 - **Respect Human Handoffs**: If `task.md` marks a step as a user handoff, stop there. Do not guess through missing schema, missing contracts, sensitive credentials, or production-only operations.
 - **Respect the Approval Gate**: A finished `task.md` is necessary but not sufficient. No code edits begin until the user has explicitly authorized implementation.
 - **Planning Surface Discipline**: If implementation requires expanding `architecture.md`, `task.md`, or loaded notes beyond 600 lines, stop and split or trim the planning surface before continuing.
+- **Behavior Contract Discipline**: Implement every documented endpoint, state transition, ownership rule, and stop condition exactly as written. Missing a negative path or boundary check is a contract failure, not an optional enhancement.
+- **Artifact Hygiene Discipline**: Build outputs, dependency directories, uploads, traces, and generated assets must live only where the planning contract allows. Do not leave runtime artifacts in the tracked source tree unless the contract explicitly calls for them.
 
 ### Step 3: Maintenance & Refactoring Constraints
 When modifying or refactoring **existing** code (as opposed to greenfield development), additional rules apply:
@@ -52,6 +64,10 @@ Produce functionality matching the requirements.
   - record blockers or pending user handoffs,
   - update the active phase summary if the current execution state changed.
 - **Conditional Architecture Writeback**: If the finished implementation changed the effective architecture, constraints, boundaries, key flows, or approved target shape, update `architecture.md` before declaring the phase complete.
+- **Mandatory Evidence Writeback**: If the task or design contract requires durable verification artifacts, create or update them before declaring the task complete.
+- **Verification File Is Mandatory**: Raw checks, command outputs, negative-path results, ownership tests, and cleanup notes belong in `verification.md`. Do not compress them into `task.md`.
+- **Planning Reality Reconciliation**: Before marking the phase ready for review, compare `architecture.md`, `task.md`, `design.md`, `verification.md`, and the actual file tree. If any of them disagree about active scope, artifact locations, delivered state, or cleanup status, reconcile them first.
+- **File-Tree Reconciliation Is Concrete Work**: List the declared tree from `design.md`, inspect the actual tree, and record any unexpected artifacts in `verification.md`. Remove or relocate them before declaring the phase complete unless the contract explicitly allows them.
 - **No Silent Completion**: If code changed but `task.md` still reads like the work has not started, the phase is not complete.
 - Once all tasks in the active phase are completed, writeback is done, and verification is recorded, trigger the Review phase by stating the phase is completed and awaiting review.
 
