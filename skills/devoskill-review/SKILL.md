@@ -7,6 +7,12 @@ description: Review module for DevoSkill. Use when reviewing implementation agai
 
 Use this skill when the request is to verify implementation compliance.
 
+Assume the entry router has already:
+- resolved bootstrap state or explicitly sent you into workspace setup,
+- classified the request as `Review`.
+
+If the work no longer matches review, stop and reroute instead of continuing.
+
 ## Load Order
 1. Read `../devoskill/workflows/03-review.md`
 2. Read `../devoskill/workflows/engineering-standards.md` — load the language-specific section matching the implementation stack
@@ -15,6 +21,7 @@ Use this skill when the request is to verify implementation compliance.
 5. Load project-level `architecture.md` for baseline context
 
 ## Required Behavior
+- Keep checking that the task is still validation/compliance work. If the user pivots into planning, coding, or performance debugging, reroute.
 - Review for scope bleed, architecture drift, phase integrity, and file size violations.
 - Treat `architecture.md` and `task.md` as the source of truth, not "working code".
 - If code and architecture diverge, return a concrete discrepancy list instead of normalizing the drift.

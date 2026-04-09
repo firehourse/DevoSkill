@@ -3,21 +3,56 @@ name: DevoSkill
 description: A standardized prompt-based framework for document-driven software development and AI agent orchestration. Use when the user describes a project, says what they are trying to do, and needs the agent routed to planning, implementation, review, or debugging with minimal context loading.
 ---
 
-# DevoSkill: Core Principles
+# DevoSkill: Bootstrap-First Router
 
-This is the entry point for DevoSkill. It defines the absolute minimum constraints and acts as a directory to load other specialized instructions when needed.
+This is the entry point for DevoSkill. Its job is not to teach every rule up front. Its job is to:
+1. resolve bootstrap state early,
+2. classify the current work mode,
+3. load only the smallest matching skill,
+4. avoid loading unrelated instruction sets.
 
-## Quick Start
-- If the user says what project they are in and what they need next, route from that description instead of waiting for skill keywords.
-- Use `../devoskill-planning/SKILL.md` when the user needs architecture, scope, task breakdown, or approval-ready planning artifacts. Planning always uses a grilling style to pressure-test the user’s request before documents are written.
-- Use `../devoskill-development/SKILL.md` when the user wants implementation work on an already approved task.
-- Use `../devoskill-review/SKILL.md` when the user wants validation, comparison against intended architecture, or drift checking.
-- Use `../devoskill-performance/SKILL.md` when the user is chasing bottlenecks, failures, or measured runtime issues.
-- Use `../devoskill-quality/SKILL.md` as a pre-completion gate at the end of any implementation phase to verify technical correctness (resource lifecycle, validation, fault tolerance, operational hygiene, identity, frontend patterns).
+## 0. Bootstrap First
+Before reading any heavy workflow or support skill, do this guard check first:
 
-## 1. Global Constraints
+1. Check whether the canonical local mapping state already exists at `skills/devoskill/config/workspace-map.local.json`.
+2. If it exists, treat workspace path resolution as already established. Do **not** load extra workspace-setup instructions just to reconfirm the same state.
+3. If it does not exist, or the current task is explicitly about repairing `skilldocs`, `.devoskill`, or workspace mapping, load `../devoskill-workspace-setup/SKILL.md`.
+
+Use workspace setup as a repair/bootstrap mode, not as default background reading.
+
+## 1. Classify Work Mode
+After the bootstrap check, classify the user's request into exactly one primary mode before loading any sibling skill:
+
+- `Planning`: define architecture, clarify scope, split work, write or rewrite `architecture.md` / `task.md`, or pressure-test assumptions
+- `Development`: implement an already approved task, modify code, or execute a planned change
+- `Review`: compare implementation against architecture/task contracts, inspect drift, or perform code review/compliance review
+- `Debug/Performance`: investigate failures, regressions, bottlenecks, baselines, or measured runtime issues
+
+If the user only describes the project and desired next step in natural language, infer the mode from that description. Do not wait for explicit skill names.
+
+## 2. Route By Mode
+Once a primary mode is chosen, load only the matching sibling skill:
+
+- `Planning` -> `../devoskill-planning/SKILL.md`
+- `Development` -> `../devoskill-development/SKILL.md`
+- `Review` -> `../devoskill-review/SKILL.md`
+- `Debug/Performance` -> `../devoskill-performance/SKILL.md`
+
+Do not preload quality, grill, workspace setup, or other support skills unless the chosen mode explicitly requires them.
+
+## 3. Stay Phase-Aware While Working
+After loading a mode-specific skill, keep checking whether the current work still matches that mode.
+
+- If you discover you are actually planning, stop loading development/review details and switch to `Planning`.
+- If you discover implementation is approved and the user now wants code changes, switch to `Development`.
+- If you discover the request is validation-only, switch to `Review`.
+- If you discover the issue is measured failure/bottleneck work, switch to `Debug/Performance`.
+
+Do not continue under the wrong phase just because you already loaded one skill.
+
+## 4. Global Constraints
 - **Planning Document Limits:** Effective planning and note files (`architecture.md`, `task.md`, and files under `notes/`) should stay under 600 lines each. Split or trim them immediately if crossed.
-- **Workspace Mapping State:** Before any file generation or planning, resolve the current workspace's `skilldocs` location from the local state file `config/workspace-map.local.json` when it exists. If it does not exist, dynamically derive the mapping, then write it back to that local file for later sessions.
+- **Canonical Workspace Mapping State:** The only canonical local mapping path is `skills/devoskill/config/workspace-map.local.json`. Do not create or rely on duplicate local-state files elsewhere in the repo.
 - **Python Ecosystem:** See `templates/design-python.md` for all Python/uv rules.
 - **No Idle Summaries:** Maintain project state exclusively via file modifications in the mapped `skilldocs`.
 - **Explicit Contracts:** Treat `architecture.md`, `task.md`, `design.md`, and any required verification artifact as an executable harness contract. Do not treat them as loose narrative notes.
@@ -25,38 +60,12 @@ This is the entry point for DevoSkill. It defines the absolute minimum constrain
 - **Pre-Requisite Planning:** Do not write code without an explicit `task.md`.
 - **Engineering Standards:** All code must conform to `workflows/engineering-standards.md`. The minimum required layer structure is Router → Controller → Service → Repository. For Node.js: interfaces and enums in `types/`, no bare string constants in business logic, helpers extracted to `util/`.
 
-## 2. Dynamic Workflow Routing
-When presented with a user request, identify the appropriate phase and load the corresponding sibling skill first. Each sibling skill then points to the exact workflow and protocol documents required for that phase.
+## 5. Support Modules
+Support modules are phase-local, not global defaults:
 
-Route based on three things from the user's natural-language description:
-1. **Project state**: new project, existing system, approved task, broken system, or uncertain situation
-2. **Immediate intent**: plan, build, review, debug, or clarify
-3. **Requested output**: architecture, `task.md`, code changes, discrepancy list, benchmark/debug result, or focused questions
-
-Prefer the smallest skill that matches the request. Do not load extra modes "just in case."
-
-Examples of natural routing:
-- "I have project X and need a phased rollout plan" -> `../devoskill-planning/SKILL.md`
-- "I have project X, task Y is approved, please implement it" -> `../devoskill-development/SKILL.md`
-- "I changed project X, help me check whether it drifted from the plan" -> `../devoskill-review/SKILL.md`
-- "Project X is slow or failing under load, help me find the bottleneck" -> `../devoskill-performance/SKILL.md`
-- "I have project X and an idea, help me figure out what I'm missing" -> `../devoskill-planning/SKILL.md` using grilling questions before planning docs
-
-- **For New Project Planning / Architecture Design:**
-  - Read `../devoskill-planning/SKILL.md`
-- **For Executing Development Tasks:**
-  - Read `../devoskill-development/SKILL.md`
-- **For Maintaining, Refactoring, or Modifying Existing Code:**
-  - Read `../devoskill-development/SKILL.md`
-- **For Diagnostics, Profiling, or Performance Bottlenecks:**
-  - Read `../devoskill-performance/SKILL.md`
-- **For Reviewing Code against Architecture:**
-  - Read `../devoskill-review/SKILL.md`
-
-## 3. Shared Support Modules
-Load these support skills when the phase requires them:
-- For Pre-completion Technical Quality Gate: Read `../devoskill-quality/SKILL.md`, then load any matching language-specific quality skill (`../devoskill-quality-go/SKILL.md`, `../devoskill-quality-node/SKILL.md`) for each language present in the implementation
-- For Workspace/Directories Configuration (`skilldocs`, `.devoskill`): Read `../devoskill-workspace-setup/SKILL.md`
-- For Thinking Phase classification and boundary confirmation: Read `../devoskill-thinking-phase/SKILL.md`
-- For planning-time user interrogation and assumption pressure-testing: Read `../devoskill-grill/SKILL.md` only as a support module inside planning
-- For Subagent Orchestration (Planning, Developing): Read `protocols/subagent-orchestration.md`
+- `../devoskill-workspace-setup/SKILL.md`: only when bootstrap state is missing or workspace setup is the task
+- `../devoskill-thinking-phase/SKILL.md`: only inside planning when the request still needs classification and boundary confirmation
+- `../devoskill-grill/SKILL.md`: only inside planning as the interrogation style
+- `../devoskill-quality/SKILL.md`: only as a pre-completion gate at the end of implementation
+- `../devoskill-quality-go/SKILL.md`, `../devoskill-quality-node/SKILL.md`: only when quality is running and those languages are present
+- `protocols/subagent-orchestration.md`: only when planning or development actually delegates work
