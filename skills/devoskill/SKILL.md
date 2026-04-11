@@ -54,6 +54,7 @@ Do not continue under the wrong phase just because you already loaded one skill.
 - **Planning Document Limits:** Effective planning and note files (`architecture.md`, `task.md`, and files under `notes/`) should stay under 600 lines each. Split or trim them immediately if crossed.
 - **Canonical Workspace Mapping State:** The only canonical local mapping path is `skills/devoskill/config/workspace-map.local.json`. Do not create or rely on duplicate local-state files elsewhere in the repo.
 - **Python Ecosystem:** See `templates/design-python.md` for all Python/uv rules.
+- **Document Language:** Write all planning documents (`architecture.md`, `task.md`, `design.md`, `notes/`) in the language the user is communicating in. Documents are read by the user, not the model — match their language. Section headings may stay in English as structural anchors (they come from the template), but all body content follows the user's language.
 - **No Idle Summaries:** Maintain project state exclusively via file modifications in the mapped `skilldocs`.
 - **Explicit Contracts:** Treat `architecture.md`, `task.md`, `design.md`, and any required verification artifact as an executable harness contract. Do not treat them as loose narrative notes.
 - **Durable Evidence:** Verification claims must be backed by durable artifacts in `skilldocs` or directly inspectable repository state. Avoid status lines that only say "verified" with no checkable surface.

@@ -83,8 +83,57 @@ To have Cursor automatically follow DevoSkill on any project:
 Whenever Cursor Chat opens, the `.mdc` file forces the AI to consult `skills/devoskill/SKILL.md` before generating code.
 
 ### 2. Claude Code Integration
-For Claude Code environments, you can inject DevoSkill directly via the provided configuration:
-- Copy the `.claude.json` configuration to your repository or merge it with your `.clauderc` to establish the `projectDependencies`. 
+
+Claude Code reads `CLAUDE.md` at startup to load project-level instructions. DevoSkill hooks into this mechanism so it is active in every session automatically.
+
+**Step 1 — Bootstrap via CLAUDE.md**
+
+Create or append to `CLAUDE.md` in your workspace root:
+
+```markdown
+# Workspace Claude Bootstrap
+
+This workspace uses DevoSkill as mandatory startup context.
+
+Before responding to any user request, load and follow:
+`/path/to/DevoSkill/skills/devoskill/SKILL.md`
+
+Execution rules:
+- Read `SKILL.md` before planning, asking clarifying questions, editing files, or reviewing code.
+- Route the task through the workflow selected by `SKILL.md`.
+- Follow DevoSkill workspace registry and `skilldocs` rules whenever planning or document persistence is required.
+- User instructions still take precedence when they explicitly override a DevoSkill preference.
+
+If the DevoSkill path is missing, stop and tell the user to restore the local clone or relink the skill.
+```
+
+Replace `/path/to/DevoSkill` with the absolute path to your local clone (e.g. `/home/user/workspace/DevoSkill`).
+
+**Step 2 — Register the `/Devoskill` slash command**
+
+Create `.claude/commands/Devoskill.md` inside your workspace:
+
+```bash
+mkdir -p .claude/commands
+```
+
+```markdown
+Load and execute the DevoSkill framework.
+
+Read `/path/to/DevoSkill/skills/devoskill/SKILL.md` and follow its router workflow
+for the current task: perform the bootstrap check, classify the work mode
+(Planning / Development / Review / Debug), load the matching sibling skill,
+and proceed accordingly.
+
+If an argument is provided (e.g. `/Devoskill plan` or `/Devoskill dev`),
+use it as a hint for mode classification. Otherwise infer from context.
+
+$ARGUMENTS
+```
+
+After restarting Claude Code, `/Devoskill` will appear as a registered slash command in the current workspace.
+
+To register it globally (available in all workspaces), place the same file at `~/.claude/commands/Devoskill.md`.
 
 ### 3. Codex (Bootstrap via AGENTS.md)
 Codex does not use Cursor rule files. To make DevoSkill load automatically in Codex, install the provided bootstrap `AGENTS.md` into the workspace root that Codex runs from.

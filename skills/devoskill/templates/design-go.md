@@ -77,6 +77,34 @@ classDiagram
   Repository ..|> taskRepository
 ```
 
+## Class Responsibilities
+
+> Class diagrams express structure only. This section explains each struct or interface's **responsibility boundary** and **design rationale** so future developers do not have to reverse-engineer intent from code.
+
+One subsection per type in the diagram. Use this pattern:
+
+### `TypeName`
+- What it **owns** (one-sentence boundary definition)
+- What it **does not own** (explicit exclusions to prevent scope creep)
+- If this type is modified in this feature: why it changed and what changed
+
+Example (Go style):
+
+### `TaskHandler`
+- HTTP entry point. Parses request, calls service, writes response.
+- Owns no business logic and never touches the DB directly.
+- All errors flow through a single `handleError` helper — no domain-error type switches inside handlers.
+
+### `taskService` (interface, defined in handler package)
+- Consumer-defined contract describing what the handler needs from the service layer.
+- Not bound to any concrete implementation — allows test injection without a real service.
+
+### `TaskService` (concrete)
+- Holds a `taskRepository` interface and implements all business logic.
+- Never accesses the DB directly — all data operations go through the repository interface.
+
+---
+
 ## Naming Rules (enforce before writing any file)
 
 - Package names: single lowercase word — `handler`, `service`, `repository`, `domain`

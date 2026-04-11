@@ -71,6 +71,30 @@ classDiagram
   PgTaskRepository ..|> TaskRepository
 ```
 
+## Class Responsibilities
+
+> Class diagrams express structure only. This section explains each class's **responsibility boundary** and **design rationale** so future developers do not have to reverse-engineer intent from code.
+
+One subsection per class in the diagram. Use this pattern:
+
+### `ClassName`
+- What it **owns** (one-sentence boundary definition)
+- What it **does not own** (explicit exclusions to prevent scope creep)
+- If this class is modified in this feature: why it changed and what changed
+
+Example (based on message-event pattern):
+
+### `ConversationService`
+- Orchestrates conversation flow: creates user messages, avatar messages, and clears conversation history.
+- Does not own task progress calculation or any task-event logic beyond writing the event within the same transaction.
+- Changed in this feature: wraps user-message creation and task-event creation in one transaction so message evidence does not depend on a product-visible query.
+
+### `UserTaskProgressService`
+- Routes progress queries to the correct sub-service based on `task.rule.key`. Does not compute any rule directly.
+- Returns `0` when no rule handler matches — known risk, documented in Reward Accuracy Notes.
+
+---
+
 ## Naming Rules (enforce before writing any file)
 
 - Files: `[domain].[role].ts` — `task.service.ts`, `task.controller.ts`, `task.repository.ts`
