@@ -16,6 +16,7 @@ This document contains the currently effective architecture only. It is written 
 - Authoritative inputs:
 - Forbidden implementation inputs:
 - Required durable artifacts:
+- Test artifact path:
 - Verification artifact path:
 - Required verification evidence:
 - Forbidden shortcuts:
@@ -135,4 +136,5 @@ State how later sessions should judge whether the architecture has been respecte
 - Key flows to verify:
 - Key authorization / ownership boundaries:
 - Required durable artifacts to inspect:
+- Required test artifacts to inspect:
 - Human-provided inputs still required:

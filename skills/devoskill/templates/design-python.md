@@ -69,6 +69,28 @@ classDiagram
   PgTaskRepository ..|> TaskRepository
 ```
 
+## Class Responsibilities
+
+One subsection per class or protocol in the diagram. Use this pattern:
+
+### `ClassName`
+- What it owns
+- What it does not own
+- Why it changed in this feature, if applicable
+
+## Flow Mapping
+
+Document each meaningful request/job/stream as a numbered handoff chain:
+
+1. Entry point
+2. Router / handler
+3. Service orchestration
+4. Repository / external dependency boundary
+5. Persistence point
+6. Ownership / authorization check
+7. Side effects emitted
+8. Terminal response or emitted event
+
 ## Naming Rules (enforce before writing any file)
 
 - Files: `snake_case` — `task_service.py`, `task_repository.py`, `task_router.py`
@@ -79,3 +101,24 @@ classDiagram
 - Constants: `UPPER_CASE` at module level — `MAX_UPLOAD_BYTES = 25 * 1024 * 1024`
 - No hardcoded strings for status/type values — use `Enum` from `enum` module
 - Domain models use `dataclass` or Pydantic `BaseModel` — not plain dicts
+
+## Behavior Contract
+
+- Resource boundaries: list every user-scoped identifier and where ownership must be checked
+- Endpoint matrix: each route lists request owner, allowed states, side effects, and error cases
+- Job / event matrix: each queue or stream event lists producer, consumer, persistence, and replay surface
+- State transitions: list allowed transitions and forbidden transitions explicitly
+
+## Test Derivation Hooks
+
+- Unit-test seams implied by class responsibilities
+- Integration-test seams implied by flow mapping
+- Acceptance / BDD seams implied by behavior contract, state transitions, and ownership rules
+- Expected durable test artifact path: `<feature-folder>/test.md`
+
+## Verification Artifacts
+
+- Runtime checks that must be persisted or be directly reproducible from repository state
+- Negative-path checks that must be evidenced
+- Artifact hygiene rules for caches, uploads, generated files, and traces
+- Expected durable artifact path: `<feature-folder>/verification.md`

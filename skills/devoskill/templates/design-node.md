@@ -131,6 +131,13 @@ If the feature spans multiple runtimes or apps, split this into subsections per 
 - Job / event matrix: each queue or stream event lists producer, consumer, persistence, and replay surface
 - State transitions: list allowed transitions and forbidden transitions explicitly
 
+## Test Derivation Hooks
+
+- Unit-test seams implied by class responsibilities
+- Integration-test seams implied by flow mapping
+- Acceptance / BDD seams implied by behavior contract, state transitions, and ownership rules
+- Expected durable test artifact path: `<feature-folder>/test.md`
+
 ## Verification Artifacts
 
 - Runtime checks that must be persisted or be directly reproducible from repository state

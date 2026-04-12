@@ -9,6 +9,7 @@ Use this protocol when deciding the directory structure under SkillDocs.
   <feature-name>/
     task.md
     design.md
+    test.md
     verification.md
     architecture.md   # only when the feature adds meaningful design deltas
     notes/

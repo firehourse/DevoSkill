@@ -7,6 +7,7 @@ Use this protocol when a phase needs to know which document is allowed to claim 
 - `architecture.md` owns effective architecture and stable boundaries.
 - `task.md` owns only the active executable phase.
 - `design.md` owns the execution-facing design contract for the current feature or phase.
+- `test.md` owns the execution-facing testing contract derived from `design.md`.
 - `verification.md` owns durable verification evidence and reconciliation notes.
 - `notes/` owns non-default history and abandoned context.
 

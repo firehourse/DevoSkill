@@ -19,6 +19,7 @@ Use this step when generating `design.md`.
 - `Class Responsibilities`
 - `Flow Mapping`
 - behavior contract
+- test derivation hooks sufficient for `test.md` to map the design into executable coverage
 - verification artifact section
 - explicit phase-approved exceptions
 
@@ -28,3 +29,4 @@ Use this step when generating `design.md`.
 - class diagram without runtime flow mapping is insufficient
 - one merged multi-runtime diagram that hides ownership boundaries is insufficient
 - if a future developer cannot answer "which class handles this next?" from `design.md`, planning is incomplete
+- if a future developer cannot derive a concrete `test.md` from `design.md`, planning is incomplete

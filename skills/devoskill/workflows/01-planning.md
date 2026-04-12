@@ -15,7 +15,7 @@ When tasked with designing a new feature, analyzing a project, or creating a blu
 7. Read `planning-approval.md`
 
 ## Core Rule
-- Planning is not complete until architecture, task, design, verification intent, and approval boundary are all explicit enough that a later session does not need to replay the whole chat.
+- Planning is not complete until architecture, task, design, test contract, verification intent, and approval boundary are all explicit enough that a later session does not need to replay the whole chat.
 
 ## Red Flags — If You Think This, You Are Violating Protocol
 

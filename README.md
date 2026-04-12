@@ -8,10 +8,10 @@ DevoSkill is also organized as a function-like document system: each skill, prot
 
 ## Core Philosophy (The Hard Rules)
 1. **No Code Without Docs:** The agent will refuse to write code without a pre-approved `task.md`.
-2. **Planning Document Limits:** DevoSkill markdown artifacts such as `architecture.md`, `task.md`, `design.md`, `verification.md`, and `notes/*.md` should stay under 600 lines each so future sessions can reload them cleanly. This limit does not apply to implementation source files.
+2. **Planning Document Limits:** DevoSkill markdown artifacts such as `architecture.md`, `task.md`, `design.md`, `test.md`, `verification.md`, and `notes/*.md` should stay under 600 lines each so future sessions can reload them cleanly. This limit does not apply to implementation source files.
 3. **Python Ecosystem:** If the project uses Python, the agent is mandated to use `uv` for all dependency and environment management.
-4. **Document Persistence (SkillDocs):** The agent will not generate useless conversational summaries. The project state is maintained entirely via writing to `architecture.md` and `task.md` centralized in a `skilldocs` directory, isolating it from your source code repository.
-5. **Effective Planning Surface:** `architecture.md` stores only the current effective architecture, and `task.md` stores only the active executable phase. History is not part of the default context.
+4. **Document Persistence (SkillDocs):** The agent will not generate useless conversational summaries. Durable project state is maintained through the SkillDocs document system (`architecture.md`, `design.md`, `test.md`, `task.md`, `verification.md`) centralized in a `skilldocs` directory, isolating it from your source code repository.
+5. **Effective Planning Surface:** `architecture.md` stores only the current effective architecture, `design.md` stores the implementation contract, `test.md` stores the testing contract, and `task.md` stores only the active executable phase. History is not part of the default context.
 
 ## How It Works
 
@@ -83,6 +83,32 @@ DevoSkill is optimized for collaboration with LLMs under context pressure, not f
 - **Phase-Based Execution:** Large changes are split into architecture parts and task phases so later sessions can reload them cleanly.
 - **Human Boundary Respect:** If DB schema, production contracts, credentials, or sensitive runtime state are missing, the agent asks the user instead of guessing.
 - **Minimal Default Context:** Future sessions should be able to read only the effective architecture and current task phase, not a pile of planning history.
+
+## Development Doctrine
+
+DevoSkill is intentionally built for humans and agents operating under prompt-weight constraints, not for generic prose documentation.
+
+- **Prompt-weight-aware routing:** Router content carries only high-level classification and load decisions because models over-weight the beginning and end of what they read. Detailed execution constraints belong in the routed skill, where they become fresh high-weight context again.
+- **Fine-grained prompt modules:** Skills, protocols, workflows, and templates should stay small and single-purpose. Agents tend to consume whole files, not selectively parse dense middle sections, so each file should answer one primary question cleanly.
+- **Document-driven synchronization:** Durable planning artifacts are the mechanism for keeping later sessions aligned with prior intent. If a decision is not written back to the correct document, it should be treated as non-durable.
+- **Shared contracts over duplication:** Avoid repeating the same rule across multiple skills when one protocol or workflow can own it. Repeated prompt logic behaves like duplicated code: it drifts and becomes contradictory.
+- **DDD-like document boundaries:** Each artifact owns a bounded semantic role. `architecture.md` owns architecture, `design.md` owns implementation design, `test.md` owns the testing contract, `task.md` owns active execution, and `verification.md` owns evidence.
+
+See [docs/DevoSkill/doctrine.md](docs/DevoSkill/doctrine.md) for the full long-lived development doctrine that future maintainers and agents should read before reshaping DevoSkill itself.
+
+## Testing Contract
+
+DevoSkill now treats testing as a first-class planning artifact rather than an afterthought hidden inside verification notes.
+
+- `design.md` defines how the system should be built.
+- `test.md` derives executable test strategy from `design.md` and records the approved methodology: `TDD`, `BDD`, or `Follow Existing Project Pattern`.
+- `verification.md` stores executed evidence, command outputs, pass/fail results, and reconciliation notes. It does not own test design.
+
+Recommended defaults:
+
+- Greenfield work defaults to `TDD` unless the feature is primarily journey-driven or cross-runtime, in which case `BDD` may be explicitly selected.
+- Existing systems default to `Follow Existing Project Pattern` unless the planning docs explicitly authorize a change in testing style.
+- `design.md` class responsibilities should map to unit tests, flow mappings should map to integration tests, and behavior contracts should map to acceptance or BDD scenarios.
 
 ## Installation & Usage
 
@@ -214,8 +240,8 @@ DevoSkill/
         ├── workflows/
         │   ├── 01-planning.md                # Thin router for planning steps
         │   ├── planning-context-bootstrap.md # Planning bootstrap and scope init
-        │   ├── planning-artifacts.md         # Architecture/task/verification rules
-        │   ├── planning-design-contract.md   # Binding design contract rules
+        │   ├── planning-artifacts.md         # Architecture/task/design/test/verification rules
+        │   ├── planning-design-contract.md   # Binding design + test traceability rules
         │   ├── planning-approval.md          # Approval gate and clean handoff
         │   ├── 02-development.md             # Active-phase execution rules
         │   ├── 03-review.md                  # Effective-architecture compliance checks
@@ -228,7 +254,7 @@ DevoSkill/
         │   ├── quality-frontend.md           # Frontend async category
         │   ├── quality-go.md                 # Go-specific quality checks
         │   └── quality-node.md               # Node.js/TypeScript-specific quality checks
-        └── templates/                        # Effective architecture and active task templates
+        └── templates/                        # Effective architecture, test, evidence, and active task templates
     ├── devoskill-planning/
     │   └── SKILL.md                          # Planning skill entry point
     ├── devoskill-development/

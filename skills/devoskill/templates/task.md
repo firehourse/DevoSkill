@@ -3,7 +3,7 @@
 This document contains only the currently active executable work. It is the source of truth for the Developer subagent during the current phase.
 
 ## Global Constraints Reminder
-- Keep DevoSkill markdown files (`architecture.md`, `task.md`, `design.md`, `verification.md`, and `notes/*.md`) under 600 lines each. Split phases or move history into `notes/` if necessary. This limit does not apply to implementation source files.
+- Keep DevoSkill markdown files (`architecture.md`, `task.md`, `design.md`, `test.md`, `verification.md`, and `notes/*.md`) under 600 lines each. Split phases or move history into `notes/` if necessary. This limit does not apply to implementation source files.
 - Python projects: follow `templates/design-python.md`.
 - If `architecture.md` and `task.md` disagree, stop and return to planning.
 - Do not load history or abandoned plans unless the user explicitly asks for them.
@@ -22,6 +22,7 @@ This document contains only the currently active executable work. It is the sour
 - Next user handoff:
 - Stop and ask the user if:
 - Verification artifact location: `[feature-folder]/verification.md`
+- Test contract location: `[feature-folder]/test.md`
 - Planning reality last reconciled at:
 
 ## 2. Setup and Preconditions
@@ -32,9 +33,11 @@ This document contains only the currently active executable work. It is the sour
 - [ ] Explicit implementation go-ahead recorded from the user
 - [ ] Writeback expectations for `task.md` / `architecture.md` confirmed
 - [ ] Behavior contract extracted from `architecture.md` / `design.md`
+- [ ] Test methodology and minimum coverage extracted from `test.md`
 - [ ] Authorization / ownership boundaries identified
 - [ ] Verification artifact expectations confirmed
 - [ ] Runtime artifact hygiene expectations confirmed
+- [ ] `test.md` bootstrapped and linked from the active phase summary
 - [ ] `verification.md` bootstrapped and linked from the active phase summary
 
 ## 3. Execution Tasks
@@ -77,14 +80,16 @@ This document contains only the currently active executable work. It is the sour
 
 ## 4. Verification Contract
 - Required runtime checks:
+- Required test suites / scenarios from `test.md`:
 - Required ownership / authorization checks:
 - Required negative-path checks:
 - Evidence that later review must be able to inspect in `verification.md`:
 
 ## 5. Planning Reality Reconciliation
-- [ ] `architecture.md`, `task.md`, `design.md`, and actual file tree agree on active scope
+- [ ] `architecture.md`, `task.md`, `design.md`, `test.md`, and actual file tree agree on active scope
 - [ ] Delivered artifacts exist only in approved locations
 - [ ] Verification claims are backed by evidence
+- [ ] `test.md` still matches actual planned coverage and methodology
 - [ ] `verification.md` reflects the latest executed checks and remaining gaps
 - [ ] Remaining drift is either fixed or explicitly handed back to planning
 

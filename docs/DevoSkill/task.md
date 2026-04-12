@@ -1,17 +1,17 @@
 # DevoSkill Active Task Plan
 
 ## 1. Active Phase Summary
-- Current Phase: `Phase 4`
-- Goal: Front-load DevoSkill's bootstrap and mode-routing rules so the model sees path resolution and work-mode classification before detailed workflow prose.
+- Current Phase: `Phase 5`
+- Goal: Add a stable DevoSkill doctrine for future humans/agents and promote `test.md` into a first-class planning artifact tied to `design.md`.
 - Depends on architecture sections: `Current Reality`, `Approved Target Shape`, `Boundaries`, `Execution Shape`
 - Implementation approval status: `Approved to implement`
 - Explicit go-ahead required before code changes: `No`
 - Execution status: `Completed`
-- Last writeback timestamp / session note: `2026-04-09 restructured DevoSkill around bootstrap-first and mode-first routing, and updated sibling skills to self-check phase instead of assuming static context`
+- Last writeback timestamp / session note: `2026-04-12 added doctrine and first-class test contract support across the DevoSkill document system`
 - User inputs still required: `None for this slice`
 - Current blocker: `None`
-- Next user handoff: `Review and decide whether to continue into prompt-mechanics refinements or trigger tests for the new routing model`
-- Stop and ask the user if: `A broader DevoSkill restructuring is needed beyond bootstrap-first and mode-first routing`
+- Next user handoff: `Review whether the doctrine and test contract model should be refined further or exercised through a concrete feature plan`
+- Stop and ask the user if: `A broader DevoSkill document-system redesign is needed beyond doctrine + test contract integration`
 
 ## 2. Setup and Preconditions
 - [x] Local skilldocs mapping established
@@ -20,59 +20,61 @@
 
 ## 3. Execution Tasks
 
-### 3.1 Bootstrap-first router refactor
-- Scope: Move DevoSkill's most important routing decisions to the front of the entry prompt so the model first decides path state and work mode, then loads the smallest matching skill.
-- Files / modules: `skills/devoskill/SKILL.md`, `skills/devoskill-workspace-setup/SKILL.md`
-- Constraints: Preserve the router model, keep rules concise, and avoid loading workspace-setup by default when canonical state already exists.
+### 3.1 Doctrine document
+- Scope: Add a stable doctrine document that explains DevoSkill's long-lived design philosophy for future humans and agents.
+- Files / modules: `docs/DevoSkill/doctrine.md`, `README.md`, `docs/DevoSkill/architecture.md`
+- Constraints: Keep it principle-focused, avoid feature-history drift, and explain prompt-weight-aware design, fine-grained decomposition, shared contracts, and document authority clearly.
 
 - [x] **Task 3.1.1**
-  - Target: `skills/devoskill/SKILL.md`
-  - Action: Restructure the entry skill around `bootstrap-first -> classify mode -> route by mode -> load support modules only when needed`.
-  - Expected output: The first part of the prompt contains the highest-value decisions, so the model can remember them and lazy-load the detailed skills later.
-  - Verification: The entry skill now leads with canonical path checks, exact mode classification, and phase-aware rerouting rules.
-  - Status / writeback note: `Completed by moving workspace/path guard clauses and primary mode routing to the front of the entry prompt.`
+  - Target: `docs/DevoSkill/doctrine.md`, `README.md`
+  - Action: Write the full doctrine and link it from the main project documentation.
+  - Expected output: Future maintainers and agents can understand why DevoSkill is structured the way it is before modifying it.
+  - Verification: Doctrine explains router/load strategy, document boundaries, anti-duplication rules, and testing philosophy.
+  - Status / writeback note: `Completed by adding a durable doctrine document and linking it from README.`
 
 - [x] **Task 3.1.2**
-  - Target: `skills/devoskill-workspace-setup/SKILL.md`
-  - Action: Convert workspace setup into an explicit bootstrap/repair mode instead of a default background skill.
-  - Expected output: Agents stop reading path-related instructions when canonical mapping state already exists.
-  - Verification: Workspace setup skill says to run only when canonical mapping is missing/broken or when the task is explicitly about setup.
-  - Status / writeback note: `Completed by turning workspace setup into a guarded bootstrap mode tied to the canonical mapping file.`
+  - Target: `docs/DevoSkill/architecture.md`
+  - Action: Write back the new doctrine/test-contract scope into the effective architecture.
+  - Expected output: Project-level docs describe doctrine and `test.md` as part of the effective shape.
+  - Verification: Architecture now names doctrine and `test.md` as first-class artifacts.
+  - Status / writeback note: `Completed by updating effective architecture to include doctrine and test-contract semantics.`
 
-### 3.2 Phase-aware sibling skill updates
-- Scope: Make each primary skill assume routing already happened, but still self-check whether the work is still in the same mode.
-- Files / modules: `skills/devoskill-planning/SKILL.md`, `skills/devoskill-development/SKILL.md`, `skills/devoskill-review/SKILL.md`, `skills/devoskill-performance/SKILL.md`
-- Constraints: Keep sibling skills small and mode-specific; do not re-explain the whole router in every file.
+### 3.2 Test contract integration
+- Scope: Promote `test.md` into the document system, templates, workflows, and review semantics.
+- Files / modules: `skills/devoskill/templates/*`, `skills/devoskill/protocols/*`, `skills/devoskill/workflows/*`, `README.md`
+- Constraints: Keep document ownership clear: `test.md` owns test design, `verification.md` owns executed evidence.
 
 - [x] **Task 3.2.1**
-  - Target: `skills/devoskill-planning/SKILL.md`, `skills/devoskill-development/SKILL.md`, `skills/devoskill-review/SKILL.md`, `skills/devoskill-performance/SKILL.md`
-  - Action: Make each mode-specific skill explicitly assume prior routing, skip workspace setup unless broken, and reroute if the user has changed phase.
-  - Expected output: Agents can orient themselves while working instead of blindly staying in the first-loaded skill.
-  - Verification: Each sibling skill now says what mode it assumes, when to skip workspace setup, and when to reroute.
-  - Status / writeback note: `Completed by adding phase self-checks and lazy workspace-setup loading rules to the sibling skills.`
+  - Target: `skills/devoskill/templates/test.md`, `skills/devoskill/templates/design-*.md`, `skills/devoskill/templates/task.md`, `skills/devoskill/templates/verification.md`
+  - Action: Create the test template and update the other templates to acknowledge design-to-test traceability.
+  - Expected output: New features can produce explicit test contracts instead of burying strategy inside verification notes.
+  - Verification: Template set now includes `test.md` and cross-references it from design/task/verification.
+  - Status / writeback note: `Completed by adding a dedicated test contract template and wiring it into related templates.`
 
-### 3.3 Planning writeback
-- Scope: Bring the project-level planning docs into alignment with the new prompt mechanics.
-- Files / modules: `docs/DevoSkill/architecture.md`, `docs/DevoSkill/task.md`
-- Constraints: Keep planning files concise and describe only the effective routing model.
+- [x] **Task 3.2.2**
+  - Target: `skills/devoskill/protocols/document-authority.md`, `document-loading-order.md`, `document-persistence.md`, `document-reviewability.md`, `workspace-layout.md`, `skills/devoskill/workflows/01-planning.md`, `planning-artifacts.md`, `planning-design-contract.md`, `02-development.md`, `03-review.md`
+  - Action: Update DevoSkill semantics so every phase knows when to read, write, and review `test.md`.
+  - Expected output: `test.md` is treated as a real contract throughout planning, development, and review.
+  - Verification: Workflows and protocols explicitly mention `test.md`, methodology selection, and traceability expectations.
+  - Status / writeback note: `Completed by integrating test-contract semantics across document authority, loading order, persistence, planning, development, and review.`
 
 - [x] **Task 3.3.1**
-  - Target: `docs/DevoSkill/architecture.md`, `docs/DevoSkill/task.md`
-  - Action: Write back Phase 4 so the planning surface describes bootstrap-first routing and phase-aware sibling skills.
-  - Expected output: The project-level docs describe the current prompt structure rather than the previous contract-hardening slice alone.
-  - Verification: Architecture and task docs both mention front-loaded path/mode decisions and phase self-check behavior.
-  - Status / writeback note: `Completed by updating the project-level docs to reflect bootstrap-first and mode-first routing as the current effective design.`
+  - Target: `docs/DevoSkill/task.md`
+  - Action: Write back the completed doctrine + test-contract phase.
+  - Expected output: Project task plan reflects the new completed scope instead of the previous router-only phase.
+  - Verification: Active task plan now describes doctrine/test-contract work and marks it completed.
+  - Status / writeback note: `Completed by replacing the previous active slice with the new doctrine + test-contract phase writeback.`
 
 ## 4. Human Handoff Points
 - [ ] Human decides whether to proceed into broader DevoSkill productization after this contract-hardening slice
 
 ## 5. Out of Scope for This Phase
-- Full multi-agent test matrix
+- Full executable test harness implementation for every language/runtime
 - Runtime code generation harnesses outside the current document-driven contract
-- Broad DevoSkill workflow redesign beyond bootstrap-first and mode-first routing
+- Broad DevoSkill workflow redesign beyond doctrine + test-contract integration
 
 ## 6. Completion Criteria for This Phase
-- [x] Entry prompt front-loads path and mode decisions
-- [x] Sibling skills explicitly assume a mode and self-check for rerouting
-- [x] Planning docs reflect the new routing model
-- [x] Planning files reflect actual work state
+- [x] A long-lived doctrine document exists for future humans and agents
+- [x] `test.md` exists as a first-class planning artifact
+- [x] Templates, workflows, and document protocols recognize `test.md`
+- [x] Project planning docs reflect the new doctrine + test-contract model

@@ -9,8 +9,10 @@ This file stores durable verification evidence for the active feature or run. `t
   - `architecture.md` sections:
   - `task.md` phase:
   - `design.md` version:
+  - `test.md` version:
 
 ## 2. Planned Check Matrix
+- Test suites / scenarios from `test.md`:
 - Runtime checks:
 - Ownership / authorization checks:
 - Negative-path checks:
@@ -40,18 +42,26 @@ This file stores durable verification evidence for the active feature or run. `t
   - Observed:
   - Evidence:
 
-## 7. File-Tree Reconciliation
+## 7. Test Execution Results
+- [Suite / scenario]:
+  - Planned source in `test.md`:
+  - Expected:
+  - Observed:
+  - Evidence:
+
+## 8. File-Tree Reconciliation
 - Declared implementation tree source:
 - Actual tree inspected:
 - Unexpected artifacts found:
 - Cleanup performed:
 - Remaining approved exceptions:
 
-## 8. Remaining Gaps and Risks
+## 9. Remaining Gaps and Risks
 - [Gap or residual risk]
 - [Gap or residual risk]
 
-## 9. Reviewer Starting Points
+## 10. Reviewer Starting Points
 - Key files to inspect:
+- Key test suites / scenarios to spot-check:
 - Key evidence entries to spot-check:
 - Known limitations of this verification pass:

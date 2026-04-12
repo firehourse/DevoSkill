@@ -10,6 +10,7 @@ When tasked with implementing a feature based on a plan, you are the **Developer
 3. Python Projects: Follow `templates/design-python.md` — `uv` is the only allowed package manager.
 4. Load only the relevant planning surface in this order:
    - `<feature-folder>/design.md` — folder structure and class diagram; this is the binding implementation contract
+   - `<feature-folder>/test.md` — the binding testing contract derived from `design.md`
    - the active phase in `<feature-folder>/task.md`
    - `<feature-folder>/verification.md` — the required evidence contract and output surface
    - `<feature-folder>/architecture.md` if it exists, then project-level `architecture.md` for baseline context
@@ -19,6 +20,7 @@ When tasked with implementing a feature based on a plan, you are the **Developer
    - behavior contract entries,
    - authorization and ownership boundaries,
    - state transitions and lifecycle rules,
+   - test suites and scenarios that must exist,
    - verification artifacts that must exist at the end.
 4. Do NOT load history, abandoned approaches, or old phases unless the user explicitly asks for them.
 5. Confirm that implementation is explicitly approved in the active planning surface or by the user's current instruction. If approval is missing or ambiguous, stop and ask the user whether to begin implementation now.
@@ -31,6 +33,7 @@ Follow the active-phase tasks linearly based on `task.md`.
 - **Respect Human Handoffs**: If `task.md` marks a step as a user handoff, stop there. Do not guess through missing schema, missing contracts, sensitive credentials, or production-only operations.
 - **Respect the Approval Gate**: A finished `task.md` is necessary but not sufficient. No code edits begin until the user has explicitly authorized implementation.
 - **Planning Surface Discipline**: If implementation requires expanding `architecture.md`, `task.md`, `design.md`, `verification.md`, or loaded notes beyond 600 lines, stop and split or trim the documentation surface before continuing. Do not treat this as a limit on implementation source files.
+- **Test Contract Discipline**: Do not improvise testing strategy during implementation. Follow `test.md` unless planning is updated first.
 - **Behavior Contract Discipline**: Implement every documented endpoint, state transition, ownership rule, and stop condition exactly as written. Missing a negative path or boundary check is a contract failure, not an optional enhancement.
 - **Artifact Hygiene Discipline**: Build outputs, dependency directories, uploads, traces, and generated assets must live only where the planning contract allows. Do not leave runtime artifacts in the tracked source tree unless the contract explicitly calls for them.
 
@@ -64,10 +67,11 @@ Produce functionality matching the requirements.
   - mark completed tasks and verification status,
   - record blockers or pending user handoffs,
   - update the active phase summary if the current execution state changed.
+- **Mandatory Test Writeback**: If implementation changes approved test scope, methodology, or traceability, update `test.md` before declaring the phase complete.
 - **Conditional Architecture Writeback**: If the finished implementation changed the effective architecture, constraints, boundaries, key flows, or approved target shape, update `architecture.md` before declaring the phase complete.
 - **Mandatory Evidence Writeback**: If the task or design contract requires durable verification artifacts, create or update them before declaring the task complete.
-- **Verification File Is Mandatory**: Raw checks, command outputs, negative-path results, ownership tests, and cleanup notes belong in `verification.md`. Do not compress them into `task.md`.
-- **Planning Reality Reconciliation**: Before marking the phase ready for review, compare `architecture.md`, `task.md`, `design.md`, `verification.md`, and the actual file tree. If any of them disagree about active scope, artifact locations, delivered state, or cleanup status, reconcile them first.
+- **Verification File Is Mandatory**: Raw checks, command outputs, test execution results, negative-path results, ownership tests, and cleanup notes belong in `verification.md`. Do not compress them into `task.md`.
+- **Planning Reality Reconciliation**: Before marking the phase ready for review, compare `architecture.md`, `task.md`, `design.md`, `test.md`, `verification.md`, and the actual file tree. If any of them disagree about active scope, artifact locations, delivered state, or cleanup status, reconcile them first.
 - **File-Tree Reconciliation Is Concrete Work**: List the declared tree from `design.md`, inspect the actual tree, and record any unexpected artifacts in `verification.md`. Remove or relocate them before declaring the phase complete unless the contract explicitly allows them.
 - **No Silent Completion**: If code changed but `task.md` still reads like the work has not started, the phase is not complete.
 - Once all tasks in the active phase are completed, writeback is done, and verification is recorded, trigger the Review phase by stating the phase is completed and awaiting review.
