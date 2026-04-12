@@ -110,6 +110,14 @@ Recommended defaults:
 - Existing systems default to `Follow Existing Project Pattern` unless the planning docs explicitly authorize a change in testing style.
 - `design.md` class responsibilities should map to unit tests, flow mappings should map to integration tests, and behavior contracts should map to acceptance or BDD scenarios.
 
+For a concrete example of the full document chain, see:
+
+- [docs/DevoSkill/examples/delete-conversation/architecture.md](docs/DevoSkill/examples/delete-conversation/architecture.md)
+- [docs/DevoSkill/examples/delete-conversation/design.md](docs/DevoSkill/examples/delete-conversation/design.md)
+- [docs/DevoSkill/examples/delete-conversation/test.md](docs/DevoSkill/examples/delete-conversation/test.md)
+- [docs/DevoSkill/examples/delete-conversation/task.md](docs/DevoSkill/examples/delete-conversation/task.md)
+- [docs/DevoSkill/examples/delete-conversation/verification.md](docs/DevoSkill/examples/delete-conversation/verification.md)
+
 ## Installation & Usage
 
 DevoSkill provides native, plug-and-play integrations for the most popular AI agents to ensure global constraints are applied automatically.
