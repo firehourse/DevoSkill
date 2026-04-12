@@ -4,9 +4,11 @@ DevoSkill is a standardized, prompt-based Orchestration Engine designed to impos
 
 It prevents AI "hallucinations" and "context explosion" by shifting the agent's behavior from *role-playing* to an **Action-Based Execution Protocol**. It forces the AI to plan before coding, strictly adhere to approved architecture, keep effective planning markdown small, and isolate documentation from source code.
 
+DevoSkill is also organized as a function-like document system: each skill, protocol, and workflow file should answer one primary question and stay small enough to be loaded selectively instead of as a monolithic prompt blob.
+
 ## Core Philosophy (The Hard Rules)
 1. **No Code Without Docs:** The agent will refuse to write code without a pre-approved `task.md`.
-2. **Planning Document Limits:** Effective planning markdown such as `architecture.md`, `task.md`, and `notes/*.md` should stay under 600 lines each so future sessions can reload them cleanly.
+2. **Planning Document Limits:** DevoSkill markdown artifacts such as `architecture.md`, `task.md`, `design.md`, `verification.md`, and `notes/*.md` should stay under 600 lines each so future sessions can reload them cleanly. This limit does not apply to implementation source files.
 3. **Python Ecosystem:** If the project uses Python, the agent is mandated to use `uv` for all dependency and environment management.
 4. **Document Persistence (SkillDocs):** The agent will not generate useless conversational summaries. The project state is maintained entirely via writing to `architecture.md` and `task.md` centralized in a `skilldocs` directory, isolating it from your source code repository.
 5. **Effective Planning Surface:** `architecture.md` stores only the current effective architecture, and `task.md` stores only the active executable phase. History is not part of the default context.
@@ -22,6 +24,7 @@ When the agent detects what phase of development you are in, it first loads the 
 - **Development (`skills/devoskill-development/SKILL.md`)**
 - **Review (`skills/devoskill-review/SKILL.md`)**
 - **Performance Debugging (`skills/devoskill-performance/SKILL.md`)**
+- **Exception / Inquiry (`skills/devoskill-exception/SKILL.md`)** — lightweight route for file lookup, question answering, latest-info research, and issue clarification before work becomes a project phase
 - **Quality Gate (`skills/devoskill-quality/SKILL.md`)** — invoked as a pre-completion support module at the end of every development phase; contains language-neutral principles and positive/negative examples across resource lifecycle, configuration application, input validation, fault tolerance, operational hygiene, identity, and frontend async patterns; automatically loads language-specific sub-skills for each language present in the implementation
   - **Go Quality (`skills/devoskill-quality-go/SKILL.md`)** — Go-specific checks: signal handling, context propagation, goroutine lifecycle, concurrency patterns, deferred cleanup
   - **Node.js Quality (`skills/devoskill-quality-node/SKILL.md`)** — Node.js/TypeScript-specific checks: async error boundaries, HTTP status codes, RabbitMQ connection management, top-level await sequencing, ioredis patterns
@@ -30,11 +33,24 @@ When the agent detects what phase of development you are in, it first loads the 
 
 This keeps the top-level skill small while making each execution mode independently discoverable and reusable.
 
+## Function-Like File System
+
+DevoSkill treats prompt files like callable units:
+- `SKILL.md` files decide **when to use** a mode or support skill
+- thin protocol/workflow routers decide **which focused files to load next**
+- focused protocol/workflow files answer **one primary question each**
+
+This keeps routing and selective loading explicit:
+- the router should stay thin
+- phase skills should orchestrate, not restate every rule
+- shared semantics should live in reusable protocol files instead of being copied into multiple phases
+
 ### Routing Rule
 
 DevoSkill should classify requests from three signals in the user's description:
 - **Project state:** new project, existing codebase, approved work, broken behavior, or uncertain direction
 - **Immediate intent:** plan, implement, review, or debug
+- **Exception intent:** inquire, lookup, research, clarify
 - **Expected output:** docs, code, discrepancy report, or benchmark/debug findings
 
 This keeps classification aligned with how users actually ask for help, while still loading only the smallest relevant context.
@@ -173,18 +189,43 @@ DevoSkill/
         │   ├── workspace-map.example.json    # Example schema for local workspace mapping state
         │   └── workspace-registry.md         # Legacy reference; local mapping state is preferred
         ├── protocols/
-        │   ├── thinking-phase.md             # Converge on reality before writing planning docs
+        │   ├── document-system.md            # Thin router for shared document semantics
+        │   ├── document-authority.md         # Which document is allowed to claim what
+        │   ├── document-loading-order.md     # Default read surface per phase
+        │   ├── document-persistence.md       # Where durable state should be written
+        │   ├── document-reviewability.md     # What makes the planning surface reusable
+        │   ├── thinking-phase.md             # Thin router for planning pre-write reasoning
+        │   ├── thinking-classification.md    # Greenfield / Existing / Hybrid decision
+        │   ├── thinking-reality-model.md     # Minimum safe current-reality model
+        │   ├── thinking-boundaries.md        # Constraints that must be confirmed
+        │   ├── thinking-delta.md             # Requested change boundary
+        │   ├── thinking-phasing.md           # When to split into phases
+        │   ├── thinking-promotion.md         # What becomes durable planning state
         │   ├── planning-greenfield.md        # Planning rules for net-new systems
         │   ├── planning-existing.md          # Planning rules for changes to existing systems
         │   ├── planning-hybrid.md            # Planning rules for new capability inside old systems
         │   ├── subagent-orchestration.md     # Rules for the AI to delegate tasks
-        │   └── workspace-setup.md            # Rules for creating symlinks and skilldocs
+        │   ├── workspace-setup.md            # Thin router for workspace setup semantics
+        │   ├── workspace-mapping.md          # Resolve SkillDocs base path
+        │   ├── workspace-layout.md           # Project/feature folder layout
+        │   ├── workspace-symlink.md          # `.devoskill` symlink rules
+        │   ├── workspace-project-resolution.md # Resolve the active SkillDocs project
+        │   └── workspace-repair.md           # Drift and repair rules for mapping/symlink state
         ├── workflows/
-        │   ├── 01-planning.md                # Thinking phase + effective architecture/task generation
+        │   ├── 01-planning.md                # Thin router for planning steps
+        │   ├── planning-context-bootstrap.md # Planning bootstrap and scope init
+        │   ├── planning-artifacts.md         # Architecture/task/verification rules
+        │   ├── planning-design-contract.md   # Binding design contract rules
+        │   ├── planning-approval.md          # Approval gate and clean handoff
         │   ├── 02-development.md             # Active-phase execution rules
         │   ├── 03-review.md                  # Effective-architecture compliance checks
         │   ├── 04-performance-debugging.md   # Profiling, baselining, and benchmark-driven refactoring
-        │   ├── 05-quality.md                 # Pre-completion technical quality gate (language-neutral)
+        │   ├── 05-quality.md                 # Thin router for quality categories
+        │   ├── quality-resource-safety.md    # Resource/config/input categories
+        │   ├── quality-resilience.md         # Fault tolerance and shutdown categories
+        │   ├── quality-hygiene.md            # Operational/evidence hygiene categories
+        │   ├── quality-identity.md           # Identity and authorization categories
+        │   ├── quality-frontend.md           # Frontend async category
         │   ├── quality-go.md                 # Go-specific quality checks
         │   └── quality-node.md               # Node.js/TypeScript-specific quality checks
         └── templates/                        # Effective architecture and active task templates
@@ -196,6 +237,8 @@ DevoSkill/
     │   └── SKILL.md                          # Review skill entry point
     ├── devoskill-performance/
     │   └── SKILL.md                          # Performance skill entry point
+    ├── devoskill-exception/
+    │   └── SKILL.md                          # Lightweight inquiry / research route
     ├── devoskill-quality/
     │   └── SKILL.md                          # Pre-completion technical quality gate skill (language-neutral)
     ├── devoskill-quality-go/

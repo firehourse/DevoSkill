@@ -3,7 +3,7 @@
 This document contains only the currently active executable work. It is the source of truth for the Developer subagent during the current phase.
 
 ## Global Constraints Reminder
-- Keep effective planning markdown files under 600 lines each. Split phases or move history into `notes/` if necessary.
+- Keep DevoSkill markdown files (`architecture.md`, `task.md`, `design.md`, `verification.md`, and `notes/*.md`) under 600 lines each. Split phases or move history into `notes/` if necessary. This limit does not apply to implementation source files.
 - Python projects: follow `templates/design-python.md`.
 - If `architecture.md` and `task.md` disagree, stop and return to planning.
 - Do not load history or abandoned plans unless the user explicitly asks for them.
@@ -109,7 +109,7 @@ List any steps the agent must not guess through.
 
 ## 9. Completion Criteria for This Phase
 - [ ] All tasks in the active phase are completed
-- [ ] Effective planning markdown files remain under 600 lines
+- [ ] Effective DevoSkill markdown files remain under 600 lines
 - [ ] Work matches the active architecture sections
 - [ ] `task.md` writeback reflects actual execution status and verification
 - [ ] `architecture.md` is updated if implementation changed effective architecture

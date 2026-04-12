@@ -6,12 +6,17 @@ description: Thinking phase module for DevoSkill. Use to classify requests, mode
 # DevoSkill Thinking Phase
 
 Use this skill before planning documents are written or rewritten.
+Do not use it after implementation has already begun unless the work is explicitly rerouted back into planning.
 
 ## Load Order
 1. Read `../devoskill/protocols/thinking-phase.md`
+2. Read `../devoskill/protocols/document-system.md`
+
+Do not read development, review, quality, or performance workflows from the Thinking Phase unless the task reroutes.
 
 ## Required Behavior
 - Classify the request as Greenfield, Existing System, or Hybrid before proceeding.
 - Build only the minimum reality model required to reason safely.
 - Confirm missing constraints and execution boundaries with the user instead of guessing.
 - Default to planning-only unless the user clearly authorizes implementation.
+- Promote only effective planning output into the document system. Do not treat intermediate reasoning as durable state.

@@ -22,14 +22,15 @@ When tasked with implementing a feature based on a plan, you are the **Developer
    - verification artifacts that must exist at the end.
 4. Do NOT load history, abandoned approaches, or old phases unless the user explicitly asks for them.
 5. Confirm that implementation is explicitly approved in the active planning surface or by the user's current instruction. If approval is missing or ambiguous, stop and ask the user whether to begin implementation now.
+6. Treat `protocols/document-system.md` as the shared contract for which document owns architecture, active work, design intent, evidence, and history.
 
 ### Step 2: Strict Adherence
 Follow the active-phase tasks linearly based on `task.md`.
 - **No Creativity in Architecture**: You are explicitly prohibited from unilaterally changing the architecture, adding third-party dependencies not mentioned in `task.md`, or reshaping the design scope.
-- **Engineering Standards**: All produced code must conform to `workflows/engineering-standards.md`. Layer hierarchy (Router → Controller → Service → Repository), naming clarity, error context, structured logging, no magic values, API response shape, and file discipline (400 lines) are non-negotiable regardless of what task.md says. Language-specific sections (Node.js, Go) in the same file also apply.
+- **Engineering Standards**: All produced code must conform to `workflows/engineering-standards.md`. Layer hierarchy (Router → Controller → Service → Repository), naming clarity, error context, structured logging, no magic values, API response shape, and file discipline are non-negotiable regardless of what task.md says. Language-specific sections (Node.js, Go) in the same file also apply.
 - **Respect Human Handoffs**: If `task.md` marks a step as a user handoff, stop there. Do not guess through missing schema, missing contracts, sensitive credentials, or production-only operations.
 - **Respect the Approval Gate**: A finished `task.md` is necessary but not sufficient. No code edits begin until the user has explicitly authorized implementation.
-- **Planning Surface Discipline**: If implementation requires expanding `architecture.md`, `task.md`, or loaded notes beyond 600 lines, stop and split or trim the planning surface before continuing.
+- **Planning Surface Discipline**: If implementation requires expanding `architecture.md`, `task.md`, `design.md`, `verification.md`, or loaded notes beyond 600 lines, stop and split or trim the documentation surface before continuing. Do not treat this as a limit on implementation source files.
 - **Behavior Contract Discipline**: Implement every documented endpoint, state transition, ownership rule, and stop condition exactly as written. Missing a negative path or boundary check is a contract failure, not an optional enhancement.
 - **Artifact Hygiene Discipline**: Build outputs, dependency directories, uploads, traces, and generated assets must live only where the planning contract allows. Do not leave runtime artifacts in the tracked source tree unless the contract explicitly calls for them.
 

@@ -5,68 +5,60 @@ description: A standardized prompt-based framework for document-driven software 
 
 # DevoSkill: Bootstrap-First Router
 
-This is the entry point for DevoSkill. Its job is not to teach every rule up front. Its job is to:
-1. resolve bootstrap state early,
-2. classify the current work mode,
-3. load only the smallest matching skill,
-4. avoid loading unrelated instruction sets.
+This is the entry point for DevoSkill.
+
+Its job is to register the available routes, choose the current one, and reroute whenever the immediate next action changes.
+
+It is not the place to preload implementation standards, planning templates, quality gates, or support modules "just in case".
+
+## 0. Primary Modes
+DevoSkill has four primary project-phase modes and one lightweight exception route. These are the routes available across the whole session.
+
+- `Planning` -> `../devoskill-planning/SKILL.md`
+  Use when the immediate next action is deciding scope, architecture, task shape, or rewriting docs.
+- `Development` -> `../devoskill-development/SKILL.md`
+  Use when the immediate next action is changing code for approved work.
+- `Review` -> `../devoskill-review/SKILL.md`
+  Use when the immediate next action is validating code against approved documents.
+- `Debug/Performance` -> `../devoskill-performance/SKILL.md`
+  Use when the immediate next action is diagnosing a measured failure, regression, or bottleneck.
+- `Exception / Inquiry` -> `../devoskill-exception/SKILL.md`
+  Use when the immediate next action is lightweight lookup, question answering, latest-info research, source verification, or problem clarification without entering a project phase yet.
+
+Reroute rule:
+- when the current route no longer matches the immediate next action, stop and return to this router mindset
+- do not wait for the user to remind you that the phase changed
+- after entering a route, read that route file before going deeper
+- `Exception / Inquiry` is intentionally lightweight: answer or clarify first, then reroute once the work becomes a real project phase
 
 ## 0. Bootstrap First
-Before reading any heavy workflow or support skill, do this guard check first:
+Before reading any workflow, template, protocol, or support skill, do this guard check first:
 
 1. Check whether the canonical local mapping state already exists at `skills/devoskill/config/workspace-map.local.json`.
 2. If it exists, treat workspace path resolution as already established. Do **not** load extra workspace-setup instructions just to reconfirm the same state.
 3. If it does not exist, or the current task is explicitly about repairing `skilldocs`, `.devoskill`, or workspace mapping, load `../devoskill-workspace-setup/SKILL.md`.
 
 Use workspace setup as a repair/bootstrap mode, not as default background reading.
+Do not treat legacy mapping metadata as the current active-project selection when `.devoskill` or explicit user intent says otherwise.
 
-## 1. Classify Work Mode
-After the bootstrap check, classify the user's request into exactly one primary mode before loading any sibling skill:
+## 1. Choose And Route
+After bootstrap, choose exactly one current route before loading any sibling skill.
 
-- `Planning`: define architecture, clarify scope, split work, write or rewrite `architecture.md` / `task.md`, or pressure-test assumptions
-- `Development`: implement an already approved task, modify code, or execute a planned change
-- `Review`: compare implementation against architecture/task contracts, inspect drift, or perform code review/compliance review
-- `Debug/Performance`: investigate failures, regressions, bottlenecks, baselines, or measured runtime issues
+If the user only describes the project and desired next step in natural language, infer the route from that description. Do not wait for explicit skill names.
+If more than one route seems plausible, pick the immediate next action rather than the broad project goal.
 
-If the user only describes the project and desired next step in natural language, infer the mode from that description. Do not wait for explicit skill names.
+Once the current route is chosen, load only that route file.
 
-## 2. Route By Mode
-Once a primary mode is chosen, load only the matching sibling skill:
+Do not preload sibling skills, workflows, templates, quality gates, or support modules before routing.
+After routing, let the chosen route file decide what to load next.
 
-- `Planning` -> `../devoskill-planning/SKILL.md`
-- `Development` -> `../devoskill-development/SKILL.md`
-- `Review` -> `../devoskill-review/SKILL.md`
-- `Debug/Performance` -> `../devoskill-performance/SKILL.md`
-
-Do not preload quality, grill, workspace setup, or other support skills unless the chosen mode explicitly requires them.
-
-## 3. Stay Phase-Aware While Working
-After loading a mode-specific skill, keep checking whether the current work still matches that mode.
-
-- If you discover you are actually planning, stop loading development/review details and switch to `Planning`.
-- If you discover implementation is approved and the user now wants code changes, switch to `Development`.
-- If you discover the request is validation-only, switch to `Review`.
-- If you discover the issue is measured failure/bottleneck work, switch to `Debug/Performance`.
-
-Do not continue under the wrong phase just because you already loaded one skill.
-
-## 4. Global Constraints
-- **Planning Document Limits:** Effective planning and note files (`architecture.md`, `task.md`, and files under `notes/`) should stay under 600 lines each. Split or trim them immediately if crossed.
+## 2. Router Constraints
 - **Canonical Workspace Mapping State:** The only canonical local mapping path is `skills/devoskill/config/workspace-map.local.json`. Do not create or rely on duplicate local-state files elsewhere in the repo.
-- **Python Ecosystem:** See `templates/design-python.md` for all Python/uv rules.
-- **Document Language:** Write all planning documents (`architecture.md`, `task.md`, `design.md`, `notes/`) in the language the user is communicating in. Documents are read by the user, not the model — match their language. Section headings may stay in English as structural anchors (they come from the template), but all body content follows the user's language.
-- **No Idle Summaries:** Maintain project state exclusively via file modifications in the mapped `skilldocs`.
-- **Explicit Contracts:** Treat `architecture.md`, `task.md`, `design.md`, and any required verification artifact as an executable harness contract. Do not treat them as loose narrative notes.
-- **Durable Evidence:** Verification claims must be backed by durable artifacts in `skilldocs` or directly inspectable repository state. Avoid status lines that only say "verified" with no checkable surface.
-- **Pre-Requisite Planning:** Do not write code without an explicit `task.md`.
-- **Engineering Standards:** All code must conform to `workflows/engineering-standards.md`. The minimum required layer structure is Router → Controller → Service → Repository. For Node.js: interfaces and enums in `types/`, no bare string constants in business logic, helpers extracted to `util/`.
+- **No Preload Rule:** Before mode classification is complete, do not read additional workflows, templates, quality rules, or support modules unless bootstrap repair requires them.
 
-## 5. Support Modules
-Support modules are phase-local, not global defaults:
+## 3. Support Modules
+Support modules are phase-local and conditional.
 
-- `../devoskill-workspace-setup/SKILL.md`: only when bootstrap state is missing or workspace setup is the task
-- `../devoskill-thinking-phase/SKILL.md`: only inside planning when the request still needs classification and boundary confirmation
-- `../devoskill-grill/SKILL.md`: only inside planning as the interrogation style
-- `../devoskill-quality/SKILL.md`: only as a pre-completion gate at the end of implementation
-- `../devoskill-quality-go/SKILL.md`, `../devoskill-quality-node/SKILL.md`: only when quality is running and those languages are present
-- `protocols/subagent-orchestration.md`: only when planning or development actually delegates work
+- Do not load a support module because it exists.
+- Load a support module only when the active phase skill explicitly calls for it.
+- If a support module is not needed for the current step, leave it unread.

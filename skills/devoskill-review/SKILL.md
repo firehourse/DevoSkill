@@ -5,7 +5,8 @@ description: Review module for DevoSkill. Use when reviewing implementation agai
 
 # DevoSkill Review
 
-Use this skill when the request is to verify implementation compliance.
+Use this skill when the request is to verify implementation compliance against the approved documents.
+Do not use it for new planning, direct coding, or exploratory debugging.
 
 Assume the entry router has already:
 - resolved bootstrap state or explicitly sent you into workspace setup,
@@ -19,6 +20,8 @@ If the work no longer matches review, stop and reroute instead of continuing.
 3. Identify the active feature folder (e.g. `.devoskill/delete-conversation/`); ask if not specified
 4. Load `<feature-folder>/task.md` (active phase only) and `<feature-folder>/architecture.md` if present
 5. Load project-level `architecture.md` for baseline context
+
+Do not read planning or development workflows from review unless the work actually reroutes.
 
 ## Required Behavior
 - Keep checking that the task is still validation/compliance work. If the user pivots into planning, coding, or performance debugging, reroute.

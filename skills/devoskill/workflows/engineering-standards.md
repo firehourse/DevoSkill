@@ -72,12 +72,22 @@ All endpoints return the same envelope. Error responses never include stack trac
 
 ## 7. File Discipline
 
-No source file exceeds 400 lines. A file approaching this limit holds multiple responsibilities and must be split at the strongest boundary before the phase completes.
+File size rules exist for context recovery and responsibility clarity, not aesthetics. Apply them with language and file-role awareness. If a file exceeds the normal threshold, either split it or record an explicit exception in `design.md` or `task.md` explaining why the larger file is still the strongest boundary.
+
+Default thresholds:
+- DevoSkill markdown artifacts: handled separately by the 600-line documentation rule; do not mix this with source-file checks
+- Application source files in most web/service codebases (`ts`, `tsx`, `js`, `jsx`, `go`, `py`, `java`, `rb`, `rs`): target under 400 lines, soft ceiling 600
+- Systems-heavy or table-heavy source files (`c`, `cc`, `cpp`, `h`, `hpp`) and similar low-level files with dense declarations or parser/state-machine tables: target under 600 lines, soft ceiling 1000
+- Generated files: excluded, but they must be clearly generated and must not be treated as hand-written design examples
+
+Hard rule:
+- A source file crossing the soft ceiling without an explicit documented exception is a review failure.
 
 | | Example |
 |---|---|
 | ❌ | `handlers.go` at 800 lines mixing auth, upload, and job logic |
 | ✅ | `handlers/auth.go`, `handlers/upload.go`, `handlers/jobs.go` each under 400 lines |
+| ✅ | `parser_tables.cpp` at 820 lines with an explicit documented exception because the table boundary is clearer than artificial splitting |
 
 ## 8. Go Consumer-Defined Contracts
 

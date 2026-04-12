@@ -5,7 +5,8 @@ description: Planning module for DevoSkill. Use when the task is architecture de
 
 # DevoSkill Planning
 
-Use this skill when the current request is about planning rather than implementation.
+Use this skill when the immediate task is to decide, design, scope, or rewrite the plan.
+Do not use it for approved coding, compliance-only review, or measured debugging.
 
 Assume the entry router has already:
 - resolved bootstrap state or explicitly sent you into workspace setup,
@@ -22,6 +23,9 @@ If the work no longer matches planning, stop and return to the correct primary m
    - `../devoskill/protocols/planning-greenfield.md`
    - `../devoskill/protocols/planning-existing.md`
    - `../devoskill/protocols/planning-hybrid.md`
+6. If the project uses Python, read `../devoskill/templates/design-python.md` before finalizing `design.md` or `task.md`
+
+Do not read development, review, quality, or performance workflows from planning unless the work actually reroutes.
 
 ## Required Behavior
 - Complete the Thinking Phase before writing or rewriting `architecture.md` or `task.md`.
@@ -29,5 +33,7 @@ If the work no longer matches planning, stop and return to the correct primary m
 - Keep checking that the task is still in planning mode. If the user pivots to code changes, review, or runtime debugging, reroute instead of continuing to plan.
 - Use the canonical workspace mapping state and `.devoskill` symlink rules only when they are actually needed.
 - Keep planning output limited to the effective architecture, explicit contracts, and the active executable phase.
+- Write planning documents in the user's language. Section headings may stay in English as structural anchors, but the body should match the user's language.
+- Do not maintain planning state through conversational summaries. Persist effective state in `architecture.md`, `task.md`, `design.md`, `verification.md`, or `notes/` only when needed.
 - Externalize harness behavior into durable natural-language artifacts: inputs, allowed read surface, stop conditions, verification contract, and writeback contract must be explicit in the planning docs rather than implied in chat.
 - After planning documents are updated, stop and wait for explicit user approval before implementation begins.

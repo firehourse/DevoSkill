@@ -95,6 +95,25 @@ Example (based on message-event pattern):
 
 ---
 
+## Flow Mapping
+
+This section is mandatory. The class diagram is not enough by itself.
+
+Document each meaningful request/job/stream as a numbered handoff chain:
+
+1. Entry point
+2. Controller / handler
+3. Service orchestration
+4. Repository / external dependency boundary
+5. Persistence point
+6. Ownership / authorization check
+7. Side effects emitted
+8. Terminal response or emitted event
+
+If the feature spans multiple runtimes or apps, split this into subsections per boundary (for example `API Service`, `Worker`, `Gateway`, `Web App`) instead of merging everything into one vague sequence.
+
+---
+
 ## Naming Rules (enforce before writing any file)
 
 - Files: `[domain].[role].ts` — `task.service.ts`, `task.controller.ts`, `task.repository.ts`
@@ -117,3 +136,12 @@ Example (based on message-event pattern):
 - Runtime checks that must be persisted or be directly reproducible from repository state
 - Negative-path checks that must be evidenced
 - Artifact hygiene rules for `dist/`, `node_modules/`, uploads, generated files, and traces
+
+## Multi-Runtime Note
+
+If this feature spans more than one executable boundary (for example API + worker, gateway + webapp, multiple services), one class diagram is usually not enough.
+
+Required approach:
+- one topology/system diagram for cross-runtime boundaries
+- one class diagram per runtime or per independently deployable boundary
+- flow mapping that explicitly names the cross-runtime handoff between them

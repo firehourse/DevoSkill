@@ -7,7 +7,7 @@ This protocol defines how a primary Agent should delegate tasks to, context-swit
 When invoking a Subagent (e.g., `planner`, `developer`, `reviewer`), you must:
 1. **Explicitly Specify the Target Files:** A Subagent only needs the *exact* subset of documents relevant to its task. Do not pass the entire project space.
 2. **Define the Expected Output:** The Subagent must return discrete file modifications (`task.md`, `architecture.md`, `src/*.py`)—not a conversational summary.
-3. **Assert the Planning Surface Limit:** Every Subagent call implicitly carries the `< 600 lines per effective planning markdown file` constraint for `architecture.md`, `task.md`, and loaded notes.
+3. **Assert the Planning Surface Limit:** Every Subagent call implicitly carries the `< 600 lines per effective DevoSkill markdown file` constraint for `architecture.md`, `task.md`, `design.md`, `verification.md`, and loaded notes. This constraint is for documentation only, not implementation source files.
 4. **Pass Only Effective Planning Context:** Default context is the active phase in `task.md`, the effective sections of `architecture.md`, and any directly required code or contracts. Do not pass planning history unless the task explicitly requires it.
 5. **Respect Human Handoffs:** If schema, credentials, production state, or sensitive operations depend on the user, the subagent must stop at that boundary.
 

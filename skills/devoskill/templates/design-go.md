@@ -105,6 +105,25 @@ Example (Go style):
 
 ---
 
+## Flow Mapping
+
+This section is mandatory. The class diagram is not enough by itself.
+
+Document each meaningful request/job/stream as a numbered handoff chain:
+
+1. Entry point (`main.go`, HTTP handler, worker loop, stream listener)
+2. Handler / consumer
+3. Service orchestration
+4. Repository / external dependency boundary
+5. Persistence point
+6. Ownership / authorization check
+7. Side effects emitted
+8. Terminal response, stored state, or published event
+
+If the feature spans multiple binaries or runtimes, split this into subsections per boundary (for example `API`, `Worker`, `Gateway`) instead of collapsing everything into one generic path.
+
+---
+
 ## Naming Rules (enforce before writing any file)
 
 - Package names: single lowercase word — `handler`, `service`, `repository`, `domain`
@@ -132,3 +151,12 @@ Example (Go style):
 - Negative-path checks that must be evidenced
 - Artifact hygiene rules for binaries, build output, uploads, generated files, and traces
 - Expected durable artifact path: `<feature-folder>/verification.md`
+
+## Multi-Binary Note
+
+If this feature spans more than one executable boundary (for example API server + worker + gateway), one class diagram is usually not enough.
+
+Required approach:
+- one topology/system diagram for cross-binary boundaries
+- one class diagram per binary or per independently deployable boundary
+- flow mapping that explicitly names the handoff between binaries
