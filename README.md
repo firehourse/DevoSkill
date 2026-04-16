@@ -220,8 +220,7 @@ DevoSkill/
     └── devoskill/
         ├── SKILL.md                          # The lightweight entry point & router
         ├── config/
-        │   ├── workspace-map.example.json    # Example schema for local workspace mapping state
-        │   └── workspace-registry.md         # Legacy reference; local mapping state is preferred
+        │   └── workspace-map.example.json    # Example schema for local workspace mapping state
         ├── protocols/
         │   ├── document-system.md            # Thin router for shared document semantics
         │   ├── document-authority.md         # Which document is allowed to claim what
