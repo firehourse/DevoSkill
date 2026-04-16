@@ -9,6 +9,7 @@
 - The project also lacks a stable doctrine file that explains the underlying prompt-weight-aware design philosophy for future maintainers and agents.
 - Multiple accidental local-state paths (`config/`, `skills/config/`) appeared alongside the canonical `skills/devoskill/config/workspace-map.local.json`, which risks repo pollution and inconsistent workspace mapping behavior.
 - The current entry prompt still spends too much early attention on background rules instead of first-step decisions, which weakens routing reliability because models remember the front of the prompt more strongly than the middle.
+- DevoSkill has no mechanism to capture user-stated corrections, style rules, or performance standards back into the skill system. Rules stated in chat vanish after the session and do not evolve the skill over time.
 
 ## Approved Target Shape
 - Keep the existing router and phase model intact.
@@ -29,6 +30,9 @@
 - Keep local workspace state canonical at `skills/devoskill/config/workspace-map.local.json` and treat any duplicate local-state path as legacy pollution to clean up rather than preserve.
 - Keep the lightweight trigger-testing skeleton, but treat it as only one slice of the product, not the whole effective architecture.
 - Make sibling skills phase-aware: they should assume a primary mode has already been chosen, but they must still self-check and reroute if the work changes phase.
+- Add an `Update` primary route to the router (same tier as Planning / Development / Review). The route is thin; all capture and writeback semantics live in a shared `skill-evolution` protocol, not in the phase skill itself.
+- Add a `skill-evolution.md` shared protocol that defines: what qualifies as a capturable rule (explicit user corrections, cross-session style/performance standards), the writeback format, and how to determine the target custom protocol file.
+- Add optional `custom-quality.md` and `custom-performance.md` protocol files under `skills/devoskill/protocols/`. These files do not exist until the first rule of that type is captured. Development and Review skills load them conditionally if they exist.
 
 ## Boundaries
 - Do not redesign the overall DevoSkill workflow model.
@@ -43,3 +47,4 @@
 - Phase 3: Harden DevoSkill into a document-driven execution contract by adding project/feature folder rules, design/verification artifacts, engineering standards, review evidence checks, and artifact-hygiene expectations.
 - Phase 4: Restructure the entry router so bootstrap/path decisions and work-mode classification happen at the front of the prompt, and make sibling skills explicitly rely on that routing model.
 - Phase 5: Add a durable doctrine document and promote `test.md` into a first-class planning artifact across templates, workflows, and document-system semantics.
+- Phase 6: Add an `Update` primary route and `skill-evolution` shared protocol that let the agent capture user-stated rules during a session and write them back into custom protocol files — without external tools or runtime hooks.

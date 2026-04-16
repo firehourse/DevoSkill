@@ -19,6 +19,7 @@ If the work no longer matches development, stop and reroute instead of continuin
 2. Read `../devoskill/workflows/02-development.md`
 3. Read `../devoskill/workflows/engineering-standards.md` — load the language-specific section matching the implementation stack
 4. Load only the active phase in `task.md` and the effective architecture sections it references
+5. If any `../devoskill/protocols/custom-*.md` files exist, read them — they contain user-captured standing rules that apply to this session
 
 Do not read planning, review, or performance workflows from development unless the task actually reroutes.
 

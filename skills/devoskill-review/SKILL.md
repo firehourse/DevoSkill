@@ -20,6 +20,7 @@ If the work no longer matches review, stop and reroute instead of continuing.
 3. Identify the active feature folder (e.g. `.devoskill/delete-conversation/`); ask if not specified
 4. Load `<feature-folder>/task.md` (active phase only) and `<feature-folder>/architecture.md` if present
 5. Load project-level `architecture.md` for baseline context
+6. If any `../devoskill/protocols/custom-*.md` files exist, read them — they contain user-captured standing rules that apply to this review
 
 Do not read planning or development workflows from review unless the work actually reroutes.
 

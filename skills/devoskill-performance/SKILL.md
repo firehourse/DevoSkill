@@ -18,6 +18,7 @@ If the work no longer matches debugging/performance, stop and reroute instead of
 1. If workspace mapping is missing or broken, read `../devoskill-workspace-setup/SKILL.md`; otherwise skip workspace setup.
 2. Read `../devoskill/workflows/04-performance-debugging.md`
 3. Load only the effective architecture and active task sections needed for the measured bottleneck
+4. If any `../devoskill/protocols/custom-*.md` files exist, read them — they contain user-captured standing rules that apply to this session
 
 Do not read planning, development, or review workflows from debug/performance unless the task actually reroutes.
 

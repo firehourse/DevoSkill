@@ -1,6 +1,6 @@
 ---
 name: DevoSkill
-description: A standardized prompt-based framework for document-driven software development and AI agent orchestration. Use when the user describes a project, says what they are trying to do, and needs the agent routed to planning, implementation, review, or debugging with minimal context loading.
+description: A standardized prompt-based framework for document-driven software development and AI agent orchestration. Use when the user describes a project, says what they are trying to do, and needs the agent routed to planning, implementation, review, debugging, or capturing standing rules with minimal context loading.
 ---
 
 # DevoSkill: Bootstrap-First Router
@@ -12,7 +12,7 @@ Its job is to register the available routes, choose the current one, and reroute
 It is not the place to preload implementation standards, planning templates, quality gates, or support modules "just in case".
 
 ## 0. Primary Modes
-DevoSkill has four primary project-phase modes and one lightweight exception route. These are the routes available across the whole session.
+DevoSkill has five primary project-phase modes and one lightweight exception route. These are the routes available across the whole session.
 
 - `Planning` -> `../devoskill-planning/SKILL.md`
   Use when the immediate next action is deciding scope, architecture, task shape, or rewriting docs.
@@ -24,6 +24,8 @@ DevoSkill has four primary project-phase modes and one lightweight exception rou
   Use when the immediate next action is diagnosing a measured failure, regression, or bottleneck.
 - `Exception / Inquiry` -> `../devoskill-exception/SKILL.md`
   Use when the immediate next action is lightweight lookup, question answering, latest-info research, source verification, or problem clarification without entering a project phase yet.
+- `Update` -> `../devoskill-update/SKILL.md`
+  Use when the immediate next action is capturing a user-stated correction, style rule, or performance standard into custom skill protocols.
 
 Reroute rule:
 - when the current route no longer matches the immediate next action, stop and return to this router mindset
