@@ -1,6 +1,6 @@
 # Quality Category: Identity
 
-Use this category set for identity and ownership correctness.
+Read this file immediately before applying identity checks. Apply each section, fix failures, then proceed to the next category.
 
 ## Includes
 - Identity and Security
@@ -13,8 +13,8 @@ Use this category set for identity and ownership correctness.
   - `Math.random()` or equivalent weak randomness for security-sensitive values
 
 ## Authorization Surface
-- Principle: every user-scoped read, stream, replay, cancel, and mutation path must enforce ownership explicitly.
+- Principle: every user-scoped read, stream, replay, cancel, and mutation path must enforce ownership explicitly. Identity establishment alone does not imply authorization.
 - Check for:
-  - SSE or replay endpoints that skip ownership checks
-  - CRUD paths that enforce ownership while streaming/cancel paths do not
-  - assumptions that identity establishment alone implies authorization
+  - SSE or replay endpoints that skip ownership checks present on the corresponding CRUD paths
+  - assumptions that a valid token means the caller owns the resource
+- For HTTP and streaming endpoint enforcement patterns and examples → see `quality-node.md` Section 6.

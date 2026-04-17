@@ -1,6 +1,6 @@
 # Quality Category: Resource Safety
 
-Use this category set for resource lifecycle, configuration application, and input validation.
+Read this file immediately before applying resource safety checks. Apply each section, fix failures, then proceed to the next category.
 
 ## Includes
 - Resource Lifecycle

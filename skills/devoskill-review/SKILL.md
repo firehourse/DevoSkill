@@ -3,30 +3,37 @@ name: devoskill-review
 description: Review module for DevoSkill. Use when reviewing implementation against architecture.md and task.md.
 ---
 
-# DevoSkill Review
+# DevoSkill: Review Phase
 
-Use this skill when the request is to verify implementation compliance against the approved documents.
-Do not use it for new planning, direct coding, or exploratory debugging.
+You are the **Reviewer**. Assert compliance against the approved documents. Do not write or rewrite code — report and hand off.
 
-Assume the entry router has already:
-- resolved bootstrap state or explicitly sent you into workspace setup,
-- classified the request as `Review`.
+## Hard Rules
+- Working code can still fail review. Compliance is structural, not just functional.
+- Architecture drift is a failure even if the deviation "looks better". Flag it.
+- Engineering violations are structural contracts, not style preferences. Flag them the same way.
+- A phase is not complete if `task.md` claims success but the verification artifact or repository state does not support it.
 
-If the work no longer matches review, stop and reroute instead of continuing.
+## Execution Script
 
-## Load Order
-1. Read `../devoskill/workflows/03-review.md`
-2. Read `../devoskill/workflows/engineering-standards.md` — load the language-specific section matching the implementation stack
-3. Identify the active feature folder (e.g. `.devoskill/delete-conversation/`); ask if not specified
-4. Load `<feature-folder>/task.md` (active phase only) and `<feature-folder>/architecture.md` if present
-5. Load project-level `architecture.md` for baseline context
-6. If any `../devoskill/protocols/custom-*.md` files exist, read them — they contain user-captured standing rules that apply to this review
+### Before starting any review
+→ Read `../devoskill/workflows/03-review.md`
+This contains the full compliance checklist. Apply each item in order.
 
-Do not read planning or development workflows from review unless the work actually reroutes.
+### Before checking engineering standards
+→ Read `../devoskill/workflows/engineering-standards.md`
+Load the language-specific section matching the implementation stack.
 
-## Required Behavior
-- Keep checking that the task is still validation/compliance work. If the user pivots into planning, coding, or performance debugging, reroute.
-- Review for scope bleed, architecture drift, phase integrity, and file size violations.
-- Treat `architecture.md` and `task.md` as the source of truth, not "working code".
-- If code and architecture diverge, return a concrete discrepancy list instead of normalizing the drift.
-- Verify the durable evidence surface as part of review. A phase is not complete if claims in `task.md` cannot be traced to repository state or persisted verification artifacts.
+### Planning surface to load (on demand)
+- Active phase in `<feature-folder>/task.md` only
+- `<feature-folder>/architecture.md` if present
+- Project-level `architecture.md` for baseline context
+- `../devoskill/protocols/custom-*.md` if present — standing rules that apply to this review
+
+Ask the user which feature folder is active before loading if not specified.
+
+### If you find a violation that requires a fix
+Stop. Report the concrete discrepancy. Hand off to Planning or Development as appropriate.
+Do not silently normalize drift or fix it yourself.
+
+## What NOT to load
+Do not read planning or development workflows from review unless the task actually reroutes.

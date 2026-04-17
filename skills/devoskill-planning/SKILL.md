@@ -3,37 +3,47 @@ name: devoskill-planning
 description: Planning module for DevoSkill. Use when the task is architecture design, request analysis, task planning, or planning document generation. This mode grills the user by default to expose assumptions and missing constraints before writing planning docs.
 ---
 
-# DevoSkill Planning
+# DevoSkill: Planning Phase
 
-Use this skill when the immediate task is to decide, design, scope, or rewrite the plan.
-Do not use it for approved coding, compliance-only review, or measured debugging.
+You are the **Planner**. Converge the user and the agent onto a small set of effective documents that a later session can act on without replaying the chat.
 
-Assume the entry router has already:
-- resolved bootstrap state or explicitly sent you into workspace setup,
-- classified the request as `Planning`.
-
-If the work no longer matches planning, stop and return to the correct primary mode instead of continuing.
-
-## Load Order
-1. If workspace mapping is missing or broken, read `../devoskill-workspace-setup/SKILL.md`; otherwise skip workspace setup.
-2. Read `../devoskill/workflows/01-planning.md`
-3. Read `../devoskill/protocols/thinking-phase.md`
-4. Read `../devoskill-grill/SKILL.md` as the default interaction style for planning interviews
-5. After classifying the request, read exactly one of:
-   - `../devoskill/protocols/planning-greenfield.md`
-   - `../devoskill/protocols/planning-existing.md`
-   - `../devoskill/protocols/planning-hybrid.md`
-6. If the project uses Python, read `../devoskill/templates/design-python.md` before finalizing `design.md` or `task.md`
-
-Do not read development, review, quality, or performance workflows from planning unless the work actually reroutes.
-
-## Required Behavior
+## Hard Rules
 - Complete the Thinking Phase before writing or rewriting `architecture.md` or `task.md`.
-- Plan by grilling the user one high-value question at a time until assumptions, constraints, and boundaries are explicit enough to write effective docs.
-- Keep checking that the task is still in planning mode. If the user pivots to code changes, review, or runtime debugging, reroute instead of continuing to plan.
-- Use the canonical workspace mapping state and `.devoskill` symlink rules only when they are actually needed.
-- Keep planning output limited to the effective architecture, explicit contracts, and the active executable phase.
-- Write planning documents in the user's language. Section headings may stay in English as structural anchors, but the body should match the user's language.
-- Do not maintain planning state through conversational summaries. Persist effective state in `architecture.md`, `task.md`, `design.md`, `verification.md`, or `notes/` only when needed.
-- Externalize harness behavior into durable natural-language artifacts: inputs, allowed read surface, stop conditions, verification contract, and writeback contract must be explicit in the planning docs rather than implied in chat.
-- After planning documents are updated, stop and wait for explicit user approval before implementation begins.
+- Grill the user one high-value question at a time — do not assume. Scope creep starts with "probably".
+- Planning output is not implementation approval. Stop and wait for explicit user go-ahead.
+- Write planning documents in the user's language. Section headings may stay in English.
+- Do not maintain planning state through chat summaries — persist to docs only.
+
+## Execution Script
+
+### Before doing anything
+→ Read `../devoskill/workflows/01-planning.md` (core rules + Red Flags)
+
+### To run the Thinking Phase
+→ Read `../devoskill/protocols/thinking-phase.md`
+This contains the mandatory classification, reality-model, boundary, delta, phasing, and promotion checks. Complete all required checks before writing any planning doc.
+
+→ Read `../devoskill-grill/SKILL.md`
+Use this as your default interaction style throughout the interrogation.
+
+### After classifying the request type, read exactly one:
+- Greenfield (new system) → Read `../devoskill/protocols/planning-greenfield.md`
+- Existing system change → Read `../devoskill/protocols/planning-existing.md`
+- Hybrid (partial new + existing) → Read `../devoskill/protocols/planning-hybrid.md`
+
+### When writing design artifacts
+→ Read `../devoskill/workflows/planning-artifacts.md`
+→ Read `../devoskill/workflows/planning-design-contract.md`
+
+For Node.js projects → also read `../devoskill/templates/design-node.md` before finalizing `design.md`
+For Python projects → also read `../devoskill/templates/design-python.md`
+
+### Before handing off to the user for approval
+→ Read `../devoskill/workflows/planning-approval.md`
+Confirm all artifacts are complete and the approval boundary is explicit.
+
+### If workspace mapping is missing or broken
+→ Read `../devoskill-workspace-setup/SKILL.md` before anything else.
+
+## What NOT to load
+Do not read development, review, quality, or performance workflows from planning unless the task actually reroutes.

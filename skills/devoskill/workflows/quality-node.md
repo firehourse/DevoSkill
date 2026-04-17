@@ -1,6 +1,6 @@
-# Quality Workflow — Node.js / TypeScript
+# Quality Category: Node.js / TypeScript
 
-Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
+Read this file immediately before applying Node.js checks. Apply each section to the code you just wrote, fix failures, then proceed.
 
 ---
 
@@ -75,3 +75,20 @@ Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
 | ✅ | Shared service/repository checks enforce the owner boundary across all task-scoped endpoints |
 | ❌ | Upload route trusts the task ID and writes to storage before verifying the task belongs to the caller |
 | ✅ | Ownership and state validation occur before irreversible side effects such as file writes or job publishes |
+
+---
+
+## 7. Integration Test Environment
+
+**Principle:** Integration tests that touch a real DB or queue must be self-contained. Tests that depend on an external database at a hardcoded address cannot run in CI without pre-provisioned infrastructure, and they silently diverge from production schema when migrations are not applied.
+
+| | Example |
+|---|---|
+| ❌ | `process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/...'` hardcoded at the top of a test file |
+| ✅ | `usePostgres()` in `beforeAll` starts a Testcontainers PostgreSQL container and sets `DATABASE_URL` from the container URI before any connection is made |
+| ❌ | `new PrismaClient()` called at module import time — executes before `beforeAll` sets `DATABASE_URL`, connects to the wrong host |
+| ✅ | PrismaClient is lazy-initialized (e.g. via a Proxy) so the first real access happens after `beforeAll` configures the container URL |
+| ❌ | Redis queue behavior validated by asserting console output |
+| ✅ | Redis Testcontainer started in `beforeAll`; test asserts queue depth and job payload directly against the container |
+| ❌ | External services (LLM, TTS, S3) mocked at the HTTP level with no consistent stub policy across tests |
+| ✅ | Stub boundary is at the service layer (e.g. `jest.spyOn(llmService, 'generate')`); real DB and real queue run in containers; only external network calls are stubbed |

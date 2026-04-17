@@ -1,6 +1,6 @@
 # Quality Category: Frontend
 
-Use this category set for frontend async correctness.
+Read this file immediately before applying frontend checks. Apply each section, fix failures, then proceed to the next category.
 
 ## Includes
 - Frontend Async Hygiene

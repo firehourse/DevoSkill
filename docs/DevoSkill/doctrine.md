@@ -35,6 +35,15 @@ That leads to these structural rules:
 
 This is why the router is intentionally broad while phase skills are more specific. The split is not stylistic. It is a response to how agents actually consume prompt context.
 
+The same logic extends to how rules are loaded within a phase:
+
+- Loading all rules upfront and then acting means the first-read rules drift to the middle of the prompt — the weakest attention zone.
+- Rules should be loaded **immediately before the action they govern**, not all at the start of the phase.
+- Phase skills should be written as execution scripts: "before doing X, read Y, then do X immediately."
+- This keeps each rule in the bottom of the active context — the strongest attention zone — at the moment of application.
+
+This is the just-in-time loading principle. It applies at every level: entry router to phase skill, phase skill to workflow, quality gate to category check.
+
 ## 3. Fine-Grained File Design
 
 DevoSkill favors many small files over a few dense files.

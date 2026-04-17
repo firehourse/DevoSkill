@@ -16,6 +16,8 @@ Every project enforces a strict layer hierarchy: **Router → Controller → Ser
 | ✅ | Service accepts plain domain types; controller translates HTTP ↔ domain |
 | ❌ | Business logic in a router callback |
 | ✅ | Router wires path + method to a controller only |
+| ❌ | `userTaskClaimService` imports `voicePostcardQueueWorkerService` directly |
+| ✅ | Queue worker class is not exported from the module index; `ttsService.enqueueVoicePostcard()` is the only public entry point — the worker is an internal implementation detail |
 
 ## 2. Naming Clarity
 
@@ -140,3 +142,27 @@ src/
   config/        # env loading and validation
   util/          # stateless helpers
 ```
+
+---
+
+## 9. Commit Discipline
+
+**Principle:** Each commit must represent one reviewable unit of intent. A commit spanning dozens of files with mixed concerns is a review failure regardless of whether the code is correct. The message must tell the reader *why*, not just *what*.
+
+**When to commit:** After each logical unit is complete and verified — not after the entire feature is done. Natural break points: infrastructure added, skeleton wired, implementation filled, tests written. Do not accumulate work and commit everything at once.
+
+**Message format:**
+```
+[type] short summary
+
+前情（why this work exists / what was broken or missing before）
+做法（what changed and key design decisions made）
+測試（how correctness was verified）
+```
+
+| | Example |
+|---|---|
+| ❌ | Single commit: 83 files, infrastructure + business logic + tests all bundled |
+| ✅ | Commit 1: testcontainer infra. Commit 2: reward flow. Commit 3: queue skeleton. Commit 4: worker impl + tests. |
+| ❌ | Message: `feat: voice postcard` — no context, no rationale |
+| ✅ | Message with 前情/做法/測試 sections: reader understands what was missing, what changed, how it was proven |

@@ -1,6 +1,6 @@
 # Quality Category: Hygiene
 
-Use this category set for operational and evidence hygiene.
+Read this file immediately before applying hygiene checks. Apply each section, fix failures, then proceed to the next category.
 
 ## Includes
 - Operational Hygiene

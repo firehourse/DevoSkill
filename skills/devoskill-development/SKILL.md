@@ -3,31 +3,49 @@ name: devoskill-development
 description: Development module for DevoSkill. Use when implementing approved task.md work.
 ---
 
-# DevoSkill Development
+# DevoSkill: Development Phase
 
-Use this skill only after planning exists and the user has explicitly approved implementation.
-Do not use it for architecture discovery, compliance-only validation, or benchmark-first debugging.
+You are the **Developer**. Execute the active phase of `task.md` exactly as written.
 
-Assume the entry router has already:
-- resolved bootstrap state or explicitly sent you into workspace setup,
-- classified the request as `Development`.
+## Hard Rules
+- No code without approved `task.md` + explicit user approval. Missing either → stop and ask.
+- Architecture gap found during implementation → stop, return to Planning. Do not code through it.
+- Modifying existing code: chunk-based only. Never rewrite an entire file at once.
+- Modifying existing code: confirm in `task.md` whether to follow existing patterns or adopt new ones. If unspecified → ask the user before writing anything.
+- Do not increase abstraction beyond what already exists — no extracting inline data into wrappers, no factory/builder patterns, no multi-hop delegation chains unless `task.md` explicitly approves.
+- No new dependencies not listed in `task.md`.
 
-If the work no longer matches development, stop and reroute instead of continuing.
+## Execution Script
 
-## Load Order
-1. If workspace mapping is missing or broken, read `../devoskill-workspace-setup/SKILL.md`; otherwise skip workspace setup.
-2. Read `../devoskill/workflows/02-development.md`
-3. Read `../devoskill/workflows/engineering-standards.md` — load the language-specific section matching the implementation stack
-4. Load only the active phase in `task.md` and the effective architecture sections it references
-5. If any `../devoskill/protocols/custom-*.md` files exist, read them — they contain user-captured standing rules that apply to this session
+### Before writing any file
+→ Read `../devoskill/workflows/engineering-standards.md`
+Apply every rule to the code you are about to write. Do not defer to later.
 
-Do not read planning, review, or performance workflows from development unless the task actually reroutes.
+### For Node.js / TypeScript — before each implementation block
+→ Read `../devoskill/workflows/quality-node.md`
+Apply every check to the code you just wrote before moving to the next step.
 
-## Required Behavior
-- Do not begin code changes without explicit implementation approval.
-- Keep checking that the work is still active implementation. If the user asks for planning, drift validation, or performance diagnosis, reroute.
-- Follow the active phase in `task.md` linearly.
-- Respect human handoff points and do not guess through missing schema, contracts, or credentials.
-- For existing code, obey maintenance constraints, style conformance rules, and anti-over-abstraction rules.
-- Do not write code without an explicit `task.md`.
-- Treat `design.md`, `task.md`, verification artifacts, and repository state as a single implementation contract. If they diverge, stop and reconcile instead of coding through the inconsistency.
+### For Go — before each implementation block
+→ Read `../devoskill/workflows/quality-go.md`
+
+### After each meaningful implementation step
+Writeback `task.md`: mark completed items, record blockers, update phase summary.
+Do not skip writeback and batch it at the end — stale `task.md` is a protocol failure.
+
+### If you notice a Red Flag thought forming
+→ Read `../devoskill/workflows/02-development.md` (Red Flags section)
+Common traps: "I don't need task.md for this", "I'll just tweak the architecture", "let me refactor while I'm here".
+
+### Before marking phase complete
+→ Read `../devoskill-quality/SKILL.md`
+Apply the full quality gate. Fix every failure before writing back to `task.md`.
+
+## Planning Surface to Load (on demand, not upfront)
+- `design.md` — folder structure and class diagram (binding contract for file names and locations)
+- `test.md` — testing contract
+- active phase in `task.md` only
+- `verification.md` — evidence requirements
+- `architecture.md` — only when a decision is ambiguous
+- `../devoskill/protocols/custom-*.md` — if present, read before writing any code
+
+Do not load history, abandoned approaches, or old phases.
