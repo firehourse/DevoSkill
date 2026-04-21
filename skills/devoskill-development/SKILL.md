@@ -19,7 +19,9 @@ If the work no longer matches development, stop and reroute instead of continuin
 2. Read `../devoskill/workflows/02-development.md`
 3. Read `../devoskill/workflows/engineering-standards.md` — load the language-specific section matching the implementation stack
 4. Load only the active phase in `task.md` and the effective architecture sections it references
-5. If any `../devoskill/protocols/custom-*.md` files exist, read them — they contain user-captured standing rules that apply to this session
+5. If Go code is in scope, read `../devoskill/protocols/go-implementation-mode.md` before choosing abstractions or package boundaries
+6. If Ruby/Rails code is in scope, read `../devoskill/protocols/rails-maintenance-mode.md` before changing style, callbacks, service boundaries, or lifecycle behavior
+7. If any `../devoskill/protocols/custom-*.md` files exist, read them — they contain project-specific or user-captured standing rules that apply to this session
 
 Do not read planning, review, or performance workflows from development unless the task actually reroutes.
 

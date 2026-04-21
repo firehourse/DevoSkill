@@ -2,11 +2,17 @@
 
 Apply during development and review. These standards govern code structure — distinct from runtime-correctness checks in `05-quality.md`. Fix violations before declaring any phase complete.
 
-Language-specific engineering rules live in the matching quality file (Go → `quality-go.md`, Node.js → see the section below).
+Language-specific engineering rules live in the matching quality file (Go → `quality-go.md`, Ruby/Rails → `quality-ruby.md`, Node.js → see the section below).
+
+When a language-specific protocol classifies the touched area differently, the protocol narrows these general standards. For Go, `../protocols/go-implementation-mode.md` decides whether a strict layered shape is appropriate. For Rails, `../protocols/rails-maintenance-mode.md` decides whether existing Rails boundaries should be preserved or explicitly modernized.
 
 ## 1. Layer Separation
 
-Every project enforces a strict layer hierarchy: **Router → Controller → Service → Repository**. Each layer calls only the layer directly below it. Utilities in `util/` are stateless helpers callable from any layer.
+Default web-service architecture uses a strict layer hierarchy: **Router → Controller → Service → Repository**. Each layer calls only the layer directly below it. Utilities in `util/` are stateless helpers callable from any layer.
+
+This default does not override a language-specific mode:
+- High-Performance Go may keep direct, explicit flow when extra layers would hide hot-path behavior.
+- Conservative Rails Maintenance preserves the existing Rails boundary in the touched area unless Explicit Modernization is approved.
 
 | | Example |
 |---|---|
@@ -94,6 +100,8 @@ Hard rule:
 ## 8. Go Consumer-Defined Contracts
 
 When Go packages use interfaces for dependency inversion, the interface belongs to the consumer package and should be separated from concrete implementation files. Putting interfaces and implementations in the same file blurs the contract boundary and makes the code read like a local convenience hack instead of an explicit dependency seam.
+
+Do not create interfaces just to satisfy this rule. First apply `../protocols/go-implementation-mode.md`: High-Performance Go often favors concrete structs and explicit dependency passing, while High-Modularity Go favors narrow consumer-defined contracts at real replacement boundaries.
 
 | | Example |
 |---|---|

@@ -4,7 +4,18 @@ Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
 
 ---
 
-## 1. Signal Handling and Root Context
+## 1. Implementation Mode
+
+**Principle:** Every Go change must choose high-performance or high-modularity mode before introducing abstractions. Apply the shared protocol at `../protocols/go-implementation-mode.md` for the touched area. Hot paths default to high-performance mode unless architecture explicitly documents a modular boundary.
+
+Required check:
+- State the selected mode for the touched Go area.
+- Use the routing examples and review gate in `go-implementation-mode.md`.
+- Fix wrong-mode abstraction before continuing with the remaining Go checks.
+
+---
+
+## 2. Signal Handling and Root Context
 
 **Principle:** The process root context must be derived from OS signal interception, not from `context.Background()`. This lets every goroutine and loop that accepts a context exit cleanly on SIGTERM without being force-killed.
 
@@ -17,7 +28,7 @@ Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
 
 ---
 
-## 2. Context Propagation
+## 3. Context Propagation
 
 **Principle:** `context.Background()` must never be used inside a request handler or any function that operates on behalf of a specific request or job. Use the request-scoped or job-scoped context so cancellation propagates correctly. The only valid uses of `context.Background()` are at process startup and in the signal-handling root.
 
@@ -30,7 +41,7 @@ Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
 
 ---
 
-## 3. Goroutine and Cancel Lifecycle
+## 4. Goroutine and Cancel Lifecycle
 
 **Principle:** Every `context.WithCancel` must have a matching `defer cancel()` in the same function scope to prevent context leaks. The cancel function must be called even when the goroutine exits early. Storing cancel functions in a map requires explicit cleanup on both normal completion and cancellation.
 
@@ -43,7 +54,7 @@ Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
 
 ---
 
-## 4. Concurrency Patterns
+## 5. Concurrency Patterns
 
 **Principle:** Use `sync.WaitGroup` to wait for a known set of goroutines to finish. Use a buffered channel as a semaphore to cap concurrent goroutines. The loop bound and the semaphore capacity serve different purposes — the loop bound is the total work count, the semaphore capacity is the parallelism limit. Both must be driven by the correct variable.
 
@@ -56,7 +67,7 @@ Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
 
 ---
 
-## 5. Deferred Cleanup
+## 6. Deferred Cleanup
 
 **Principle:** Cleanup calls (`Close`, `Rollback`, `Unlock`) must be deferred immediately after acquisition so they run even if the function returns early due to an error. Relying on cleanup only at the end of a function body is fragile — early returns skip it.
 
@@ -69,7 +80,7 @@ Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
 
 ---
 
-## 6. Structured Logging
+## 7. Structured Logging
 
 Use `log/slog` for all log output. `log.Printf`, `log.Fatalf`, and `fmt.Println` are banned in service code. Every log call includes named key-value fields; bare format strings are not sufficient.
 
@@ -82,7 +93,7 @@ Use `log/slog` for all log output. `log.Printf`, `log.Fatalf`, and `fmt.Println`
 
 ---
 
-## 7. Package Structure and Constructors
+## 8. Package Structure and Constructors
 
 Package names are lowercase single words with no underscores. Each package has one coherent responsibility. Types with external dependencies are always created via a `NewXxx` constructor — never by bare struct literal at the call site.
 
@@ -95,7 +106,7 @@ Package names are lowercase single words with no underscores. Each package has o
 
 ---
 
-## 8. Interface Placement
+## 9. Interface Placement
 
 Interfaces are defined by the consumer, not the implementer. Every struct field holding an external dependency is typed as an interface declared in the same file — never as a concrete pointer. This prevents import cycles and keeps interfaces minimal.
 
@@ -108,7 +119,7 @@ Interfaces are defined by the consumer, not the implementer. Every struct field 
 
 ---
 
-## 9. Ownership and Stream Authorization
+## 10. Ownership and Stream Authorization
 
 **Principle:** Go services that broker SSE, WebSocket, queue replay, or resource-scoped background operations must validate ownership before opening the stream or replaying buffered data. Identity setup and resource authorization are separate steps; doing the first does not satisfy the second.
 

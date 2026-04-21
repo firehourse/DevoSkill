@@ -64,3 +64,5 @@ Support modules are phase-local and conditional.
 - Do not load a support module because it exists.
 - Load a support module only when the active phase skill explicitly calls for it.
 - If a support module is not needed for the current step, leave it unread.
+- Implementation strategy is not a primary route. For Go work, the Development, Review, Debug/Performance, and Go quality routes conditionally load the shared Go implementation mode protocol to choose high-performance or high-modularity rules inside the active phase.
+- Rails maintenance strategy is also phase-local. For Ruby/Rails work, Development, Review, Debug/Performance, and Ruby quality routes conditionally load the shared Rails maintenance mode protocol to choose Conservative Rails Maintenance or Explicit Modernization inside the active phase.

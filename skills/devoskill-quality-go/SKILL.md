@@ -1,6 +1,6 @@
 ---
 name: devoskill-quality-go
-description: Go-specific quality and engineering rules for DevoSkill. Load alongside devoskill-quality when the implementation includes Go code. Covers signal handling, context propagation, goroutine lifecycle, concurrency, deferred cleanup, structured logging (slog), package structure, and interface placement.
+description: Go-specific quality and engineering rules for DevoSkill. Load alongside devoskill-quality when the implementation includes Go code. Covers implementation mode selection, signal handling, context propagation, goroutine lifecycle, concurrency, deferred cleanup, structured logging (slog), package structure, and interface placement.
 ---
 
 # DevoSkill Quality — Go
@@ -9,10 +9,12 @@ Load this skill in addition to `../devoskill-quality/SKILL.md` whenever the impl
 
 ## Load Order
 1. Confirm `../devoskill-quality/SKILL.md` has already been loaded
-2. Read `../devoskill/workflows/quality-go.md`
-3. Apply every category against the Go source files in the implementation
+2. Read `../devoskill/protocols/go-implementation-mode.md`
+3. Read `../devoskill/workflows/quality-go.md`
+4. Apply every category against the Go source files in the implementation
 
 ## Required Behavior
 - Apply Go-specific checks after the general quality checks pass.
+- State whether the touched Go code is high-performance or high-modularity before checking abstractions.
 - Use the examples to pattern-match — if produced code matches a ❌ pattern, fix it before writing back to `task.md`.
 - Do not skip a category because the code "looks fine" — verify against the principle explicitly.
