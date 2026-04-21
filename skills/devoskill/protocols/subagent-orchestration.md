@@ -26,7 +26,7 @@ When invoking a Subagent (e.g., `planner`, `developer`, `reviewer`), you must:
 **Required Inputs:**
 - The active phase in `task.md`.
 - The effective architecture sections referenced by that phase.
-- Ensure `.devoskill/` symlink exists to the centralized `skilldocs/<project_name>` folder.
+- Ensure the project root's `.devoskill/` symlink exists and points to `<workspace_path>/docs/<project>`.
 - *Strict Rule:* The Developer does not alter the architecture. If architecture changes are required, it must halt and return control to the Orchestrator/Planner.
 
 ### The Reviewer Subagent

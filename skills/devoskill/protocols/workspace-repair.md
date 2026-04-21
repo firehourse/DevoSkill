@@ -7,6 +7,7 @@ Use this protocol when workspace mapping and local symlink state drift out of sy
 - mapping exists and `.devoskill` points to a different project
 - mapping path is valid but the previously used project is no longer the active one
 - workspace was repurposed for a different project set over time
+- a child project is missing `.devoskill` while an ancestor directory has one
 
 ## Repair Rules
 - Repair workspace state only when:
@@ -14,6 +15,8 @@ Use this protocol when workspace mapping and local symlink state drift out of sy
   - the task is explicitly about workspace setup/repair, or
   - the current session cannot proceed without resolving the active project
 - If `.devoskill` already points to a plausible project and the user is actively working there, do not force-switch it to match legacy mapping state.
+- If the current project root is missing `.devoskill`, do not reuse an ancestor `.devoskill`; create or repair the project root symlink to `<workspace_path>/docs/<project>` after project resolution.
+- If the current project root's `.devoskill` points outside `<workspace_path>/docs/<project>`, report the drift and repair it only after explicit project resolution.
 - When drift is detected, surface it explicitly:
   - mapping target
   - symlink target

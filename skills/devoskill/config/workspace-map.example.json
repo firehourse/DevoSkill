@@ -2,9 +2,8 @@
   "version": 1,
   "workspaces": [
     {
-      "workspace_path": "/home/webuser/devel",
-      "skilldocs_base_path": "/home/webuser/devel/docs",
-      "project_name": "DevoSkill"
+      "workspace_path": "/Users/devorkli/devel",
+      "skilldocs_base_path": "/Users/devorkli/devel/docs"
     }
   ]
 }

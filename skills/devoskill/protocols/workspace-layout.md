@@ -4,7 +4,7 @@ Use this protocol when deciding the directory structure under SkillDocs.
 
 ## Layout
 ```text
-<Project_Name>/
+<workspace_path>/docs/<project>/
   architecture.md
   <feature-name>/
     task.md
@@ -16,6 +16,7 @@ Use this protocol when deciding the directory structure under SkillDocs.
 ```
 
 ## Rules
+- Store SkillDocs under `<workspace_path>/docs/<project>`.
 - Project-root `architecture.md` is the stable baseline.
 - Each feature gets its own folder.
 - Do not create a second feature `task.md` at the project root.

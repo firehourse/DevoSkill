@@ -18,12 +18,13 @@ Do not read planning, development, review, performance, or quality workflows fro
 
 ## Required Behavior
 - Resolve the mapped SkillDocs base path from `skills/devoskill/config/workspace-map.local.json` when present.
-- If no local mapping exists, derive it from the current workspace and persist it into the canonical local mapping file for future sessions.
-- If `.devoskill` already points to a valid SkillDocs project, treat that as enough to derive session-local base-path state even before persistence succeeds.
-- Resolve the active project using explicit user intent first, then `.devoskill`, then other local evidence.
-- Derive or confirm a concrete project folder under the mapped base path.
+- If no local mapping exists, derive `skilldocs_base_path` as `<workspace_path>/docs` and persist it into the canonical local mapping file for future sessions.
+- On macOS, this commonly resolves to `/Users/<user>/devel/docs`; on Linux or containers, it resolves from that environment's configured `workspace_path`.
+- Resolve the active project using explicit user intent first, then the project root's own `.devoskill`, then other local evidence.
+- Derive or confirm the concrete project folder as `<workspace_path>/docs/<project>`.
 - Reuse existing project folders when present instead of re-bootstrapping blindly.
-- Ensure the local `.devoskill` symlink points at the project-specific SkillDocs directory.
+- Ensure the local `.devoskill` symlink points at `<workspace_path>/docs/<project>`.
+- Do not use an ancestor directory's `.devoskill` as the active project pointer for a child project.
 - Remove or ignore duplicate local-state files outside the canonical path instead of treating them as valid alternatives.
 - Keep workspace setup focused on location, mapping, and symlink correctness. It does not own planning decisions or execution rules.
 - If mapping metadata and `.devoskill` drift, treat that as repair work. Do not silently switch the active project just because legacy mapping metadata disagrees.

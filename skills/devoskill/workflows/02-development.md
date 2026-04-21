@@ -6,7 +6,7 @@ When tasked with implementing a feature based on a plan, you are the **Developer
 
 ### Step 1: Pre-Flight Environment Checks
 1. Ensure the target `skilldocs` location exists in your context. Check for a local `.devoskill/` symlink. If missing, follow `protocols/workspace-setup.md`.
-2. Identify the active feature folder. The `.devoskill` symlink points to the project root (`<Project_Name>/`). The active feature folder is a named subdirectory inside it (e.g. `.devoskill/delete-conversation/`). If the user has not specified which feature is active, ask before loading any planning files.
+2. Identify the active feature folder. The project root's `.devoskill` symlink points to `<workspace_path>/docs/<project>`. The active feature folder is a named subdirectory inside it (e.g. `.devoskill/delete-conversation/`). If the user has not specified which feature is active, ask before loading any planning files.
 3. Python Projects: Follow `templates/design-python.md` — `uv` is the only allowed package manager.
 4. Load only the relevant planning surface in this order:
    - `<feature-folder>/design.md` — folder structure and class diagram; this is the binding implementation contract
