@@ -6,7 +6,7 @@ Use this protocol when deciding the default read surface for a phase.
 1. Relevant `architecture.md` sections
 2. Existing active `task.md` only if rewriting
 3. Existing `design.md` / `test.md` only when rewriting or reconciling a prior contract
-4. Notes or history only when directly required
+4. `project-changelog.md` or notes only when directly required
 
 ## Development
 1. `design.md`
@@ -29,4 +29,4 @@ Use this protocol when deciding the default read surface for a phase.
 4. `verification.md`
 5. Relevant `architecture.md` sections only when required by a category
 
-Do not load notes, old phases, or abandoned plans unless the current step explicitly needs them.
+Do not load `project-changelog.md`, notes, old phases, or abandoned plans unless the current step explicitly needs them.

@@ -1,6 +1,7 @@
 # [Project Name] Effective Architecture
 
 This document contains the currently effective architecture only. It is written for future execution sessions, not for preserving every design conversation.
+For historical rationale, link to the relevant `project-changelog.md` entry instead of embedding long "why" sections here.
 
 ## 1. Planning Mode
 - Mode: `[Greenfield | Existing System | Hybrid]`

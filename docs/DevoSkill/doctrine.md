@@ -104,9 +104,11 @@ Each artifact owns a different semantic contract:
 - `test.md` owns the testing contract derived from `design.md`.
 - `task.md` owns only the active executable phase.
 - `verification.md` owns durable verification evidence and reconciliation notes.
-- `notes/` owns non-default history, rejected ideas, and material not needed in the default load surface.
+- project-root `project-changelog.md` owns feature/change timestamp rows and rationale that should not pollute the default load surface.
+- feature-level `notes/` owns rejected ideas and local material not needed in the default load surface.
 
 If these documents disagree, the system is in drift. Drift must be reconciled in the documents, not explained away in chat.
+Planning files should not carry long historical explanations. They should state the effective decision and point to the relevant `project-changelog.md` entry when the rationale, legacy burden, or accumulated context matters.
 
 This is where the system is closest to DDD:
 
@@ -171,7 +173,7 @@ Documents should stay small because:
 
 The line limit is not cosmetic. It is a reliability guard for later prompt loading.
 
-If a file grows beyond the approved planning surface, split it by responsibility or move non-default history into `notes/`.
+If a file grows beyond the approved planning surface, split it by responsibility, move project-level rationale into `project-changelog.md`, or move feature-local abandoned context into `notes/`.
 
 ## 9. Extension Rules For Future Contributors
 

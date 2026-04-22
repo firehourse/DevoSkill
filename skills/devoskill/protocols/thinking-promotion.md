@@ -15,4 +15,4 @@ Use this protocol when deciding what becomes durable planning state.
 - every intermediate thought
 - obsolete plans
 
-If history matters, store it in `notes/` so it is not default context.
+If project-level decision history matters, store it in project-root `project-changelog.md` so it is not default context. Use feature-level `notes/` for abandoned local context.

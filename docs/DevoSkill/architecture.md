@@ -25,6 +25,7 @@
   - `design.md` as the binding implementation contract,
   - `test.md` as the binding testing contract derived from `design.md`,
   - `verification.md` as the durable evidence surface,
+  - project-root `project-changelog.md` as the non-default feature/change timestamp and rationale surface,
   - engineering standards as mandatory review/development gates,
   - artifact hygiene and ownership/authorization checks as first-class review concerns.
 - Keep local workspace state canonical at `skills/devoskill/config/workspace-map.local.json` and treat any duplicate local-state path as legacy pollution to clean up rather than preserve.
@@ -48,3 +49,4 @@
 - Phase 4: Restructure the entry router so bootstrap/path decisions and work-mode classification happen at the front of the prompt, and make sibling skills explicitly rely on that routing model.
 - Phase 5: Add a durable doctrine document and promote `test.md` into a first-class planning artifact across templates, workflows, and document-system semantics.
 - Phase 6: Add an `Update` primary route and `skill-evolution` shared protocol that let the agent capture user-stated rules during a session and write them back into custom protocol files — without external tools or runtime hooks.
+- Phase 7: Add project-root `project-changelog.md` as the simple place to record feature/change timestamps and rationale, while keeping change history out of default planning context.
