@@ -5,6 +5,19 @@ description: Development module for DevoSkill. Use when implementing approved ta
 
 # DevoSkill Development
 
+## Entry Gate (check before anything else)
+
+**STOP. Do not proceed until both conditions are met:**
+
+1. A `task.md` exists in the active project skilldocs.
+2. The user has explicitly approved implementation in this session, or `task.md` has an active phase with approved status.
+
+If either condition is not met:
+- Do not load any workflow or read any file below.
+- Route back to `Planning` and tell the user exactly what is missing (no task.md / no explicit approval).
+
+---
+
 Use this skill only after planning exists and the user has explicitly approved implementation.
 Do not use it for architecture discovery, compliance-only validation, or benchmark-first debugging.
 
