@@ -3,10 +3,10 @@
 This document contains only the currently active executable work. It is the source of truth for the Developer subagent during the current phase.
 
 ## Global Constraints Reminder
-- Keep DevoSkill markdown files (`architecture.md`, `task.md`, `design.md`, `test.md`, `verification.md`, project-root `project-changelog.md`, and `notes/*.md`) under 600 lines each. Split phases or move project-level rationale into `project-changelog.md` if necessary. This limit does not apply to implementation source files.
+- Keep DevoSkill markdown files (`architecture.md`, `task.md`, `design.md`, `test.md`, `verification.md`, project-root `project-changelog.md`, loaded `study/*.md`, and `notes/*.md`) under 600 lines each. Split phases, move reusable understanding into `study/`, or move project-level rationale into `project-changelog.md` if necessary. This limit does not apply to implementation source files.
 - Python projects: follow `templates/design-python.md`.
 - If `architecture.md` and `task.md` disagree, stop and return to planning.
-- Do not load `project-changelog.md` or abandoned plans unless the user explicitly asks for them or the task needs change rationale.
+- Do not load `study/`, `project-changelog.md`, or abandoned plans unless the user explicitly asks for them or the task needs reusable context or change rationale.
 - Do not store long rationale in this file. Link to the relevant `project-changelog.md` entry when historical context matters.
 - Verification claims must point to durable evidence or directly inspectable repository state.
 

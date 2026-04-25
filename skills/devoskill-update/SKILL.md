@@ -21,7 +21,7 @@ Do not load planning, development, review, or performance workflows.
 
 ## Required Behavior
 - Apply the noise filter before capturing anything. If the rule does not qualify, do not write.
-- Scan existing `custom-*.md` files first. Append to an existing file if the rule fits its scope.
-- Classify and name the file independently using the logic in `skill-evolution.md`. Do not ask the user for the file name.
-- Only create or append to `custom-*.md` files inside `skills/devoskill/protocols/`. No other file may be created or modified.
+- Scan existing `custom-*.md` files first only for shared/company-level rules. If the rule is project/domain-specific, route it to the matching dedicated skill instead of writing it into DevoSkill shared protocols.
+- Classify and name the shared/company-level file independently using the logic in `skill-evolution.md`. Do not ask the user for the file name.
+- Only create or append to `custom-*.md` files inside `skills/devoskill/protocols/` when the rule truly belongs to the shared/company-level layer. Do not force project/domain rules into DevoSkill custom files.
 - After writeback, report what was written and to which file. Stop — do not continue into implementation.

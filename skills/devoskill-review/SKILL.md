@@ -22,7 +22,9 @@ If the work no longer matches review, stop and reroute instead of continuing.
 5. Load project-level `architecture.md` for baseline context
 6. If Go code is in scope, read `../devoskill/protocols/go-implementation-mode.md` and review whether the implementation mode was chosen correctly
 7. If Ruby/Rails code is in scope, read `../devoskill/protocols/rails-maintenance-mode.md` and review whether the change preserved the existing Rails style and lifecycle behavior
-8. If any `../devoskill/protocols/custom-*.md` files exist, read them — they contain project-specific or user-captured standing rules that apply to this review
+8. Read shared/company-level `../devoskill/protocols/custom-*.md` only when the current review step matches the load conditions defined in `../devoskill/protocols/skill-evolution.md` Section 5
+9. If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent
+10. If that project skill exposes registry-based rule discovery, read `../devoskill/protocols/rule-registry-routing.md` and follow its `project -> phase -> registry -> current action -> concern` model
 
 Do not read planning or development workflows from review unless the work actually reroutes.
 
@@ -32,3 +34,4 @@ Do not read planning or development workflows from review unless the work actual
 - Treat `architecture.md` and `task.md` as the source of truth, not "working code".
 - If code and architecture diverge, return a concrete discrepancy list instead of normalizing the drift.
 - Verify the durable evidence surface as part of review. A phase is not complete if claims in `task.md` cannot be traced to repository state or persisted verification artifacts.
+- When a review depends on project/domain rules, treat the project skill as the authority instead of searching DevoSkill shared custom files for that concern.

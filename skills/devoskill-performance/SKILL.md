@@ -20,7 +20,9 @@ If the work no longer matches debugging/performance, stop and reroute instead of
 3. Load only the effective architecture and active task sections needed for the measured bottleneck
 4. If Go code is in scope, read `../devoskill/protocols/go-implementation-mode.md` and default measured hot paths to high-performance mode unless the architecture explicitly chooses modularity
 5. If Ruby/Rails code is in scope, read `../devoskill/protocols/rails-maintenance-mode.md` before changing transaction, callback, cache, job, or integration lifecycle behavior
-6. If any `../devoskill/protocols/custom-*.md` files exist, read them — they contain project-specific or user-captured standing rules that apply to this session
+6. Read shared/company-level `../devoskill/protocols/custom-*.md` only when the current debug/performance step matches the load conditions defined in `../devoskill/protocols/skill-evolution.md` Section 5
+7. If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent
+8. If that project skill exposes registry-based rule discovery, read `../devoskill/protocols/rule-registry-routing.md` and follow its `project -> phase -> registry -> current action -> concern` model
 
 Do not read planning, development, or review workflows from debug/performance unless the task actually reroutes.
 

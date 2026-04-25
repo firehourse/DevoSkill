@@ -10,6 +10,7 @@
 - Multiple accidental local-state paths (`config/`, `skills/config/`) appeared alongside the canonical `skills/devoskill/config/workspace-map.local.json`, which risks repo pollution and inconsistent workspace mapping behavior.
 - The current entry prompt still spends too much early attention on background rules instead of first-step decisions, which weakens routing reliability because models remember the front of the prompt more strongly than the middle.
 - DevoSkill has no mechanism to capture user-stated corrections, style rules, or performance standards back into the skill system. Rules stated in chat vanish after the session and do not evolve the skill over time.
+- DevoSkill now has project-root `project-changelog.md` for non-default rationale, but reusable code-reading and architecture study material is still only an informal convention in downstream projects.
 
 ## Approved Target Shape
 - Keep the existing router and phase model intact.
@@ -26,6 +27,7 @@
   - `test.md` as the binding testing contract derived from `design.md`,
   - `verification.md` as the durable evidence surface,
   - project-root `project-changelog.md` as the non-default feature/change timestamp and rationale surface,
+  - project-root `study/` as the non-default reusable system understanding surface for code-reading guides, domain studies, and flow maps,
   - engineering standards as mandatory review/development gates,
   - artifact hygiene and ownership/authorization checks as first-class review concerns.
 - Keep local workspace state canonical at `skills/devoskill/config/workspace-map.local.json` and treat any duplicate local-state path as legacy pollution to clean up rather than preserve.
@@ -34,12 +36,14 @@
 - Add an `Update` primary route to the router (same tier as Planning / Development / Review). The route is thin; all capture and writeback semantics live in a shared `skill-evolution` protocol, not in the phase skill itself.
 - Add a `skill-evolution.md` shared protocol that defines: what qualifies as a capturable rule (explicit user corrections, cross-session style/performance standards), the writeback format, and how to determine the target custom protocol file.
 - Add optional `custom-quality.md` and `custom-performance.md` protocol files under `skills/devoskill/protocols/`. These files do not exist until the first rule of that type is captured. Development and Review skills load them conditionally if they exist.
+- Add a Study Surface protocol that lets Inquiry and Planning create or consume durable code studies without making Study part of the default Development, Review, Quality, or Debug load surface.
 
 ## Boundaries
 - Do not redesign the overall DevoSkill workflow model.
 - Do not turn the new doctrine into feature-history or duplicate README prose without adding sharper operational guidance.
 - Do not introduce a heavyweight test harness or unrelated product features.
 - Do not track machine-local workspace mapping state in git.
+- Do not let `study/` become a dumping ground for raw search logs, feature task lists, or execution evidence.
 - Keep the new contract-oriented rules compatible with the existing sibling-skill pattern and concise enough to reload quickly.
 
 ## Execution Shape
@@ -50,3 +54,4 @@
 - Phase 5: Add a durable doctrine document and promote `test.md` into a first-class planning artifact across templates, workflows, and document-system semantics.
 - Phase 6: Add an `Update` primary route and `skill-evolution` shared protocol that let the agent capture user-stated rules during a session and write them back into custom protocol files — without external tools or runtime hooks.
 - Phase 7: Add project-root `project-changelog.md` as the simple place to record feature/change timestamps and rationale, while keeping change history out of default planning context.
+- Phase 8: Add project-root `study/` and a Study Surface protocol so Inquiry and Planning can preserve reusable repository, subsystem, domain, and workflow understanding without polluting active execution context.

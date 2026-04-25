@@ -34,7 +34,9 @@ If the work no longer matches development, stop and reroute instead of continuin
 4. Load only the active phase in `task.md` and the effective architecture sections it references
 5. If Go code is in scope, read `../devoskill/protocols/go-implementation-mode.md` before choosing abstractions or package boundaries
 6. If Ruby/Rails code is in scope, read `../devoskill/protocols/rails-maintenance-mode.md` before changing style, callbacks, service boundaries, or lifecycle behavior
-7. If any `../devoskill/protocols/custom-*.md` files exist, read them — they contain project-specific or user-captured standing rules that apply to this session
+7. Read shared/company-level `../devoskill/protocols/custom-*.md` only when the current implementation step matches the load conditions defined in `../devoskill/protocols/skill-evolution.md` Section 5
+8. If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent
+9. If that project skill exposes registry-based rule discovery, read `../devoskill/protocols/rule-registry-routing.md` and follow its `project -> phase -> registry -> current action -> concern` model
 
 Do not read planning, review, or performance workflows from development unless the task actually reroutes.
 
@@ -46,3 +48,4 @@ Do not read planning, review, or performance workflows from development unless t
 - For existing code, obey maintenance constraints, style conformance rules, and anti-over-abstraction rules.
 - Do not write code without an explicit `task.md`.
 - Treat `design.md`, `task.md`, verification artifacts, and repository state as a single implementation contract. If they diverge, stop and reconcile instead of coding through the inconsistency.
+- Do not use DevoSkill shared custom files as a catch-all source for project/domain concerns; load the relevant project skill when the implementation depends on domain-specific rules.

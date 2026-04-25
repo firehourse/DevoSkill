@@ -104,11 +104,13 @@ Each artifact owns a different semantic contract:
 - `test.md` owns the testing contract derived from `design.md`.
 - `task.md` owns only the active executable phase.
 - `verification.md` owns durable verification evidence and reconciliation notes.
+- project-root `study/` owns reusable system understanding, code-reading guides, domain studies, and flow maps that help future Inquiry or Planning work recover current reality without rediscovering a large codebase.
 - project-root `project-changelog.md` owns feature/change timestamp rows and rationale that should not pollute the default load surface.
 - feature-level `notes/` owns rejected ideas and local material not needed in the default load surface.
 
 If these documents disagree, the system is in drift. Drift must be reconciled in the documents, not explained away in chat.
 Planning files should not carry long historical explanations. They should state the effective decision and point to the relevant `project-changelog.md` entry when the rationale, legacy burden, or accumulated context matters.
+Study files should not become feature plans. They preserve reusable understanding; Planning promotes only the change-specific pieces into `architecture.md`, `design.md`, or `task.md`.
 
 This is where the system is closest to DDD:
 
@@ -185,6 +187,7 @@ When extending DevoSkill:
 - do not add repeated rules to multiple files when one shared protocol can own them,
 - do not hide new execution requirements in README prose only,
 - do not treat verification evidence as a substitute for a proper design or test contract.
+- do not use Study as a shortcut around Planning approval or Development scoping.
 
 Any change that affects the default document system should update:
 
@@ -192,6 +195,7 @@ Any change that affects the default document system should update:
 - document loading order,
 - document persistence,
 - workspace layout,
+- study surface rules when reusable code understanding is affected,
 - relevant workflows,
 - relevant templates,
 - and README or doctrine references where humans discover the system.

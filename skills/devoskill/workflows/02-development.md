@@ -22,7 +22,7 @@ When tasked with implementing a feature based on a plan, you are the **Developer
    - state transitions and lifecycle rules,
    - test suites and scenarios that must exist,
    - verification artifacts that must exist at the end.
-4. Do NOT load `project-changelog.md`, abandoned approaches, or old phases unless the user explicitly asks for them or the task needs change rationale.
+4. Do NOT load `study/`, `project-changelog.md`, abandoned approaches, or old phases unless the user explicitly asks for them or the task needs reusable context or change rationale.
 5. Confirm that implementation is explicitly approved in the active planning surface or by the user's current instruction. If approval is missing or ambiguous, stop and ask the user whether to begin implementation now.
 6. Treat `protocols/document-system.md` as the shared contract for which document owns architecture, active work, design intent, evidence, and history.
 
@@ -88,7 +88,7 @@ Before marking any implementation phase complete, load `../devoskill-quality/SKI
 |-------|---------|
 | "This is too simple, I don't need task.md" | Simple tasks cause the most assumption errors. Write it in task.md, it takes 2 minutes. |
 | "There is a task.md now, so I can start coding" | A task plan is not approval. Wait for explicit user authorization. |
-| "I'll read `project-changelog.md` and old notes to be safe" | Context overload makes execution worse. Load only the active planning surface unless change rationale is required. |
+| "I'll read `study/`, `project-changelog.md`, and old notes to be safe" | Context overload makes execution worse. Load only the active planning surface unless reusable context or change rationale is required. |
 | "Let me write the code first, I'll update docs later" | "Later" never comes. Docs first, code second. No exceptions. |
 | "The code is done, I don't need to touch task.md" | Execution without writeback leaves the planning surface stale. Update `task.md` before claiming progress. |
 | "The code drifted a bit, but architecture.md can stay as-is" | Effective architecture must describe the resulting system. Update it or return to planning. |

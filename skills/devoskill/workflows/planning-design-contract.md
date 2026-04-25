@@ -6,6 +6,7 @@ Use this step when generating `design.md`.
 - `design.md` is the compact execution contract, not a narrative summary.
 - Existing-system and hybrid work may adapt to the real codebase, but must still satisfy the required design contract sections.
 - For greenfield work, start from the stack-specific template.
+- When a stack-specific quality workflow exists, pull the implementation-shaping constraints into `design.md` up front. Naming, error boundaries, lifecycle rules, and file/module structure must be explicit during planning rather than discovered only at the final quality gate.
 - For existing/hybrid work, scan only the minimum useful surface:
   - dependency manifest
   - entry point
@@ -27,6 +28,7 @@ Use this step when generating `design.md`.
 - topology graph alone is insufficient
 - class diagram without responsibilities is insufficient
 - class diagram without runtime flow mapping is insufficient
+- stack-specific quality constraints that materially shape implementation are missing from `design.md`
 - one merged multi-runtime diagram that hides ownership boundaries is insufficient
 - if a future developer cannot answer "which class handles this next?" from `design.md`, planning is incomplete
 - if a future developer cannot derive a concrete `test.md` from `design.md`, planning is incomplete
