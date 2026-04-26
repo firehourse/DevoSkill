@@ -30,7 +30,7 @@ If the work no longer matches planning, stop and return to the correct primary m
 10. If the project uses Python, read `../devoskill/templates/design-python.md` and `../devoskill/workflows/quality-python.md` before finalizing `design.md` or `task.md`
 11. If the project uses Ruby or Rails, read `../devoskill/protocols/rails-maintenance-mode.md`, `../devoskill/templates/design-ruby.md`, and `../devoskill/workflows/quality-ruby.md` before finalizing `design.md` or `task.md`
 12. If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent instead of scanning DevoSkill shared custom protocols
-13. If that project skill exposes registry-based rule discovery, read `../devoskill/protocols/rule-registry-routing.md` and follow its `project -> phase -> registry -> current action -> concern` model
+13. If that project skill or knowledge surface exposes registry-based discovery, read `../devoskill/protocols/rule-registry-routing.md` and follow its `phase -> project/domain or knowledge surface -> registry -> current action -> concern` model
 
 Do not read development, review, quality, or performance workflows from planning unless the work actually reroutes.
 

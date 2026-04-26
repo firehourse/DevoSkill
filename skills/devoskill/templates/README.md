@@ -3,6 +3,7 @@
 This directory contains the effective planning templates used by DevoSkill.
 
 - `architecture.md`: The current effective architecture only. It is for future execution sessions, not for storing long-form design history.
+- `design.contract.md`: The small mandatory contract for every `design.md`. It defines stable anchors, audience rules, source inputs, completion rules, and split rules.
 - `design.md`: The execution-facing implementation contract.
 - `design-go.md`, `design-node.md`, `design-python.md`, `design-ruby.md`: Stack-specific design baselines. Use them together with the matching quality workflow so naming, lifecycle, and error-handling constraints are already explicit during planning.
 - `test.md`: The execution-facing testing contract derived from `design.md`.
@@ -11,4 +12,9 @@ This directory contains the effective planning templates used by DevoSkill.
 - `project-changelog.md`: Project-level feature/change timestamp rows with rationale. It is read only when change rationale is needed.
 - `study.md`: Template for files under project-root `study/`. Study files preserve reusable system understanding and are read selectively by Inquiry or Planning.
 
-Do not turn these templates into archival logs. Project rationale belongs in `project-changelog.md`; feature-local abandoned context belongs in `notes/`.
+Template files should stay layered:
+- contract files define required anchors and completion rules,
+- stack-specific files provide implementation-shaping detail,
+- examples and local operator notes are loaded only when needed.
+
+Do not turn these templates into archival logs. Project rationale belongs in `project-changelog.md`; feature-local abandoned context belongs in `notes/`; machine-local convenience belongs in explicitly local notes such as `notes/local.md`.

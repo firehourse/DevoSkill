@@ -2,7 +2,16 @@
 
 Generated during Planning. Development follows this document — do not deviate without updating it first.
 
-## Folder Structure
+## Source Inputs
+
+- Architecture:
+- Study:
+- Changelog:
+- Code read surface:
+- User-provided inputs:
+- Local operator notes, if any:
+
+## Relevant Structure
 
 ```
 cmd/
@@ -31,7 +40,7 @@ internal/
     logger.go             # slog wrapper
 ```
 
-## Class Diagram
+## Boundary Diagram
 
 ```mermaid
 classDiagram
@@ -158,6 +167,13 @@ If the feature spans multiple binaries or runtimes, split this into subsections 
 - Negative-path checks that must be evidenced
 - Artifact hygiene rules for binaries, build output, uploads, generated files, and traces
 - Expected durable artifact path: `<feature-folder>/verification.md`
+
+## Approved Exceptions
+
+- `[Exception]`:
+  - Why it is allowed:
+  - Scope:
+  - Compensating test or verification:
 
 ## Multi-Binary Note
 

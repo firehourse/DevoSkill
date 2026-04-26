@@ -24,7 +24,7 @@ If the work no longer matches review, stop and reroute instead of continuing.
 7. If Ruby/Rails code is in scope, read `../devoskill/protocols/rails-maintenance-mode.md` and review whether the change preserved the existing Rails style and lifecycle behavior
 8. Read shared/company-level `../devoskill/protocols/custom-*.md` only when the current review step matches the load conditions defined in `../devoskill/protocols/skill-evolution.md` Section 5
 9. If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent
-10. If that project skill exposes registry-based rule discovery, read `../devoskill/protocols/rule-registry-routing.md` and follow its `project -> phase -> registry -> current action -> concern` model
+10. If that project skill exposes registry-based discovery, read `../devoskill/protocols/rule-registry-routing.md` and follow its `phase -> project/domain -> registry -> current action -> concern` model
 
 Do not read planning or development workflows from review unless the work actually reroutes.
 

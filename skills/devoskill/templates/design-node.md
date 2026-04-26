@@ -2,7 +2,16 @@
 
 Generated during Planning. Development follows this document — do not deviate without updating it first.
 
-## Folder Structure
+## Source Inputs
+
+- Architecture:
+- Study:
+- Changelog:
+- Code read surface:
+- User-provided inputs:
+- Local operator notes, if any:
+
+## Relevant Structure
 
 ```
 src/
@@ -24,7 +33,7 @@ src/
   index.ts
 ```
 
-## Class Diagram
+## Boundary Diagram
 
 ```mermaid
 classDiagram
@@ -143,6 +152,13 @@ If the feature spans multiple runtimes or apps, split this into subsections per 
 - Runtime checks that must be persisted or be directly reproducible from repository state
 - Negative-path checks that must be evidenced
 - Artifact hygiene rules for `dist/`, `node_modules/`, uploads, generated files, and traces
+
+## Approved Exceptions
+
+- `[Exception]`:
+  - Why it is allowed:
+  - Scope:
+  - Compensating test or verification:
 
 ## Multi-Runtime Note
 

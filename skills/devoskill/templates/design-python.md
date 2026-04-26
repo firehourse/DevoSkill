@@ -2,6 +2,15 @@
 
 Generated during Planning. Development follows this document — do not deviate without updating it first.
 
+## Source Inputs
+
+- Architecture:
+- Study:
+- Changelog:
+- Code read surface:
+- User-provided inputs:
+- Local operator notes, if any:
+
 ## Runtime Rules (enforced before any code is written)
 
 - All dependency management and script execution uses `uv` — never `pip`, `poetry`, or bare `python`
@@ -9,7 +18,7 @@ Generated during Planning. Development follows this document — do not deviate 
 - Code follows PEP 8: `snake_case` for functions/variables, `PascalCase` for classes, `UPPER_CASE` for module-level constants
 - Type hints on all function signatures and class fields
 
-## Folder Structure
+## Relevant Structure
 
 ```
 src/
@@ -31,7 +40,7 @@ src/
 pyproject.toml
 ```
 
-## Class Diagram
+## Boundary Diagram
 
 ```mermaid
 classDiagram
@@ -122,3 +131,10 @@ Document each meaningful request/job/stream as a numbered handoff chain:
 - Negative-path checks that must be evidenced
 - Artifact hygiene rules for caches, uploads, generated files, and traces
 - Expected durable artifact path: `<feature-folder>/verification.md`
+
+## Approved Exceptions
+
+- `[Exception]`:
+  - Why it is allowed:
+  - Scope:
+  - Compensating test or verification:

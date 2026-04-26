@@ -2,6 +2,15 @@
 
 Generated during Planning. Development follows this document — do not deviate without updating it first.
 
+## Source Inputs
+
+- Architecture:
+- Study:
+- Changelog:
+- Code read surface:
+- User-provided inputs:
+- Local operator notes, if any:
+
 ## Rails Maintenance Mode
 
 - Mode: `[Conservative Rails Maintenance | Explicit Modernization]`
@@ -148,3 +157,10 @@ List every caller-visible outcome that implementation must preserve or intention
 - Caller-facing payload/status changes that must be reconciled:
 - Artifact hygiene constraints:
 - Expected durable artifact path: `<feature-folder>/verification.md`
+
+## Approved Exceptions
+
+- `[Exception]`:
+  - Why it is allowed:
+  - Scope:
+  - Compensating test or verification:
