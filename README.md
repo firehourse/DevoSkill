@@ -120,102 +120,37 @@ For a concrete example of the full document chain, see:
 
 ## Installation & Usage
 
-DevoSkill provides native, plug-and-play integrations for the most popular AI agents to ensure global constraints are applied automatically.
+DevoSkill provides per-agent install guides for plug-and-play integration. Each agent has different attention-anchoring characteristics, so the install steps are tailored — but the underlying skill files are identical.
 
-### 1. Cursor IDE (Native Rule Integration)
-To have Cursor automatically follow DevoSkill on any project:
-1. Clone the repository into your workspace: `git clone git@github.com:firehourse/DevoSkill.git ~/workspace/DevoSkill`
-2. **Auto-Load:** Copy or symlink the specific agent rule into your target project:
-   ```bash
-   mkdir -p .cursor/rules
-   cp ~/workspace/DevoSkill/.cursor/rules/devoskill.mdc .cursor/rules/
-   ```
-Whenever Cursor Chat opens, the `.mdc` file forces the AI to consult `skills/devoskill/SKILL.md` before generating code.
+| Agent | Install guide | Integration mechanism |
+|---|---|---|
+| **Cursor IDE** | [.cursor/INSTALL.md](.cursor/INSTALL.md) | Native `.cursor/rules/devoskill.mdc` rule, reloaded at every Cursor Chat invocation |
+| **Claude Code** | [.claude/INSTALL.md](.claude/INSTALL.md) | `CLAUDE.md` bootstrap + `/Devoskill` slash command + optional `UserPromptSubmit` hook for long-session attention anchoring |
+| **Codex** | [.codex/INSTALL.md](.codex/INSTALL.md) | `AGENTS.md` bootstrap, optional skill registration via `~/.agents/skills/` |
 
-### 2. Claude Code Integration
+### Why per-agent guides instead of one universal recipe
 
-Claude Code reads `CLAUDE.md` at startup to load project-level instructions. DevoSkill hooks into this mechanism so it is active in every session automatically.
+The reinforcement each agent needs is shaped by its interaction model:
 
-**Step 1 — Bootstrap via CLAUDE.md**
+- **Cursor**: rule files (`.mdc`) load fresh at every chat invocation, so the prompt entry naturally re-anchors DevoSkill on every turn. Minimal config.
+- **Codex**: workspace-bootstrap (`AGENTS.md`) is read at session start; sessions tend to stay task-shaped without competing modes, so a single bootstrap is enough.
+- **Claude Code**: long conversations + session-level Auto Mode put extra pressure on doctrine § 2 (prompt-weight-aware design). DevoSkill rules read at startup drift toward the prompt's weak-attention zone as the conversation grows, and Auto Mode's "act immediately" can compete with router-first reroute. The Claude Code install guide therefore hardens `CLAUDE.md` and ships an optional `UserPromptSubmit` hook that re-anchors rules in the strong-attention zone of every prompt.
 
-Create or append to `CLAUDE.md` in your workspace root:
-
-```markdown
-# Workspace Claude Bootstrap
-
-This workspace uses DevoSkill as mandatory startup context.
-
-Before responding to any user request, load and follow:
-`/path/to/DevoSkill/skills/devoskill/SKILL.md`
-
-Execution rules:
-- Read `SKILL.md` before planning, asking clarifying questions, editing files, or reviewing code.
-- Route the task through the workflow selected by `SKILL.md`.
-- Follow DevoSkill workspace registry and `skilldocs` rules whenever planning or document persistence is required.
-- User instructions still take precedence when they explicitly override a DevoSkill preference.
-
-If the DevoSkill path is missing, stop and tell the user to restore the local clone or relink the skill.
-```
-
-Replace `/path/to/DevoSkill` with the absolute path to your local clone (e.g. `/home/user/workspace/DevoSkill`).
-
-**Step 2 — Register the `/Devoskill` slash command**
-
-Create `.claude/commands/Devoskill.md` inside your workspace:
-
-```bash
-mkdir -p .claude/commands
-```
-
-```markdown
-Load and execute the DevoSkill framework.
-
-Read `/path/to/DevoSkill/skills/devoskill/SKILL.md` and follow its router workflow
-for the current task: perform the bootstrap check, classify the work mode
-(Planning / Development / Review / Debug), load the matching sibling skill,
-and proceed accordingly.
-
-If an argument is provided (e.g. `/Devoskill plan` or `/Devoskill dev`),
-use it as a hint for mode classification. Otherwise infer from context.
-
-$ARGUMENTS
-```
-
-After restarting Claude Code, `/Devoskill` will appear as a registered slash command in the current workspace.
-
-To register it globally (available in all workspaces), place the same file at `~/.claude/commands/Devoskill.md`.
-
-### 3. Codex (Bootstrap via AGENTS.md)
-Codex does not use Cursor rule files. To make DevoSkill load automatically in Codex, install the provided bootstrap `AGENTS.md` into the workspace root that Codex runs from.
-
-1. Clone DevoSkill into a stable local path, for example `~/workspace/DevoSkill`
-2. Copy the bootstrap template:
-   ```bash
-   cp ~/workspace/DevoSkill/.codex/AGENTS.bootstrap.md /path/to/your/workspace/AGENTS.md
-   ```
-3. Replace `{{DEVOSKILL_ROOT}}` with your local clone path
-
-When Codex starts inside that workspace, the bootstrap file instructs it to load `skills/devoskill/SKILL.md` before doing any work.
-
-On first use in a workspace, DevoSkill will derive the `skilldocs` location dynamically and persist that machine-local mapping in `skills/devoskill/config/workspace-map.local.json`. That file is local state, should stay gitignored, and can be deleted when you want to simulate a fresh install on the same machine.
-
-If you also want DevoSkill discoverable as a registered local skill, create:
-```bash
-mkdir -p ~/.agents/skills
-ln -s ~/workspace/DevoSkill/skills/devoskill ~/.agents/skills/devoskill
-```
-
-See `.codex/INSTALL.md` for the complete Codex bootstrap instructions.
-
-To simulate a clean-machine reinstall later, remove the workspace `AGENTS.md`, `.devoskill` symlink, optional `~/.agents/skills/devoskill` registration, and the local `workspace-map.local.json`, then repeat the bootstrap steps.
+For first-run workspace mapping (`skilldocs` location, `.devoskill` symlink, `workspace-map.local.json`) details and clean-machine reinstall steps, see the install guide for your agent — the underlying behavior is identical across all three.
 
 ## Directory Structure
 ```text
 DevoSkill/
-├── .cursor/rules/devoskill.mdc       # Native IDE Rule Integration
+├── .cursor/
+│   ├── INSTALL.md                    # Cursor install guide
+│   └── rules/devoskill.mdc           # Native IDE Rule Integration
+├── .claude/
+│   └── INSTALL.md                    # Claude Code install guide (CLAUDE.md + slash command + optional hook)
 ├── .claude.json                      # Claude Configuration Block
-├── .codex/INSTALL.md                 # CLI Install script
-├── README.md                         # This file
+├── .codex/
+│   ├── INSTALL.md                    # Codex install guide
+│   └── AGENTS.bootstrap.md           # Codex bootstrap template
+├── README.md                         # This file (design philosophy + per-agent install pointers)
 └── skills/
     └── devoskill/
         ├── SKILL.md                          # The lightweight entry point & router

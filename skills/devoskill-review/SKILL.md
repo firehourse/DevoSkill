@@ -19,6 +19,7 @@ If the work no longer matches review, stop and reroute instead of continuing.
 2. Read `../devoskill/workflows/engineering-standards.md` — load the language-specific section matching the implementation stack
 3. Identify the active feature folder (e.g. `.devoskill/delete-conversation/`); ask if not specified
 4. Load `<feature-folder>/task.md` (active phase only) and `<feature-folder>/architecture.md` if present
+4.5 Enumerate the feature folder with `ls`. For every other `.md` file present (e.g., `design.md`, `test.md`, `verification.md`, `PR.md`, ad-hoc design memos, `notes/*.md`), read it before forming review judgments unless the user has explicitly scoped the review to a subset. Do not assume `task.md` + `architecture.md` are exhaustive — feature folders often contain PR drafts, post-review changelogs, or ad-hoc memos that the user expects you to consult.
 5. Load project-level `architecture.md` for baseline context
 6. If Go code is in scope, read `../devoskill/protocols/go-implementation-mode.md` and review whether the implementation mode was chosen correctly
 7. If Ruby/Rails code is in scope, read `../devoskill/protocols/rails-maintenance-mode.md` and review whether the change preserved the existing Rails style and lifecycle behavior
