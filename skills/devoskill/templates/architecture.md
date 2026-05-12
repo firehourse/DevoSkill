@@ -97,13 +97,15 @@ Use this section when user-scoped resources, streaming endpoints, replay buffers
 - Authorization and ownership constraints:
 - Artifact hygiene constraints:
 
-## 9. Open Questions
-List only unresolved items that block or shape implementation.
+## 9. Deferred Questions / Future Decisions
+Do not list active-phase implementation choices here. If a question can change current implementation, planning is incomplete and development must not begin.
 
-- [Question]
-- [Question]
+List only non-blocking future decisions that are not referenced by the active `task.md`.
 
-Once resolved, move the answer into the effective sections above and remove the question.
+- [Deferred question]
+- [Future-phase decision]
+
+Once a decision becomes active, move the selected answer into the effective sections above and remove the question.
 
 ## 10. Phased Delivery Plan
 Use this section whenever the scope is too large for one execution pass.

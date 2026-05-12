@@ -109,6 +109,7 @@ Each artifact owns a different semantic contract:
 - feature-level `notes/` owns rejected ideas and local material not needed in the default load surface.
 
 If these documents disagree, the system is in drift. Drift must be reconciled in the documents, not explained away in chat.
+If these documents still present active implementation alternatives, the system is still in Planning. A development-ready surface contains selected decisions, explicit deferrals, out-of-scope items, or stop conditions. It does not ask the Developer to choose between A and B.
 Planning files should not carry long historical explanations. They should state the effective decision and point to the relevant `project-changelog.md` entry when the rationale, legacy burden, or accumulated context matters.
 Study files should not become feature plans. They preserve reusable understanding; Planning promotes only the change-specific pieces into `architecture.md`, `design.md`, or `task.md`.
 
@@ -226,6 +227,7 @@ A bad change usually has one of these smells:
 - Single-responsibility prompt files.
 - Durable state belongs in the right artifact, not in chat.
 - Design and test contracts must exist before serious implementation.
+- Active development documents must be decision-complete; unresolved implementation choices belong to Planning.
 - Verification evidence is not the same thing as test design.
 - Review judges compliance against persisted contracts, not remembered conversation.
 

@@ -18,6 +18,7 @@ Every `design.md` must contain these anchors unless an explicit phase-approved e
 - `Responsibilities`
 - `Flow Mapping`
 - `Behavior Contract`
+- `Decision Completeness`
 - `Test Derivation Hooks`
 - `Verification Artifacts`
 - `Approved Exceptions`
@@ -37,6 +38,8 @@ Reviewer-facing source inputs must be portable. Local operator notes are conveni
 ## Completion Rules
 - A future developer can answer which component handles the next implementation step from `Responsibilities` and `Flow Mapping`.
 - A future reviewer can compare code against explicit boundaries without inferring intent from chat.
+- The active phase contains one selected implementation path. Alternatives are either rejected, deferred to a named future phase, or marked out of scope.
+- `design.md` does not ask the Developer to choose between active implementation options.
 - `Test Derivation Hooks` are specific enough to create or validate `test.md`.
 - `Verification Artifacts` are specific enough to create or validate `verification.md`.
 - Every local-only reference is isolated to local notes and excluded from reviewer-facing proof.

@@ -12,6 +12,7 @@ DevoSkill is also organized as a function-like document system: each skill, prot
 3. **Python Ecosystem:** If the project uses Python, the agent is mandated to use `uv` for all dependency and environment management.
 4. **Document Persistence (SkillDocs):** The agent will not generate useless conversational summaries. Durable project state is maintained through the SkillDocs document system (`architecture.md`, `design.md`, `test.md`, `task.md`, `verification.md`) centralized in a `skilldocs` directory, isolating it from your source code repository.
 5. **Effective Planning Surface:** `architecture.md` stores only the current effective architecture, `design.md` stores the implementation contract, `test.md` stores the testing contract, and `task.md` stores only the active executable phase. History is not part of the default context.
+6. **Decision-Complete Development Surface:** Development-ready documents must contain one selected path for the active phase. If the docs still ask the Developer to choose between A and B, planning is not complete.
 
 ## How It Works
 
@@ -82,6 +83,7 @@ DevoSkill is optimized for collaboration with LLMs under context pressure, not f
 - **Mode-Aware Planning:** New systems, existing systems, and hybrid changes use different planning logic.
 - **Phase-Based Execution:** Large changes are split into architecture parts and task phases so later sessions can reload them cleanly.
 - **Human Boundary Respect:** If DB schema, production contracts, credentials, or sensitive runtime state are missing, the agent asks the user instead of guessing.
+- **Decision-Complete Handoff:** Planning output may record rejected or deferred alternatives, but the active development surface must not contain implementation choices for the Developer to decide.
 - **Minimal Default Context:** Future sessions should be able to read only the effective architecture and current task phase, not a pile of planning history.
 
 ## Development Doctrine
@@ -162,6 +164,7 @@ DevoSkill/
         │   ├── document-loading-order.md     # Default read surface per phase
         │   ├── document-persistence.md       # Where durable state should be written
         │   ├── document-reviewability.md     # What makes the planning surface reusable
+        │   ├── implementation-readiness-gate.md # Decision-complete gate before implementation
         │   ├── thinking-phase.md             # Thin router for planning pre-write reasoning
         │   ├── thinking-classification.md    # Greenfield / Existing / Hybrid decision
         │   ├── thinking-reality-model.md     # Minimum safe current-reality model
