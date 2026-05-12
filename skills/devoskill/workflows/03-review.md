@@ -34,6 +34,8 @@ Perform the checks:
    - a class/type appears in code but not in the diagram set,
    - a diagram node has no matching responsibility section,
    - runtime flow in code cannot be reconstructed from the documented flow mapping,
+   - a mixed-stack or multi-binary feature fails `templates/design.contract.md` Cross-Stack / Multi-Binary Rule,
+   - a Rails `Boundary Map` is used to replace required non-Rails runtime Mermaid `classDiagram` sections with method/function signatures and matching responsibilities,
    - a multi-runtime feature is represented only by a single merged diagram that hides ownership and handoff boundaries.
 12. **Test Contract Completeness**: Review `test.md` as a binding artifact. Flag it if:
    - the selected methodology contradicts project reality or approved planning,

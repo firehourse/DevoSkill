@@ -27,12 +27,10 @@ Use this step when generating `design.md`.
 - verification artifact section
 - explicit phase-approved exceptions
 
-## Multi-Stack / Multi-Binary Rule
+## Cross-Stack / Multi-Binary Rule
 - If the feature spans multiple stacks, runtimes, binaries, apps, or independently deployable boundaries, apply `../templates/design.contract.md` Cross-Stack / Multi-Binary Rule before finalizing `design.md`.
-- A single prose `Boundary Map` is insufficient for mixed-stack work when any Go, Node.js/TypeScript, Python, or other method-signature-driven runtime boundary is in active scope.
-- Rails Conservative Maintenance may omit a class diagram only for the Rails segment. It cannot waive class diagrams, method/function signatures, or class-level responsibilities required for non-Rails runtime boundaries in the same feature.
-- For each Go, Node.js/TypeScript, Python, or other non-Rails runtime boundary in active scope, require one Mermaid `classDiagram` with method/function signatures and matching responsibility subsections.
-- Flow mapping must trace meaningful steps to the concrete method, function, class, interface, protocol, struct, or Rails boundary that owns the step.
+- Do not downgrade non-Rails runtime boundary requirements because the Rails segment uses a prose `Boundary Map`; the shared contract owns required topology, Mermaid `classDiagram`, method/function signatures, responsibilities, and flow traceability.
+- If a runtime-specific diagram is omitted, record it as an `Approved Exceptions` entry exactly as required by the shared contract.
 
 ## Minimum Bar
 - `design.md` can be understood by the human owner without reading skill files or replaying chat
@@ -40,8 +38,8 @@ Use this step when generating `design.md`.
 - topology graph alone is insufficient
 - class diagram without responsibilities is insufficient
 - class diagram without runtime flow mapping is insufficient
-- mixed-stack prose that hides Go, Node.js/TypeScript, Python, or other method-signature-driven runtime boundaries is insufficient
-- Rails `Boundary Map` prose used to replace required non-Rails runtime class diagrams is insufficient
+- mixed-stack or multi-binary design that fails the shared Cross-Stack / Multi-Binary Rule is insufficient
+- Rails `Boundary Map` prose used to replace required non-Rails runtime Mermaid `classDiagram` sections is insufficient
 - stack-specific quality constraints that materially shape implementation are missing from `design.md`
 - one merged multi-runtime diagram that hides ownership boundaries is insufficient
 - if a future developer cannot answer "which class handles this next?" from `design.md`, planning is incomplete
