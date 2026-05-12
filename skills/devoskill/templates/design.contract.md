@@ -23,6 +23,19 @@ Every `design.md` must contain these anchors unless an explicit phase-approved e
 - `Verification Artifacts`
 - `Approved Exceptions`
 
+## Cross-Stack / Multi-Binary Rule
+If a feature spans multiple stacks, runtimes, binaries, apps, or independently deployable boundaries, the design must make each boundary inspectable instead of collapsing everything into one prose map.
+
+Required shape:
+- one topology or system diagram showing cross-boundary traffic and ownership
+- one Mermaid `classDiagram` per Go, Node.js/TypeScript, Python, or other method-signature-driven runtime boundary, with concrete classes, structs, interfaces, protocols, functions, and method/function signatures that shape implementation
+- one responsibility subsection per diagram node or Rails boundary
+- flow mapping steps that trace to the concrete method, function, class, interface, protocol, struct, or Rails boundary that owns each step
+
+Rails Conservative Maintenance may use a prose `Boundary Map` for the Rails segment when a class diagram would be fake precision. That exception is local to Rails. It does not replace Mermaid `classDiagram` sections required for Go, Node.js/TypeScript, Python, or other non-Rails runtime boundaries in the same feature.
+
+If a required runtime diagram is omitted, `Approved Exceptions` must name the runtime boundary, explain why the diagram would be misleading, and provide compensating flow and responsibility detail.
+
 ## Source Inputs
 This section records where the design came from. Keep it short and typed.
 
@@ -38,6 +51,7 @@ Reviewer-facing source inputs must be portable. Local operator notes are conveni
 ## Completion Rules
 - A future developer can answer which component handles the next implementation step from `Responsibilities` and `Flow Mapping`.
 - A future reviewer can compare code against explicit boundaries without inferring intent from chat.
+- For multi-stack or multi-binary features, a future developer can identify the owning method/function or Rails boundary for each meaningful flow step.
 - The active phase contains one selected implementation path. Alternatives are either rejected, deferred to a named future phase, or marked out of scope.
 - `design.md` does not ask the Developer to choose between active implementation options.
 - `Test Derivation Hooks` are specific enough to create or validate `test.md`.

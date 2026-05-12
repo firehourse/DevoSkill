@@ -183,3 +183,5 @@ Required approach:
 - one topology/system diagram for cross-binary boundaries
 - one class diagram per binary or per independently deployable boundary
 - flow mapping that explicitly names the handoff between binaries
+
+For mixed-stack features, this Go boundary still requires its own class diagram, method signatures, responsibilities, and flow mapping even when another stack, such as Rails, uses a prose boundary map.

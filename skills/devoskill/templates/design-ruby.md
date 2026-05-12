@@ -59,6 +59,8 @@ Do not force a class diagram if the touched Rails area is better explained as fl
 
 If a diagram helps, use one. If the code is legacy Rails and a diagram would be fake precision, omit it and make the boundaries explicit in prose instead.
 
+This Rails exception is local to the Rails segment. If the same feature also touches Go, Node.js/TypeScript, Python, or another method-signature-driven runtime boundary, follow `design.contract.md` for that runtime: include its class diagram, method/function signatures, matching responsibilities, and flow mapping. Do not let Rails prose replace non-Rails runtime diagrams.
+
 ## Responsibilities
 
 One subsection per touched component.

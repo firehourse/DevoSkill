@@ -138,3 +138,14 @@ Document each meaningful request/job/stream as a numbered handoff chain:
   - Why it is allowed:
   - Scope:
   - Compensating test or verification:
+
+## Multi-Runtime Note
+
+If this feature spans more than one executable boundary or stack, one class diagram is usually not enough.
+
+Required approach:
+- one topology/system diagram for cross-runtime boundaries
+- one class diagram per Python runtime or independently deployable boundary
+- flow mapping that explicitly names the cross-runtime handoff between them
+
+For mixed-stack features, this Python boundary still requires its own class diagram, method/function signatures, responsibilities, and flow mapping even when another stack, such as Rails, uses a prose boundary map.

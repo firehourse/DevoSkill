@@ -168,3 +168,5 @@ Required approach:
 - one topology/system diagram for cross-runtime boundaries
 - one class diagram per runtime or per independently deployable boundary
 - flow mapping that explicitly names the cross-runtime handoff between them
+
+For mixed-stack features, this Node.js/TypeScript boundary still requires its own class diagram, method signatures, responsibilities, and flow mapping even when another stack, such as Rails, uses a prose boundary map.
