@@ -120,6 +120,12 @@ For a concrete example of the full document chain, see:
 - [docs/DevoSkill/examples/delete-conversation/task.md](docs/DevoSkill/examples/delete-conversation/task.md)
 - [docs/DevoSkill/examples/delete-conversation/verification.md](docs/DevoSkill/examples/delete-conversation/verification.md)
 
+## Change Review Packets
+
+DevoSkill can expose a compact change-review surface when a feature changes observable behavior or agent workflow behavior. The behavior delta stays in the feature architecture as a small skeleton, while `task.md`, `test.md`, and `verification.md` keep the execution checklist, proof mapping, and evidence.
+
+This keeps the review intent inspectable without turning templates into long rule carriers. The executable rules live in focused protocols and workflows.
+
 ## Installation & Usage
 
 DevoSkill provides per-agent install guides for plug-and-play integration. Each agent has different attention-anchoring characteristics, so the install steps are tailored — but the underlying skill files are identical.
@@ -164,6 +170,7 @@ DevoSkill/
         │   ├── document-loading-order.md     # Default read surface per phase
         │   ├── document-persistence.md       # Where durable state should be written
         │   ├── document-reviewability.md     # What makes the planning surface reusable
+        │   ├── change-review-packet.md       # Behavior delta, review packet, sync/archive semantics
         │   ├── implementation-readiness-gate.md # Decision-complete gate before implementation
         │   ├── thinking-phase.md             # Thin router for planning pre-write reasoning
         │   ├── thinking-classification.md    # Greenfield / Existing / Hybrid decision

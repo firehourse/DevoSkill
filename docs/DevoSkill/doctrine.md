@@ -61,6 +61,8 @@ Therefore:
 - each protocol should own one shared semantic concern,
 - each template should define one durable document contract.
 
+Templates should be shaped for their document job instead of labeled by audience. Architecture states boundaries and behavior deltas, task drives execution, test maps proof, and verification stores evidence. Execution rules belong in protocols and workflows.
+
 This is intentionally close to a functional-programming style of decomposition:
 
 - small units,
@@ -100,10 +102,11 @@ The SkillDocs system is not generic documentation. It is a bounded document arch
 Each artifact owns a different semantic contract:
 
 - `architecture.md` owns effective architecture and stable boundaries.
+- feature-level `architecture.md` owns behavior-delta skeletons when observable behavior or agent workflow behavior changes.
 - `design.md` owns the execution-facing implementation contract.
 - `test.md` owns the testing contract derived from `design.md`.
 - `task.md` owns only the active executable phase.
-- `verification.md` owns durable verification evidence and reconciliation notes.
+- `verification.md` owns durable verification evidence, behavior-delta evidence, and reconciliation notes.
 - project-root `study/` owns reusable system understanding, code-reading guides, domain studies, and flow maps that help future Inquiry or Planning work recover current reality without rediscovering a large codebase.
 - project-root `project-changelog.md` owns feature/change timestamp rows and rationale that should not pollute the default load surface.
 - feature-level `notes/` owns rejected ideas and local material not needed in the default load surface.
@@ -186,6 +189,7 @@ When extending DevoSkill:
 - do not create a new top-level skill if a support module is enough,
 - do not add a template without defining its authority boundary,
 - do not add repeated rules to multiple files when one shared protocol can own them,
+- do not put execution rules into template skeletons when a protocol or workflow should own them,
 - do not hide new execution requirements in README prose only,
 - do not treat verification evidence as a substitute for a proper design or test contract.
 - do not use Study as a shortcut around Planning approval or Development scoping.

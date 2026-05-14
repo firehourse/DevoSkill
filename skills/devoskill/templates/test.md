@@ -42,6 +42,7 @@ For each meaningful production flow in `design.md`, specify where it is proven.
 
 ### 5.1 [Flow Name]
 - Source production flow:
+- Behavior delta entries covered:
 - Primary layer proving it: `[unit | integration | acceptance | end-to-end]`
 - Setup:
 - Expected assertions:
@@ -59,6 +60,9 @@ Map the design contract to executable tests.
 
 ### 6.3 Behavior Contract -> Acceptance or BDD
 - `[Behavior rule / state transition / ownership rule]` -> `[scenario or suite]`
+
+### 6.4 Behavior Delta -> Acceptance / Regression
+- `[Added / Changed / Removed / Non-Goal entry]` -> `[planned proof or guardrail]`
 
 ## 7. Test Case Inventory
 

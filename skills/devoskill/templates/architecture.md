@@ -1,6 +1,6 @@
 # [Project Name] Effective Architecture
 
-This document contains the currently effective architecture only. It is written for future execution sessions, not for preserving every design conversation.
+This document contains the currently effective architecture only. It preserves the target shape, boundaries, and behavior deltas without storing every design conversation.
 For historical rationale, link to the relevant `project-changelog.md` entry instead of embedding long "why" sections here.
 
 ## 1. Planning Mode
@@ -51,6 +51,22 @@ graph TD
 - In scope:
 - Out of scope:
 - Explicitly deferred:
+
+## 5.5 Behavior Delta
+### Added
+- [Added behavior]
+
+### Changed
+- [Changed behavior]
+
+### Removed
+- [Removed behavior]
+
+### Non-Goals
+- [Explicit non-goal]
+
+### Review Evidence
+- [Required evidence]
 
 ## 6. Component Responsibilities
 ### 6.1 [Component Name]

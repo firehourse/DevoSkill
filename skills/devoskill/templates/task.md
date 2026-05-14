@@ -58,6 +58,7 @@ If any required readiness value is not `Yes` or `None`, this task is Planning-on
 - Scope:
 - Files / modules:
 - Constraints:
+- Behavior delta entries covered:
 - Behavior contract entries covered:
 
 - [ ] **Task 4.1.1**
@@ -80,6 +81,7 @@ If any required readiness value is not `Yes` or `None`, this task is Planning-on
 - Scope:
 - Files / modules:
 - Constraints:
+- Behavior delta entries covered:
 - Behavior contract entries covered:
 
 - [ ] **Task 4.2.1**
@@ -93,11 +95,30 @@ If any required readiness value is not `Yes` or `None`, this task is Planning-on
 ## 5. Verification Contract
 - Required runtime checks:
 - Required test suites / scenarios from `test.md`:
+- Required behavior-delta evidence:
 - Required ownership / authorization checks:
 - Required negative-path checks:
 - Evidence that later review must be able to inspect in `verification.md`:
 
-## 6. Planning Reality Reconciliation
+## 6. Surgical Change Boundary
+- Allowed files/modules:
+- Allowed generated or runtime artifacts:
+- Allowed cleanup caused by this change:
+- Explicitly out-of-scope cleanup:
+- Adjacent code that must not be touched:
+- Dead code policy:
+  - Pre-existing dead code:
+  - Dead code created by this change:
+- Diff review focus:
+- Every planned changed hunk must trace to:
+  - user request:
+  - `architecture.md` section:
+  - behavior-delta entry:
+  - `design.md` section:
+  - task item:
+  - verification cleanup:
+
+## 7. Planning Reality Reconciliation
 - [ ] `architecture.md`, `task.md`, `design.md`, `test.md`, and actual file tree agree on active scope
 - [ ] Implementation Readiness Gate still passes
 - [ ] Delivered artifacts exist only in approved locations
@@ -106,7 +127,7 @@ If any required readiness value is not `Yes` or `None`, this task is Planning-on
 - [ ] `verification.md` reflects the latest executed checks and remaining gaps
 - [ ] Remaining drift is either fixed or explicitly handed back to planning
 
-## 7. Human Handoff Points
+## 8. Human Handoff Points
 List any steps the agent must not guess through.
 
 - [ ] Human provides schema / contract / credentials / sample data
@@ -114,7 +135,8 @@ List any steps the agent must not guess through.
 - [ ] Human approves boundary change
 - [ ] Human executes sensitive environment step
 
-## 8. Forbidden Shortcuts
+## 9. Forbidden Shortcuts
+- Do not change files, hunks, comments, formatting, or dead code outside the surgical change boundary unless the user explicitly approves the expansion.
 - Do not mark a task "verified" without durable evidence or a directly inspectable surface.
 - Do not treat `task.md` as the storage location for raw verification output; write the proof to `verification.md` and summarize it here.
 - Do not leave build output, dependency directories, uploads, or generated artifacts in tracked source paths unless the contract explicitly allows them.
@@ -122,11 +144,11 @@ List any steps the agent must not guess through.
 - Do not reconcile planning drift in chat only; update the documents.
 - Do not choose between active implementation alternatives during Development; return to Planning if the selected path is missing.
 
-## 9. Out of Scope for This Phase
+## 10. Out of Scope for This Phase
 - [Item]
 - [Item]
 
-## 10. Completion Criteria for This Phase
+## 11. Completion Criteria for This Phase
 - [ ] All tasks in the active phase are completed
 - [ ] Effective DevoSkill markdown files remain under 600 lines
 - [ ] Work matches the active architecture sections
@@ -134,5 +156,6 @@ List any steps the agent must not guess through.
 - [ ] `architecture.md` is updated if implementation changed effective architecture
 - [ ] Verification artifacts and evidence surface are complete
 - [ ] Planning reality reconciliation is complete
+- [ ] Final diff contains only changes allowed by the surgical change boundary
 - [ ] No runtime-generated artifacts remain in tracked implementation paths unless explicitly approved
 - [ ] Remaining work is either moved to the next phase or handed back to the user

@@ -7,6 +7,7 @@ Use this protocol when validating whether the document system is strong enough f
 - Development can determine which file/class/flow to implement next from `design.md` and `task.md`.
 - Development and review can determine how the design is supposed to be proven from `test.md`.
 - Review can compare code against explicit boundaries instead of inferred chat intent.
+- Review can inspect behavior intent through a compact `Behavior Delta` when the change affects observable behavior.
 - Quality can inspect declared evidence surfaces and artifact hygiene expectations.
 - Planning can reuse `study/` for broad current-reality understanding without copying that background into every feature.
 - A future session can recover active truth without replaying long chat history.
@@ -18,3 +19,4 @@ If that is not possible, planning is incomplete.
 - Reviewer-facing surfaces do not contain machine-local absolute paths, local-only credentials, personal shell aliases, editor paths, or host-specific assumptions.
 - Human/operator convenience may be local, but it belongs in `notes/local.md` or another explicitly local note. Local notes are non-authoritative and must not be required for review.
 - If a reviewer needs evidence, put the portable proof in `verification.md`; local reproduction hints may link out to local notes only as optional operator context.
+- Generated artifacts should not label their audience. Their section shape should match their job: architecture states boundaries and deltas, task drives execution, test maps proof, and verification stores evidence.
