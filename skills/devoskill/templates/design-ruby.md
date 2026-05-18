@@ -55,6 +55,7 @@ Do not force a class diagram if the touched Rails area is better explained as fl
 - model/validation boundary
 - query/repository-like boundary if one exists
 - job/integration boundary if one exists
+- error/rescue boundary (`rescue_from`, API error helper, custom exception class, result object normalization, or exception reporting path)
 - caller boundary if another app or frontend consumes the response
 
 If a diagram helps, use one. If the code is legacy Rails and a diagram would be fake precision, omit it and make the boundaries explicit in prose instead.
@@ -106,6 +107,7 @@ This section is mandatory for Ruby/Rails work.
 ### System Errors
 - Unexpected runtime, persistence, callback, integration, or infrastructure failures:
 - Where they are rescued:
+- Whether the handler is `ApplicationController`, a Grape/API helper, middleware, job-level rescue, or another existing Rails boundary:
 - What gets logged/reported:
 - What caller-visible response is returned:
 

@@ -25,7 +25,22 @@ This default does not override a language-specific mode:
 | ❌ | `userTaskClaimService` imports `voicePostcardQueueWorkerService` directly |
 | ✅ | Queue worker class is not exported from the module index; `ttsService.enqueueVoicePostcard()` is the only public entry point — the worker is an internal implementation detail |
 
-## 2. Naming Clarity
+## 2. Primary Flow Clarity
+
+Complex behavior must have one obvious primary responsibility and a top-level flow that can be read in one pass. The main function, controller action, job handler, service method, or equivalent entry method should read like short pseudocode: validate, derive state, execute the key operations, persist or emit the result, then return.
+
+Extract concrete operations into helpers when doing so removes operational detail from the primary flow. Keep small behavior inline when one direct function is clearer than a wrapper, and do not add indirection that hides the flow.
+
+Stable product or protocol details should not distract from the primary path. Cookie names, Redis key prefixes, message types, and similar stable identifiers belong in named constants or focused helpers instead of inline string assembly scattered through the main logic.
+
+| | Example |
+|---|---|
+| ❌ | A handler interleaves cookie names, Redis key formatting, TTL math, request validation, session persistence, and response branching in one long block |
+| ✅ | The handler reads as `validate request -> resolve waiting-room session -> persist admission -> return redirect/allow response`, with cookie/key construction hidden behind named constants or focused helpers |
+| ❌ | A two-line status assignment is extracted into `buildStatusContext()` even though the wrapper adds no domain meaning |
+| ✅ | Simple direct code stays inline; extraction is reserved for details that obscure the main responsibility |
+
+## 3. Naming Clarity
 
 Names express action and subject without requiring the reader to inspect the body. `data`, `result`, `info`, `handle`, `process` are banned as standalone exported names. Abbreviations only for universally-known terms (`ctx`, `id`, `err`, `i`).
 
@@ -34,7 +49,7 @@ Names express action and subject without requiring the reader to inspect the bod
 | ❌ | `func Process(data interface{})` / `handleMsg(m)` |
 | ✅ | `func ValidateUploadRequest(req UploadRequest)` / `enqueueTranscriptionJob(msg)` |
 
-## 3. Error Context
+## 4. Error Context
 
 Errors from multi-step functions carry the name of the step that failed. Callers distinguish error categories via typed checks, never string matching on `.message`.
 
@@ -45,7 +60,7 @@ Errors from multi-step functions carry the name of the step that failed. Callers
 | ❌ | `if (err.message === 'task not found')` in HTTP dispatch |
 | ✅ | Service throws `class TaskError { statusCode; code }`, controller checks `err instanceof TaskError` |
 
-## 4. Structured Logging
+## 5. Structured Logging
 
 All log output goes through the project's structured logger. `fmt.Println` and `console.log` are banned in production paths. Every log line during a request or job includes the trace/request/job ID as a named field. Log levels match severity: DEBUG for diagnostic loops, INFO for state transitions, WARN for recoverable anomalies, ERROR for failures.
 
@@ -56,9 +71,13 @@ All log output goes through the project's structured logger. `fmt.Println` and `
 | ❌ | `log.Error("task failed")` with no task ID or cause |
 | ✅ | `log.Error("task failed", "task_id", taskID, "error", err)` |
 
-## 5. No Magic Values
+## 6. No Magic Values
 
-Ports, timeouts, buffer sizes, retry counts, and domain identifier strings must be named constants or sourced from config. A bare literal in business logic is invisible to operators and breaks silently when the value changes.
+Ports, external endpoints, credentials, environment-specific limits, buffer sizes, retry counts, and operationally tuned timeouts belong in config. Stable product or protocol identifiers belong in named constants, not config, unless the product contract explicitly allows them to vary by deployment.
+
+Do not make a value configurable merely for speculative flexibility. Cookie names, Redis key prefixes, message types, status strings, and similar identifiers should normally be constants. TTLs may be constants or config; choose config only when operators truly need runtime or environment variation.
+
+A bare literal in business logic is invisible to operators and breaks silently when the value changes.
 
 | | Example |
 |---|---|
@@ -66,8 +85,10 @@ Ports, timeouts, buffer sizes, retry counts, and domain identifier strings must 
 | ✅ | `case MsgTypeSTT:` / `Type: MsgTypeSummary` — constants at package level |
 | ❌ | SQL embeds `'processing'`, `'pending'` as raw strings |
 | ✅ | SQL parameters use `string(types.TaskStatusProcessing)` — one source of truth |
+| ❌ | `WAITING_ROOM_COOKIE_NAME` is sourced from config even though the cookie name is a stable product contract |
+| ✅ | `WAITING_ROOM_COOKIE_NAME` and `WAITING_ROOM_REDIS_KEY_PREFIX` are named constants; only the Redis endpoint or truly tunable TTL is config |
 
-## 6. API Response Shape
+## 7. API Response Shape
 
 All endpoints return the same envelope. Error responses never include stack traces, file paths, or raw DB errors. The HTTP status code alone distinguishes caller errors (4xx) from server errors (5xx).
 
@@ -78,7 +99,7 @@ All endpoints return the same envelope. Error responses never include stack trac
 | ❌ | `res.json({ error: err.stack })` |
 | ✅ | `res.json({ error: { code: "INTERNAL_ERROR", message: "An unexpected error occurred" } })` |
 
-## 7. File Discipline
+## 8. File Discipline
 
 File size rules exist for context recovery and responsibility clarity, not aesthetics. Apply them with language and file-role awareness. If a file exceeds the normal threshold, either split it or record an explicit exception in `design.md` or `task.md` explaining why the larger file is still the strongest boundary.
 
@@ -97,7 +118,7 @@ Hard rule:
 | ✅ | `handlers/auth.go`, `handlers/upload.go`, `handlers/jobs.go` each under 400 lines |
 | ✅ | `parser_tables.cpp` at 820 lines with an explicit documented exception because the table boundary is clearer than artificial splitting |
 
-## 8. Go Consumer-Defined Contracts
+## 9. Go Consumer-Defined Contracts
 
 When Go packages use interfaces for dependency inversion, the interface belongs to the consumer package and should be separated from concrete implementation files. Putting interfaces and implementations in the same file blurs the contract boundary and makes the code read like a local convenience hack instead of an explicit dependency seam.
 
@@ -153,7 +174,7 @@ src/
 
 ---
 
-## 9. Commit Discipline
+## 10. Commit Discipline
 
 **Principle:** Each commit must represent one reviewable unit of intent. A commit spanning dozens of files with mixed concerns is a review failure regardless of whether the code is correct. The message must tell the reader *why*, not just *what*.
 

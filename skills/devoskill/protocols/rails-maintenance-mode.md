@@ -1,6 +1,6 @@
 # Rails Maintenance Mode Protocol
 
-Use this shared protocol during Development, Review, Debug/Performance, and Ruby quality checks whenever Ruby on Rails code is in scope.
+Use this shared protocol during Planning, Development, Review, Debug/Performance, and Ruby quality checks whenever Ruby on Rails code is in scope.
 
 This file is the single source of truth for Rails maintenance style. Phase skills and quality workflows should reference it instead of duplicating style, abstraction, or lifecycle examples.
 
@@ -25,10 +25,21 @@ Use **Explicit Modernization** only when the task or architecture document says 
 | Isolated new feature folder with approved design.md structure | Explicit Modernization | The planning contract authorized a new boundary. |
 | Framework upgrade, RuboCop migration, service extraction task | Explicit Modernization | The requested work is style or architecture change. |
 
-## 3. Review Gate
+## 3. Planning Design Gate
+
+When planning Rails work, classify the touched area before writing `design.md` or drawing diagrams:
+
+- Use the stack-specific `design-ruby.md` surface for Rails work.
+- Prefer a Rails Boundary Map when the real code is organized around controllers, Grape APIs, concerns, models, callbacks, service objects, policies, helpers, jobs, or application-level rescue handlers.
+- Include error handling as an explicit boundary when the feature depends on `rescue_from`, API error helpers, custom exception classes, result objects, or shared exception reporting.
+- Do not invent class diagrams that imply a new object model for legacy Rails code. A class diagram is useful only when it reflects real implementation boundaries or an explicitly approved modernization.
+- Record whether expected business failures are result-based or exception-based, where system exceptions are rescued, and which layer normalizes the caller-visible response.
+
+## 4. Review Gate
 
 Wrong mode choice is a quality issue:
 
 - Flag syntax modernization, broad service extraction, concern rewrites, or callback movement that is unrelated to the task.
 - Flag changes that alter transaction, locking, callback, cache, job enqueue, or integration timing without explicit approval.
 - Require the task or architecture document to name the modernization boundary before accepting new architectural layers in legacy Rails code.
+- Flag Rails designs or implementations that hide error handling behind generic prose when the touched flow depends on a concrete rescue handler, API error helper, custom exception class, result object, or exception reporting path.

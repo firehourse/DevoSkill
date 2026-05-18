@@ -22,7 +22,7 @@ If the work no longer matches review, stop and reroute instead of continuing.
 4.5 Enumerate the feature folder with `ls`. For every other `.md` file present (e.g., `design.md`, `test.md`, `verification.md`, `PR.md`, ad-hoc design memos, `notes/*.md`), read it before forming review judgments unless the user has explicitly scoped the review to a subset. Do not assume `task.md` + `architecture.md` are exhaustive — feature folders often contain PR drafts, post-review changelogs, or ad-hoc memos that the user expects you to consult.
 5. Load project-level `architecture.md` for baseline context
 6. If Go code is in scope, read `../devoskill/protocols/go-implementation-mode.md` and review whether the implementation mode was chosen correctly
-7. If Ruby/Rails code is in scope, read `../devoskill/protocols/rails-maintenance-mode.md` and review whether the change preserved the existing Rails style and lifecycle behavior
+7. If Ruby/Rails code is in scope, read `../devoskill/protocols/rails-maintenance-mode.md` and `../devoskill/workflows/quality-ruby.md`, then review whether the change preserved existing Rails style, lifecycle behavior, error boundaries, and Ruby/Rails quality rules
 8. Read shared/company-level `../devoskill/protocols/custom-*.md` only when the current review step matches the load conditions defined in `../devoskill/protocols/skill-evolution.md` Section 5
 9. If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent
 10. If that project skill exposes registry-based discovery, read `../devoskill/protocols/rule-registry-routing.md` and follow its `phase -> project/domain -> registry -> current action -> concern` model

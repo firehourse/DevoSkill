@@ -30,7 +30,7 @@ When tasked with implementing a feature based on a plan, you are the **Developer
 ### Step 2: Strict Adherence
 Follow the active-phase tasks linearly based on `task.md`.
 - **No Creativity in Architecture**: You are explicitly prohibited from unilaterally changing the architecture, adding third-party dependencies not mentioned in `task.md`, or reshaping the design scope.
-- **Engineering Standards**: All produced code must conform to `workflows/engineering-standards.md`. Layer hierarchy (Router → Controller → Service → Repository), naming clarity, error context, structured logging, no magic values, API response shape, and file discipline are non-negotiable regardless of what task.md says. Language-specific sections (Node.js, Go) in the same file also apply.
+- **Engineering Standards**: All produced code must conform to `workflows/engineering-standards.md`. Layer hierarchy (Router → Controller → Service → Repository), primary flow clarity, naming clarity, error context, structured logging, no magic values, API response shape, and file discipline are non-negotiable regardless of what task.md says. Language-specific sections and stack-specific quality workflows also apply.
 - **Respect Human Handoffs**: If `task.md` marks a step as a user handoff, stop there. Do not guess through missing schema, missing contracts, sensitive credentials, or production-only operations.
 - **Respect the Approval Gate**: A finished `task.md` is necessary but not sufficient. No code edits begin until the user has explicitly authorized implementation.
 - **Respect Decision Completeness**: Active planning documents must contain one selected path for the active phase. If they present alternatives for you to choose during implementation, stop and return to Planning.

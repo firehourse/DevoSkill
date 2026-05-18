@@ -96,7 +96,11 @@ Required check:
 
 ## 8. Error Handling and Rescue
 
-**Principle:** Rescue the narrowest exception class. `rescue StandardError` at controller level must render a structured error response — never expose backtraces or raw exception messages to clients. Domain errors use custom exception classes, not generic `RuntimeError`.
+**Principle:** Preserve the existing Rails error boundary and make it explicit in `design.md`. Rescue the narrowest exception class. Centralized handlers such as `ApplicationController.rescue_from`, Grape/API error helpers, middleware, and job-level rescue blocks must render or report through the repository's established structured path.
+
+Expected domain failures follow the approved Result / Exception Boundary from `design.md`. If the boundary is exception-based, use custom exception classes, not generic `RuntimeError`. If it is result-based, do not raise for expected failures.
+
+`rescue StandardError` at controller/API level must render a structured error response and report/log with context — never expose backtraces or raw exception messages to clients.
 
 | | Example |
 |---|---|
@@ -104,6 +108,8 @@ Required check:
 | ✅ | `rescue PaymentError => e; render json: { error: { code: e.code, message: e.message } }, status: :unprocessable_entity` |
 | ❌ | `raise "order not found"` — string message, not typed |
 | ✅ | `raise OrderNotFoundError.new(order_id: id)` |
+| ❌ | A controller adds an ad hoc broad rescue while the app already has a shared API error handler |
+| ✅ | The flow uses the existing shared handler, or `design.md` records why this action needs a local rescue boundary |
 
 ---
 
