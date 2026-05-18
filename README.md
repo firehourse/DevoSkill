@@ -94,6 +94,7 @@ DevoSkill is intentionally built for humans and agents operating under prompt-we
 - **Fine-grained prompt modules:** Skills, protocols, workflows, and templates should stay small and single-purpose. Agents tend to consume whole files, not selectively parse dense middle sections, so each file should answer one primary question cleanly.
 - **Document-driven synchronization:** Durable planning artifacts are the mechanism for keeping later sessions aligned with prior intent. If a decision is not written back to the correct document, it should be treated as non-durable.
 - **Shared contracts over duplication:** Avoid repeating the same rule across multiple skills when one protocol or workflow can own it. Repeated prompt logic behaves like duplicated code: it drifts and becomes contradictory.
+- **Executable standards:** Engineering and quality standards should follow `skills/devoskill/protocols/standard-authoring.md`: state the principle, define concrete checks, and include positive/negative examples that agents can apply during development and review.
 - **DDD-like document boundaries:** Each artifact owns a bounded semantic role. `architecture.md` owns architecture, `design.md` owns implementation design, `test.md` owns the testing contract, `task.md` owns active execution, and `verification.md` owns evidence.
 
 See [docs/DevoSkill/doctrine.md](docs/DevoSkill/doctrine.md) for the full long-lived development doctrine that future maintainers and agents should read before reshaping DevoSkill itself.
@@ -182,6 +183,7 @@ DevoSkill/
         │   ├── planning-greenfield.md        # Planning rules for net-new systems
         │   ├── planning-existing.md          # Planning rules for changes to existing systems
         │   ├── planning-hybrid.md            # Planning rules for new capability inside old systems
+        │   ├── standard-authoring.md         # How DevoSkill standards and quality rules should be written
         │   ├── subagent-orchestration.md     # Rules for the AI to delegate tasks
         │   ├── workspace-setup.md            # Thin router for workspace setup semantics
         │   ├── workspace-mapping.md          # Resolve SkillDocs base path

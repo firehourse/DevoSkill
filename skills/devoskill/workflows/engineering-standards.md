@@ -2,6 +2,8 @@
 
 Apply during development and review. These standards govern code structure — distinct from runtime-correctness checks in `05-quality.md`. Fix violations before declaring any phase complete.
 
+When adding or revising standards in this file, follow `../protocols/standard-authoring.md`: each non-trivial standard needs an executable principle, concrete review checks, and positive/negative examples.
+
 Language-specific engineering rules live in the matching quality file (Go → `quality-go.md`, Ruby/Rails → `quality-ruby.md`, Node.js → see the section below).
 
 When a language-specific protocol classifies the touched area differently, the protocol narrows these general standards. For Go, `../protocols/go-implementation-mode.md` decides whether a strict layered shape is appropriate. For Rails, `../protocols/rails-maintenance-mode.md` decides whether existing Rails boundaries should be preserved or explicitly modernized.
@@ -29,7 +31,7 @@ This default does not override a language-specific mode:
 
 Complex behavior must have one obvious primary responsibility and a top-level flow that can be read in one pass. The main function, controller action, job handler, service method, or equivalent entry method should read like short pseudocode: validate, derive state, execute the key operations, persist or emit the result, then return.
 
-Extract concrete operations into helpers when doing so removes operational detail from the primary flow. Keep small behavior inline when one direct function is clearer than a wrapper, and do not add indirection that hides the flow.
+Extract concrete operations into helpers when doing so removes operational detail from the primary flow. Keep small behavior inline when one direct function is clearer than a wrapper, and do not add indirection that hides the flow. Do not split a readable flow into many one-line methods just to make the top-level method look short.
 
 Stable product or protocol details should not distract from the primary path. Cookie names, Redis key prefixes, message types, and similar stable identifiers belong in named constants or focused helpers instead of inline string assembly scattered through the main logic.
 
@@ -37,8 +39,10 @@ Stable product or protocol details should not distract from the primary path. Co
 |---|---|
 | ❌ | A handler interleaves cookie names, Redis key formatting, TTL math, request validation, session persistence, and response branching in one long block |
 | ✅ | The handler reads as `validate request -> resolve waiting-room session -> persist admission -> return redirect/allow response`, with cookie/key construction hidden behind named constants or focused helpers |
+| ❌ | `call` delegates to `enabled?`, `cookie_values`, `user_id`, `single_cookie?`, `binding_result`, and `allowed?` where each helper only wraps one obvious line, forcing readers to jump around to reconstruct one request path |
+| ✅ | Simple gate checks stay inline in `call`; extraction is reserved for meaningful boundaries such as raw cookie parsing, Redis binding, response construction, or error normalization |
 | ❌ | A two-line status assignment is extracted into `buildStatusContext()` even though the wrapper adds no domain meaning |
-| ✅ | Simple direct code stays inline; extraction is reserved for details that obscure the main responsibility |
+| ✅ | A helper such as `check_waiting_room_binding` owns Redis/Lua interaction and returns a small decision value, while the caller keeps the business branch visible |
 
 ## 3. Naming Clarity
 

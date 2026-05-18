@@ -188,6 +188,7 @@ When extending DevoSkill:
 - do not enlarge the router unless the new rule affects first-step classification,
 - do not create a new top-level skill if a support module is enough,
 - do not add a template without defining its authority boundary,
+- do not add or revise engineering/quality standards without following `skills/devoskill/protocols/standard-authoring.md`,
 - do not add repeated rules to multiple files when one shared protocol can own them,
 - do not put execution rules into template skeletons when a protocol or workflow should own them,
 - do not hide new execution requirements in README prose only,
