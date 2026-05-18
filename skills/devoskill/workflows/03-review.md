@@ -2,6 +2,42 @@
 
 When tasked with verifying implemented code against its original plan, you act as the **Reviewer**. Your sole job is to assert compliance against the effective architecture and the active task phase.
 
+## Process Flowchart
+
+This flowchart is a visual index of the review protocol — the prose below remains the authoritative contract. Each diamond is a decision you must answer; each terminal node (doublecircle) is the only valid exit. Walking off the graph (skipping a check, cherry-picking which checks matter, signing off with discrepancies unresolved) is itself a discipline violation.
+
+Three terminal states exist:
+- **Sign-off** — all 18 checks pass with zero discrepancy.
+- **Itemized feedback** — one or more checks flagged a discrepancy; report findings and hand off to the user without writing code.
+- **Reroute to Planning** — a structural problem (architecture drift, incomplete design, abandoned scope, refactor required) requires Planning to re-approve before implementation can continue.
+
+```dot
+digraph review_compliance {
+    rankdir=TB;
+
+    Step1 [shape=box, label="Step 1: Reconcile Sources\n(diff, task.md, architecture.md,\ndesign.md, test.md, verification.md,\nproject-changelog.md)"];
+    Step2 [shape=box, label="Step 2: Run all 18 compliance checks\n(numbered list below)"];
+    Rationalize [shape=diamond, label="Tempted to skip,\ndowngrade, or rationalize\na check?"];
+    RedFlags [shape=box, style=dashed, label="Read the Red Flags table.\nInvoke discipline.\nRun the check anyway."];
+    AllPass [shape=diamond, label="All 18 checks pass\nwith zero discrepancy?"];
+    FailureKind [shape=diamond, label="Failure type?"];
+
+    Signoff [shape=doublecircle, label="Step 3a: Sign off\nReport: compliance pass"];
+    Feedback [shape=doublecircle, label="Step 3b: Itemized feedback\nHand off; do NOT write code"];
+    Reroute [shape=doublecircle, label="Step 3c: Reroute to Planning\n(structural refactor)"];
+
+    Step1 -> Step2;
+    Step2 -> Rationalize;
+    Rationalize -> RedFlags [label="yes"];
+    Rationalize -> AllPass [label="no, all 18 honestly checked"];
+    RedFlags -> Rationalize;
+    AllPass -> Signoff [label="yes"];
+    AllPass -> FailureKind [label="no"];
+    FailureKind -> Reroute [label="structural\n(checks 1, 7, 10, 12 typically)", style=dashed];
+    FailureKind -> Feedback [label="discrepancy\n(checks 2-6, 8-9, 11, 13-18 typically)", style=dashed];
+}
+```
+
 ## Execution Protocol
 
 ### Step 1: Reconcile Sources
