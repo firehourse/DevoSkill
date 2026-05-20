@@ -26,7 +26,7 @@ If uncertain, do not capture. Only capture when the rule is clearly cross-sessio
 Before creating any file, first decide whether the rule belongs to the shared/company-level layer or to a project/domain skill.
 
 - Shared/company-level rule:
-  - scan existing `custom-*.md` files under `skills/devoskill/protocols/`
+  - scan existing `custom-*.md` files under `{DEVOSKILL_ROOT}/skills/devoskill/protocols/`
   - if the rule fits an existing file's scope, append there instead of creating a new one
 - Project/domain-specific rule:
   - do not write it into DevoSkill shared custom protocols
@@ -53,7 +53,7 @@ The agent decides the shared/company-level file name independently. Do not ask t
 
 ## 3. Naming Constraint (Non-Negotiable)
 
-The Update phase may ONLY create or append to files whose name matches `custom-*.md` inside `skills/devoskill/protocols/` when the captured rule belongs to the shared/company-level layer.
+The Update phase may ONLY create or append to files whose name matches `custom-*.md` inside `{DEVOSKILL_ROOT}/skills/devoskill/protocols/` when the captured rule belongs to the shared/company-level layer.
 
 Do not force project/domain rules into DevoSkill shared custom files. Those rules belong in dedicated skills outside this writeback surface.
 

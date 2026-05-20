@@ -17,8 +17,10 @@ Do not use it once the next action becomes architecture planning, approved code 
 ## Load Order
 1. Read only the minimum local files needed to answer the question
 2. Use web lookup only when the request is latest-info, external research, or source verification work
-3. Read `../devoskill/protocols/study-surface.md` only when the user asks for durable repository, subsystem, flow, or architecture learning
-4. Do not load planning/development/review/debug workflows unless the task reroutes into one of those modes
+3. Read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/study-surface.md` only when the user asks for durable repository, subsystem, flow, or architecture learning
+4. If the inquiry is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent
+5. If that project skill exposes registry-based discovery, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rule-registry-routing.md` and follow its `phase -> project/domain or knowledge surface -> registry -> current action -> concern` model
+6. Do not load planning/development/review/debug workflows unless the task reroutes into one of those modes
 
 ## Required Behavior
 - Stay lightweight: answer the question, clarify the situation, or gather the requested facts.

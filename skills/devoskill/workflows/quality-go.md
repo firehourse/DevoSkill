@@ -119,7 +119,21 @@ Interfaces are defined by the consumer, not the implementer. Every struct field 
 
 ---
 
-## 10. Ownership and Stream Authorization
+## 10. Comment & Doc-Comment Style
+
+**Principle:** Go quality also includes godoc and inline-comment intent. Apply `quality-comments.md` to every touched Go file. The principles are language-neutral, but Go has two extra-strict rules: every exported identifier carries a doc comment whose first sentence starts with the identifier name (godoc renders that sentence as the entry summary), and order-sensitive sequences (defer placement, named return assignment, response-write vs. observability) carry a comment naming the hazard the order prevents.
+
+Required check:
+- Exported function/method/type/constant without godoc-shaped doc comment → finding.
+- Comment that paraphrases the next statement instead of stating contract / invariant / trade-off → finding.
+- Any defer/recover/named-return interaction whose ordering matters → require an inline comment naming the hazard.
+- Fail-mode keyword (`fail-open`, `fail-closed`, `fail-fast`) required on any deliberate catch-and-continue or hard-stop on missing state.
+
+See `quality-comments.md` for the nine-rule executable contract and ❌/✅ examples drawn from real Go HTTP middleware code.
+
+---
+
+## 11. Ownership and Stream Authorization
 
 **Principle:** Go services that broker SSE, WebSocket, queue replay, or resource-scoped background operations must validate ownership before opening the stream or replaying buffered data. Identity setup and resource authorization are separate steps; doing the first does not satisfy the second.
 

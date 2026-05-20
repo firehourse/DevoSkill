@@ -5,12 +5,12 @@ description: Ruby on Rails-specific quality rules for DevoSkill. Load alongside 
 
 # DevoSkill Quality — Ruby on Rails
 
-Load this skill in addition to `../devoskill-quality/SKILL.md` whenever the implementation includes Ruby or Rails code.
+Load this skill in addition to `{DEVOSKILL_ROOT}/skills/devoskill-quality/SKILL.md` whenever the implementation includes Ruby or Rails code.
 
 ## Load Order
-1. Confirm `../devoskill-quality/SKILL.md` has already been loaded
-2. Read `../devoskill/protocols/rails-maintenance-mode.md`
-3. Read `../devoskill/workflows/quality-ruby.md`
+1. Confirm `{DEVOSKILL_ROOT}/skills/devoskill-quality/SKILL.md` has already been loaded
+2. Read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rails-maintenance-mode.md`
+3. Read `{DEVOSKILL_ROOT}/skills/devoskill/workflows/quality-ruby.md`
 4. Apply every category against the Ruby source files in the implementation
 
 ## Required Behavior

@@ -5,12 +5,12 @@ description: Go-specific quality and engineering rules for DevoSkill. Load along
 
 # DevoSkill Quality — Go
 
-Load this skill in addition to `../devoskill-quality/SKILL.md` whenever the implementation includes Go code.
+Load this skill in addition to `{DEVOSKILL_ROOT}/skills/devoskill-quality/SKILL.md` whenever the implementation includes Go code.
 
 ## Load Order
-1. Confirm `../devoskill-quality/SKILL.md` has already been loaded
-2. Read `../devoskill/protocols/go-implementation-mode.md`
-3. Read `../devoskill/workflows/quality-go.md`
+1. Confirm `{DEVOSKILL_ROOT}/skills/devoskill-quality/SKILL.md` has already been loaded
+2. Read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/go-implementation-mode.md`
+3. Read `{DEVOSKILL_ROOT}/skills/devoskill/workflows/quality-go.md`
 4. Apply every category against the Go source files in the implementation
 
 ## Required Behavior

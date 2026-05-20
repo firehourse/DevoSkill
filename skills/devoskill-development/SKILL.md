@@ -27,20 +27,51 @@ Assume the entry router has already:
 
 If the work no longer matches development, stop and reroute instead of continuing.
 
-## Load Order
-1. If workspace mapping is missing or broken, read `../devoskill-workspace-setup/SKILL.md`; otherwise skip workspace setup.
-2. Read `../devoskill/workflows/02-development.md`
-3. Read `../devoskill/workflows/engineering-standards.md` — load the language-specific section matching the implementation stack
-4. Load only the active phase in `task.md` and the effective architecture sections it references
-5. If Go code is in scope, read `../devoskill/protocols/go-implementation-mode.md` before choosing abstractions or package boundaries
-6. If Ruby/Rails code is in scope, read `../devoskill/protocols/rails-maintenance-mode.md` before changing style, callbacks, service boundaries, or lifecycle behavior
-7. Read shared/company-level `../devoskill/protocols/custom-*.md` only when the current implementation step matches the load conditions defined in `../devoskill/protocols/skill-evolution.md` Section 5
-8. If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent
-9. If that project skill exposes registry-based discovery, read `../devoskill/protocols/rule-registry-routing.md` and follow its `phase -> project/domain -> registry -> current action -> concern` model
+## Execution Order — Just-In-Time Loading
+
+Read each file immediately before the step that depends on it. Do not pre-load every file at phase entry; see doctrine § 2.
+
+### Step D1 — Workspace bootstrap (only if broken)
+
+If workspace mapping is missing or broken, read `{DEVOSKILL_ROOT}/skills/devoskill-workspace-setup/SKILL.md` first and repair it. Otherwise skip.
+
+### Step D2 — Enter the development workflow
+
+Before opening the active phase in `task.md`, read `{DEVOSKILL_ROOT}/skills/devoskill/workflows/02-development.md`. This file owns the development workflow contract.
+
+### Step D3 — Load engineering standards for the touched stack
+
+Before writing or modifying any code, read `{DEVOSKILL_ROOT}/skills/devoskill/workflows/engineering-standards.md` — focus on the language-specific section matching the implementation stack.
+
+### Step D4 — Load language-specific implementation mode (conditional)
+
+Before choosing abstractions or package boundaries:
+
+- If Go code is in scope, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/go-implementation-mode.md`.
+- If Ruby/Rails code is in scope, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rails-maintenance-mode.md` before changing style, callbacks, service boundaries, or lifecycle behavior.
+
+### Step D5 — Open the active phase
+
+Load only the active phase in `task.md` and the effective architecture sections it references. Do not load past phases or non-referenced architecture sections.
+
+### Step D6 — Cross-project / shared rules (conditional)
+
+Before any code step that may touch cross-project / company-level operational boundaries (branch creation, commits, push, PR creation, external system updates), consult `{DEVOSKILL_ROOT}/skills/devoskill/protocols/custom-INDEX.md` and open only the section the index points to.
+
+### Step D7 — Project/domain skill (conditional)
+
+If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent. If that project skill exposes registry-based discovery, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rule-registry-routing.md`.
+
+### Step D8 — Before declaring the phase complete
+
+Before writing back to `task.md`, reroute through `{DEVOSKILL_ROOT}/skills/devoskill-quality/SKILL.md`. Quality is a pre-completion gate, not optional.
+
+---
 
 Do not read planning, review, or performance workflows from development unless the task actually reroutes.
 
 ## Required Behavior
+
 - Do not begin code changes without explicit implementation approval.
 - Keep checking that the work is still active implementation. If the user asks for planning, drift validation, or performance diagnosis, reroute.
 - Follow the active phase in `task.md` linearly.
@@ -49,3 +80,15 @@ Do not read planning, review, or performance workflows from development unless t
 - Do not write code without an explicit `task.md`.
 - Treat `design.md`, `task.md`, verification artifacts, and repository state as a single implementation contract. If they diverge, stop and reconcile instead of coding through the inconsistency.
 - Do not use DevoSkill shared custom files as a catch-all source for project/domain concerns; load the relevant project skill when the implementation depends on domain-specific rules.
+
+---
+
+## Strongest-Attention Rules
+
+Re-read these on every reroute into Development and at any long-session re-anchor. If you remember nothing else from this route, remember these.
+
+1. **No code without `task.md` + explicit approval.** The Entry Gate at the top of this file is the hard contract.
+2. **Active phase is the unit of work.** Follow it linearly; do not jump ahead.
+3. **Design + task + repo state are one contract.** If any two diverge, stop and reconcile in docs before continuing.
+4. **Stop at human handoff boundaries** — missing schema, credentials, production state, sensitive flags. Do not guess through.
+5. **Quality gate is mandatory before writeback.** Do not mark a phase complete until `devoskill-quality` has run and any failures are fixed.

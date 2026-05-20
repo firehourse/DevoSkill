@@ -1,6 +1,6 @@
 # Quality Workflow
 
-The quality gate entry point is `../../devoskill-quality/SKILL.md`. Load that skill to run quality checks.
+The quality gate entry point is `{DEVOSKILL_ROOT}/skills/devoskill-quality/SKILL.md`. Load that skill to run quality checks.
 
 ## How quality checks work in DevoSkill
 
@@ -14,11 +14,12 @@ Each file is self-contained and should be read on demand:
 - `quality-resilience.md` — graceful shutdown, fault tolerance, async task state machines
 - `quality-hygiene.md` — Redis TTLs, gitignore discipline, verification evidence
 - `quality-identity.md` — secure identifiers, authorization surface
+- `quality-comments.md` — comment & doc-comment intent contract (language-neutral; load whenever code is added or modified)
 - `quality-frontend.md` — frontend async hygiene (load only for frontend code)
 - `quality-node.md` — Node.js / TypeScript specific checks (load only for Node.js code)
 - `quality-go.md` — Go specific checks (load only for Go code)
 
 ## Language-specific skills
 
-Node.js → also load `../../devoskill-quality-node/SKILL.md`
-Go → also load `../../devoskill-quality-go/SKILL.md`
+Node.js → also load `{DEVOSKILL_ROOT}/skills/devoskill-quality-node/SKILL.md`
+Go → also load `{DEVOSKILL_ROOT}/skills/devoskill-quality-go/SKILL.md`

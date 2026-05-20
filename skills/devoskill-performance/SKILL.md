@@ -14,20 +14,55 @@ Assume the entry router has already:
 
 If the work no longer matches debugging/performance, stop and reroute instead of continuing.
 
-## Load Order
-1. If workspace mapping is missing or broken, read `../devoskill-workspace-setup/SKILL.md`; otherwise skip workspace setup.
-2. Read `../devoskill/workflows/04-performance-debugging.md`
-3. Load only the effective architecture and active task sections needed for the measured bottleneck
-4. If Go code is in scope, read `../devoskill/protocols/go-implementation-mode.md` and default measured hot paths to high-performance mode unless the architecture explicitly chooses modularity
-5. If Ruby/Rails code is in scope, read `../devoskill/protocols/rails-maintenance-mode.md` before changing transaction, callback, cache, job, or integration lifecycle behavior
-6. Read shared/company-level `../devoskill/protocols/custom-*.md` only when the current debug/performance step matches the load conditions defined in `../devoskill/protocols/skill-evolution.md` Section 5
-7. If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent
-8. If that project skill exposes registry-based discovery, read `../devoskill/protocols/rule-registry-routing.md` and follow its `phase -> project/domain -> registry -> current action -> concern` model
+## Execution Order — Just-In-Time Loading
+
+Read each file immediately before the step that depends on it. Do not pre-load every file at phase entry; see doctrine § 2.
+
+### Step PF1 — Workspace bootstrap (only if broken)
+
+If workspace mapping is missing or broken, read `{DEVOSKILL_ROOT}/skills/devoskill-workspace-setup/SKILL.md` first and repair it. Otherwise skip.
+
+### Step PF2 — Enter the performance workflow
+
+Before measuring or proposing optimizations, read `{DEVOSKILL_ROOT}/skills/devoskill/workflows/04-performance-debugging.md`. This file owns the diagnose-baseline-optimize loop.
+
+### Step PF3 — Anchor against the measured bottleneck
+
+Load only the effective architecture and active task sections needed for the measured bottleneck. Do not load unrelated subsystems just because the project is large.
+
+### Step PF4 — Language-specific lifecycle constraints (conditional)
+
+Just before changing any code, read:
+
+- Go: `{DEVOSKILL_ROOT}/skills/devoskill/protocols/go-implementation-mode.md`. Default measured hot paths to high-performance mode unless the architecture explicitly chooses modularity.
+- Ruby / Rails: `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rails-maintenance-mode.md` before changing transaction, callback, cache, job, or integration lifecycle behavior.
+
+### Step PF5 — Cross-project / shared rules (conditional)
+
+Before any optimization step that may touch cross-project / company-level operational boundaries, consult `{DEVOSKILL_ROOT}/skills/devoskill/protocols/custom-INDEX.md`.
+
+### Step PF6 — Project/domain skill (conditional)
+
+If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent. If that project skill exposes registry-based discovery, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rule-registry-routing.md`.
+
+---
 
 Do not read planning, development, or review workflows from debug/performance unless the task actually reroutes.
 
 ## Required Behavior
+
 - Establish measurable baselines before proposing optimizations.
 - Keep checking that the task is still debugging/performance work. If the user actually needs planning, coding, or review, reroute.
 - Persist only effective benchmark and optimization changes back into planning docs.
 - If the optimization changes architecture boundaries, return to planning before implementation continues.
+
+---
+
+## Strongest-Attention Rules
+
+Re-read these on every reroute into Debug/Performance and at any long-session re-anchor. If you remember nothing else from this route, remember these.
+
+1. **No optimization without a measured baseline.** Reproduce the failure / measure the bottleneck before proposing a fix.
+2. **Architecture-changing optimizations reroute to Planning.** If the fix crosses an architectural boundary, stop and re-plan.
+3. **Reroute if the actual need is not perf work.** Users sometimes describe a coding or review need as "it's slow". Confirm before staying in this route.
+4. **Persist effective changes back into planning docs.** Benchmark numbers and adopted optimizations belong in `verification.md` / `architecture.md`, not just chat.

@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "projects": [
+    {
+      "project_name": "example-monolith",
+      "main_checkout": "/absolute/path/to/main/checkout",
+      "worktree_root": "/absolute/path/to/parent/of/per-slug-worktrees",
+      "scripts": {
+        "spin_up": "/absolute/path/to/spin-worktree.sh",
+        "tear_down_flag": "--down",
+        "install_hosts_helper": "/absolute/path/to/install-hosts-helper.sh"
+      },
+      "host": {
+        "hosts_helper_path": "/usr/local/bin/example-worktree-hosts",
+        "hostname_template": "example-{slug}.test"
+      },
+      "container": {
+        "app_image": "example-app:latest",
+        "app_name_template": "example-app-{slug}",
+        "shared_services": ["example-postgres-1", "example-redis-1"],
+        "shared_network": "example_default"
+      },
+      "shared_db": {
+        "engine": "postgres",
+        "test_database_name": "example_test",
+        "isolation_note": "Worktrees share the same test DB; sequence schema work to avoid deadlocks."
+      },
+      "overlay_files": [
+        "config/application.yml",
+        "config/database.yml",
+        ".env"
+      ],
+      "slug_pattern": "^[A-Za-z0-9-]+$",
+      "operator_manual": "/absolute/path/to/operator/README.md",
+      "git_rules_reference": "example-project-skill/references/git-rules.md"
+    }
+  ]
+}

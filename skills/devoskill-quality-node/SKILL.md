@@ -5,11 +5,11 @@ description: Node.js/TypeScript-specific quality rules for DevoSkill. Load along
 
 # DevoSkill Quality — Node.js / TypeScript
 
-Load this skill in addition to `../devoskill-quality/SKILL.md` whenever the implementation includes Node.js or TypeScript code.
+Load this skill in addition to `{DEVOSKILL_ROOT}/skills/devoskill-quality/SKILL.md` whenever the implementation includes Node.js or TypeScript code.
 
 ## Load Order
-1. Confirm `../devoskill-quality/SKILL.md` has already been loaded
-2. Read `../devoskill/workflows/quality-node.md`
+1. Confirm `{DEVOSKILL_ROOT}/skills/devoskill-quality/SKILL.md` has already been loaded
+2. Read `{DEVOSKILL_ROOT}/skills/devoskill/workflows/quality-node.md`
 3. Apply every category against the Node.js / TypeScript source files in the implementation
 
 ## Required Behavior

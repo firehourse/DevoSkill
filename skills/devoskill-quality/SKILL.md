@@ -9,14 +9,14 @@ Use this skill as a pre-completion gate after implementation work is done and be
 Do not use it as a substitute for planning or review. Quality verifies implementation risk categories; it does not define architecture and it does not normalize drift.
 
 ## Load Order
-1. Read `../devoskill/protocols/document-system.md`
-2. Read `../devoskill/workflows/05-quality.md` — language-neutral checks, always required
+1. Read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/document-system.md`
+2. Read `{DEVOSKILL_ROOT}/skills/devoskill/workflows/05-quality.md` — language-neutral checks, always required
 3. Inspect the implementation file extensions to identify all languages present, then load every matching skill:
-   - `.go` files → load `../devoskill-quality-go/SKILL.md`
-   - `.ts` / `.js` files → load `../devoskill-quality-node/SKILL.md`
-   - `.py` files → load `../devoskill-quality-python/SKILL.md`
-   - `.lua` files → load `../devoskill-quality-lua/SKILL.md`
-   - `.rb` files → load `../devoskill-quality-ruby/SKILL.md`
+   - `.go` files → load `{DEVOSKILL_ROOT}/skills/devoskill-quality-go/SKILL.md`
+   - `.ts` / `.js` files → load `{DEVOSKILL_ROOT}/skills/devoskill-quality-node/SKILL.md`
+   - `.py` files → load `{DEVOSKILL_ROOT}/skills/devoskill-quality-python/SKILL.md`
+   - `.lua` files → load `{DEVOSKILL_ROOT}/skills/devoskill-quality-lua/SKILL.md`
+   - `.rb` files → load `{DEVOSKILL_ROOT}/skills/devoskill-quality-ruby/SKILL.md`
    - No match → apply only general checks from step 2
 4. Apply all loaded checks against the produced code before writing back to `task.md`
 

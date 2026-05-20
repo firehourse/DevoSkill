@@ -80,7 +80,7 @@ Produce functionality matching the requirements.
 
 ### Step 6: Pre-phase Completion Quality Gate
 
-Before marking any implementation phase complete, load `../devoskill-quality/SKILL.md` and apply every relevant category in `workflows/05-quality.md` against the produced code. Fix any failures before writing back to `task.md`.
+Before marking any implementation phase complete, load `{DEVOSKILL_ROOT}/skills/devoskill-quality/SKILL.md` and apply every relevant category in `workflows/05-quality.md` against the produced code. Fix any failures before writing back to `task.md`.
 
 ---
 

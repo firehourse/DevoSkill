@@ -2,6 +2,37 @@
 
 This protocol defines how a primary Agent should delegate tasks to, context-switch with, or simulate Subagents within the DevoSkill environment. This ensures clarity, precise context boundary management, and strict separation of concerns.
 
+## 0. Subagent Router Bootstrap (Non-Negotiable)
+
+**Subagents must run the DevoSkill router themselves; they do not inherit the orchestrator's route.**
+
+Harness-spawned subagents typically do not see workspace-level `CLAUDE.md` reliably, and `UserPromptSubmit`-style anchoring hooks do not fire on subagent invocations. A subagent that is handed a "file list + task" without route discipline runs without doctrine § 2 attention anchoring, doctrine § 11 router-first invariant, or any of the per-phase Required Behavior. That is a silent regression of the whole framework for the duration of the delegated task.
+
+Therefore every subagent prompt the orchestrator emits must open with a router-bootstrap preamble. Use this template verbatim, replacing `{ROUTE}` with the route the orchestrator has already classified the subtask into and `{DEVOSKILL_ROOT}` with the absolute path to the local DevoSkill clone:
+
+```text
+You are operating inside DevoSkill. Before doing anything else:
+
+1. Read `{DEVOSKILL_ROOT}/skills/devoskill/SKILL.md` (router).
+2. Confirm the route is `{ROUTE}` for this subtask. If you would classify it differently, stop and report back to the orchestrator instead of acting on a wrong route.
+3. Read `{DEVOSKILL_ROOT}/skills/devoskill-{route}/SKILL.md` and apply its load order and Strongest-Attention Rules.
+4. Announce the route at the top of your first reply so the orchestrator can verify (e.g. "Subagent route: Review").
+5. Only after steps 1-4, act on the task below.
+```
+
+Orchestrator obligations:
+- Always supply `{DEVOSKILL_ROOT}` as an absolute path; do not assume the subagent resolves it from environment.
+- State the classified `{ROUTE}` explicitly in the prompt — the subagent verifies, it does not classify from scratch.
+- If the subagent reports back with a different route, treat that as a routing dispute and re-classify in the parent context before re-delegating; do not silently accept the subagent's route override.
+- Subagents that are explicitly read-only research helpers (e.g. an `Explore` agent looking up file paths) may skip steps 2-3 only when the orchestrator's prompt names the read-only research scope; the bootstrap preamble itself still appears.
+
+Subagent obligations:
+- The visible route announcement is mandatory even when the answer is short.
+- If the subtask reroutes mid-execution (e.g. Inquiry resolves into a needed Update), stop and return control — do not silently switch routes inside the delegated task.
+- Strongest-Attention Rules from the route's SKILL.md still apply inside the subagent, including any output-shape, file-write, or destructive-action constraints.
+
+This is doctrine § 11 ("Router first, details later") applied to the subagent boundary. The same router invariant that governs the primary agent governs every delegated task.
+
 ## 1. Interaction Primitives
 
 When invoking a Subagent (e.g., `planner`, `developer`, `reviewer`), you must:
@@ -19,7 +50,7 @@ When invoking a Subagent (e.g., `planner`, `developer`, `reviewer`), you must:
 - User intent/specifications.
 - Thinking Phase classification.
 - If existing or hybrid project: current reality and allowed delta.
-- Standard Template: `DevoSkill/templates/architecture.md`.
+- Standard Template: `{DEVOSKILL_ROOT}/skills/devoskill/templates/architecture.md`.
 
 ### The Developer Subagent
 **Role:** Executes code line-by-line exactly as dictated by the pre-approved `task.md`.

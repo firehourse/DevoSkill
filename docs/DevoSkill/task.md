@@ -23,7 +23,7 @@
 
 ### 3.4 Study surface protocol
 - Scope: Define Study as durable inquiry for reusable system understanding, not implementation planning.
-- Files: `skills/devoskill/protocols/study-surface.md`, `skills/devoskill-exception/SKILL.md`, `skills/devoskill-planning/SKILL.md`, `skills/devoskill/workflows/planning-context-bootstrap.md`
+- Files: `{DEVOSKILL_ROOT}/skills/devoskill/protocols/study-surface.md`, `{DEVOSKILL_ROOT}/skills/devoskill-exception/SKILL.md`, `{DEVOSKILL_ROOT}/skills/devoskill-planning/SKILL.md`, `{DEVOSKILL_ROOT}/skills/devoskill/workflows/planning-context-bootstrap.md`
 
 - [x] **Task 3.4.1**
   - Action: Add Study load conditions, authority, discovery behavior, persistence rules, and forbidden uses.
@@ -31,7 +31,7 @@
 
 ### 3.5 Document system, execution guardrails, and templates
 - Scope: Add project-root `study/` to SkillDocs ownership, layout, loading, persistence, and template storage.
-- Files: `skills/devoskill/protocols/document-authority.md`, `skills/devoskill/protocols/document-loading-order.md`, `skills/devoskill/protocols/document-persistence.md`, `skills/devoskill/protocols/document-reviewability.md`, `skills/devoskill/protocols/workspace-layout.md`, `skills/devoskill/protocols/subagent-orchestration.md`, `skills/devoskill/workflows/02-development.md`, `skills/devoskill/workflows/03-review.md`, `skills/devoskill/templates/README.md`, `skills/devoskill/templates/task.md`, `skills/devoskill/templates/study.md`
+- Files: `{DEVOSKILL_ROOT}/skills/devoskill/protocols/document-authority.md`, `{DEVOSKILL_ROOT}/skills/devoskill/protocols/document-loading-order.md`, `{DEVOSKILL_ROOT}/skills/devoskill/protocols/document-persistence.md`, `{DEVOSKILL_ROOT}/skills/devoskill/protocols/document-reviewability.md`, `{DEVOSKILL_ROOT}/skills/devoskill/protocols/workspace-layout.md`, `{DEVOSKILL_ROOT}/skills/devoskill/protocols/subagent-orchestration.md`, `{DEVOSKILL_ROOT}/skills/devoskill/workflows/02-development.md`, `{DEVOSKILL_ROOT}/skills/devoskill/workflows/03-review.md`, `{DEVOSKILL_ROOT}/skills/devoskill/templates/README.md`, `{DEVOSKILL_ROOT}/skills/devoskill/templates/task.md`, `{DEVOSKILL_ROOT}/skills/devoskill/templates/study.md`
 
 - [x] **Task 3.5.1**
   - Action: Add Study as a non-default project-root artifact surface.

@@ -26,9 +26,12 @@ When the agent detects what phase of development you are in, it first loads the 
 - **Review (`skills/devoskill-review/SKILL.md`)**
 - **Performance Debugging (`skills/devoskill-performance/SKILL.md`)**
 - **Exception / Inquiry (`skills/devoskill-exception/SKILL.md`)** — lightweight route for file lookup, question answering, latest-info research, and issue clarification before work becomes a project phase
-- **Quality Gate (`skills/devoskill-quality/SKILL.md`)** — invoked as a pre-completion support module at the end of every development phase; contains language-neutral principles and positive/negative examples across resource lifecycle, configuration application, input validation, fault tolerance, operational hygiene, identity, and frontend async patterns; automatically loads language-specific sub-skills for each language present in the implementation
+- **Update (`skills/devoskill-update/SKILL.md`)** — captures user-stated cross-session rules into `custom-*.md` plus `custom-INDEX.md`
+- **Doctrine / Maintenance (`skills/devoskill-doctrine/SKILL.md`)** — edits to DevoSkill itself: routes, protocols, workflows, templates, doctrine; respects extension rules in `docs/DevoSkill/doctrine.md § 9`
+- **Quality Gate (`skills/devoskill-quality/SKILL.md`)** — invoked as a pre-completion support module at the end of every development phase; contains language-neutral principles and positive/negative examples across resource lifecycle, configuration application, input validation, fault tolerance, operational hygiene, identity, frontend async patterns, and comment & doc style; automatically loads language-specific sub-skills for each language present in the implementation
   - **Go Quality (`skills/devoskill-quality-go/SKILL.md`)** — Go-specific checks: signal handling, context propagation, goroutine lifecycle, concurrency patterns, deferred cleanup
   - **Node.js Quality (`skills/devoskill-quality-node/SKILL.md`)** — Node.js/TypeScript-specific checks: async error boundaries, HTTP status codes, RabbitMQ connection management, top-level await sequencing, ioredis patterns
+- **Parallel Worktree (`skills/devoskill-parallel-worktree/SKILL.md`)** — support module for concurrent / multi-agent work on a single project; reads per-machine paths and container settings from `config/parallel-worktree.local.json` so the skill itself is project-agnostic and cherry-pickable
 - **Workspace Setup (`skills/devoskill-workspace-setup/SKILL.md`)**
 - **Thinking Phase (`skills/devoskill-thinking-phase/SKILL.md`)**
 
@@ -166,6 +169,7 @@ DevoSkill/
         ├── config/
         │   └── workspace-map.example.json    # Example schema for local workspace mapping state
         ├── protocols/
+        │   ├── custom-INDEX.md               # Discovery index for shared/company-level custom-*.md rules (trigger -> file§section)
         │   ├── document-system.md            # Thin router for shared document semantics
         │   ├── document-authority.md         # Which document is allowed to claim what
         │   ├── document-loading-order.md     # Default read surface per phase
@@ -206,6 +210,7 @@ DevoSkill/
         │   ├── quality-hygiene.md            # Operational/evidence hygiene categories
         │   ├── quality-identity.md           # Identity and authorization categories
         │   ├── quality-frontend.md           # Frontend async category
+        │   ├── quality-comments.md           # Comment & doc style category (language-neutral, applied via language-specific skills)
         │   ├── quality-go.md                 # Go-specific quality checks
         │   └── quality-node.md               # Node.js/TypeScript-specific quality checks
         └── templates/                        # Effective architecture, test, evidence, and active task templates
@@ -225,8 +230,15 @@ DevoSkill/
     │   └── SKILL.md                          # Go-specific quality rules
     ├── devoskill-quality-node/
     │   └── SKILL.md                          # Node.js/TypeScript-specific quality rules
+    ├── devoskill-doctrine/
+    │   └── SKILL.md                          # Doctrine / maintenance route — edits to DevoSkill itself
     ├── devoskill-grill/
     │   └── SKILL.md                          # Planning support module for user grilling
+    ├── devoskill-parallel-worktree/
+    │   ├── SKILL.md                          # Concurrent / multi-agent worktree support module
+    │   └── config/
+    │       ├── parallel-worktree.example.json # Example local-config schema (per-project paths and container settings)
+    │       └── parallel-worktree.local.json   # (gitignored) per-machine project entries
     ├── devoskill-workspace-setup/
     │   └── SKILL.md                          # SkillDocs and symlink setup skill
     └── devoskill-thinking-phase/

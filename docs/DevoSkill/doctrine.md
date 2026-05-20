@@ -44,6 +44,28 @@ The same logic extends to how rules are loaded within a phase:
 
 This is the just-in-time loading principle. It applies at every level: entry router to phase skill, phase skill to workflow, quality gate to category check.
 
+### 2a. Strongest-Attention Anchoring
+
+Each `SKILL.md` should put its **non-negotiable behavior** at the very bottom of the file in a section explicitly named `## Strongest-Attention Rules` (or equivalent). Because models weight the end of a freshly-read file most strongly, this is where the rules an agent MUST NOT forget belong. Procedural setup (load order, classification, prerequisites) goes earlier; the irreducible "if you remember nothing else from this route, remember these" rules go last.
+
+A reroute or a long-session re-anchor should always end by re-reading at minimum the tail section of the active route's `SKILL.md`. The hook reminder and the CLAUDE.md reroute discipline both exist to make this practical.
+
+### 2b. Attention-Anchoring Duplication Is An Allowed Exception To § 4
+
+DevoSkill normally forbids duplicating prompt logic across files (§ 4). The exception: when a rule must survive long-session attention drift, the same rule may be intentionally restated at multiple anchoring sites — typically in `CLAUDE.md` (session-start anchor), in a `UserPromptSubmit` hook payload (per-turn re-anchor), and at the tail of the relevant `SKILL.md` (per-reroute re-anchor). Three anchoring sites is a soft ceiling; more than three is duplication, not anchoring.
+
+When restating, keep the wording identical across sites so an attentive future maintainer can grep and reconcile. Differences in wording across anchors signal drift, not richer specification.
+
+### 2c. Path Resolution Discipline
+
+Cross-file references inside DevoSkill markdown must use the tokenized absolute form `{DEVOSKILL_ROOT}/...`, never the `../` relative form. Reason: models reading a file with `../foo` references inconsistently resolve them — some resolve from the file's own directory (correct), some from the agent's current working directory (which is typically the user's workspace, NOT the DevoSkill clone), producing silent broken loads.
+
+`{DEVOSKILL_ROOT}` is the absolute path of the DevoSkill clone, bound once at session start in the router `SKILL.md` from the absolute path the bootstrap `CLAUDE.md` (or equivalent agent bootstrap) used to reach the router. The router preamble is the single binding site; every other file just substitutes the token.
+
+Same-file `## section` anchors are unaffected — they have no resolution ambiguity. ASCII directory trees inside `README.md` are also unaffected — they are illustrations, not loadable cross-references.
+
+Subagent prompts (see `{DEVOSKILL_ROOT}/skills/devoskill/protocols/subagent-orchestration.md § 0`) also use `{DEVOSKILL_ROOT}` — orchestrators substitute the bound value when emitting the subagent preamble, so subagents receive an absolute path, not a token they must independently resolve.
+
 ## 3. Fine-Grained File Design
 
 DevoSkill favors many small files over a few dense files.
@@ -188,7 +210,7 @@ When extending DevoSkill:
 - do not enlarge the router unless the new rule affects first-step classification,
 - do not create a new top-level skill if a support module is enough,
 - do not add a template without defining its authority boundary,
-- do not add or revise engineering/quality standards without following `skills/devoskill/protocols/standard-authoring.md`,
+- do not add or revise engineering/quality standards without following `{DEVOSKILL_ROOT}/skills/devoskill/protocols/standard-authoring.md`,
 - do not add repeated rules to multiple files when one shared protocol can own them,
 - do not put execution rules into template skeletons when a protocol or workflow should own them,
 - do not hide new execution requirements in README prose only,

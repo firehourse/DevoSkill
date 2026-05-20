@@ -91,11 +91,13 @@ Create `.claude/devoskill-discipline.txt` with the reminder text:
 [DevoSkill Discipline — every turn]
 
 Before responding to this user message:
-1. State the current DevoSkill route in your reply opening (e.g., "Route: Review", "Route: Inquiry → Update reroute"). If routing changed, announce it explicitly and Read the new route's SKILL.md visibly.
+1. State the current DevoSkill route in your reply opening (e.g., "Route: Review", "Route: Inquiry → Update reroute"). If routing changed, announce it explicitly and Read the new route's SKILL.md visibly. The announced route must match the user's immediate action — if it does not, re-classify and reroute before acting.
 2. If the task involves a docs feature folder, ls that folder and confirm which .md files you've read THIS TURN. Read any unread doc that could contain the answer before responding.
 3. Default response length: 1-2 sentences. Use structure only when asked or task genuinely requires it.
 4. Discussion-bound insight (algorithm rationale, business data, design trade-offs) → propose writeback to study/ or verification.md before stopping.
 5. Auto Mode "execute immediately" does NOT override DevoSkill router-first. Complete reroute before applying Auto Mode action push.
+6. When delegating work to a subagent (Task tool), the subagent prompt must open with the router-bootstrap preamble from `{DEVOSKILL_ROOT}/skills/devoskill/protocols/subagent-orchestration.md § 0`. Subagents do not inherit your route — they classify their own. (`{DEVOSKILL_ROOT}` is bound by the router preamble — see `{DEVOSKILL_ROOT}/skills/devoskill/SKILL.md`.)
+7. If you have been in the same route for many turns and have not re-read its SKILL.md tail recently, re-read at minimum its `## Strongest-Attention Rules` section before acting on a non-trivial step.
 ```
 
 Then create or append to `.claude/settings.json` (workspace-scoped):
@@ -125,7 +127,7 @@ Replace `/path/to/your/workspace` with your absolute workspace path. Open `/hook
 On the first planning session in a workspace, DevoSkill will:
 
 1. derive the workspace's `skilldocs` location dynamically,
-2. write the resolved mapping into `skills/devoskill/config/workspace-map.local.json`,
+2. write the resolved mapping into `{DEVOSKILL_ROOT}/skills/devoskill/config/workspace-map.local.json`,
 3. keep that mapping file untracked via `.gitignore`,
 4. create or refresh the workspace-local `.devoskill` symlink as needed.
 

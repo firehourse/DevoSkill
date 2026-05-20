@@ -5,7 +5,7 @@ When tasked with designing a new feature, analyzing a project, or creating a blu
 ## Load Order
 1. Read `planning-context-bootstrap.md`
 2. Read `protocols/thinking-phase.md`
-3. Use `../devoskill-grill/SKILL.md` for interrogation behavior inside planning
+3. Use `{DEVOSKILL_ROOT}/skills/devoskill-grill/SKILL.md` for interrogation behavior inside planning
 4. Read exactly one of:
    - `protocols/planning-greenfield.md`
    - `protocols/planning-existing.md`

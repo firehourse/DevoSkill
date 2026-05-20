@@ -11,3 +11,6 @@ __pycache__/
 config/workspace-map.local.json
 skills/config/workspace-map.local.json
 skills/devoskill/config/workspace-map.local.json
+
+# DevoSkill 本地 parallel-worktree state
+skills/devoskill-parallel-worktree/config/parallel-worktree.local.json

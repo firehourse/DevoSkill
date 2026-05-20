@@ -5,11 +5,11 @@ description: Python-specific quality rules for DevoSkill. Load alongside devoski
 
 # DevoSkill Quality — Python
 
-Load this skill in addition to `../devoskill-quality/SKILL.md` whenever the implementation includes Python code.
+Load this skill in addition to `{DEVOSKILL_ROOT}/skills/devoskill-quality/SKILL.md` whenever the implementation includes Python code.
 
 ## Load Order
-1. Confirm `../devoskill-quality/SKILL.md` has already been loaded
-2. Read `../devoskill/workflows/quality-python.md`
+1. Confirm `{DEVOSKILL_ROOT}/skills/devoskill-quality/SKILL.md` has already been loaded
+2. Read `{DEVOSKILL_ROOT}/skills/devoskill/workflows/quality-python.md`
 3. Apply every category against the Python source files in the implementation
 
 ## Required Behavior

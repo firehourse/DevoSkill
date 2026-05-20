@@ -9,8 +9,8 @@ Use this skill before planning documents are written or rewritten.
 Do not use it after implementation has already begun unless the work is explicitly rerouted back into planning.
 
 ## Load Order
-1. Read `../devoskill/protocols/thinking-phase.md`
-2. Read `../devoskill/protocols/document-system.md`
+1. Read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/thinking-phase.md`
+2. Read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/document-system.md`
 
 Do not read development, review, quality, or performance workflows from the Thinking Phase unless the task reroutes.
 

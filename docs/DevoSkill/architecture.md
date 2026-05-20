@@ -7,7 +7,7 @@
 - The implementation now includes stronger workspace setup rules, explicit design/verification artifacts, durable evidence requirements, and engineering standards, but the project-level planning docs had not been written back to describe that broader shape.
 - The next structural gap is testing: DevoSkill has strong design and verification semantics, but test strategy is not yet a first-class planning artifact.
 - The project also lacks a stable doctrine file that explains the underlying prompt-weight-aware design philosophy for future maintainers and agents.
-- Multiple accidental local-state paths (`config/`, `skills/config/`) appeared alongside the canonical `skills/devoskill/config/workspace-map.local.json`, which risks repo pollution and inconsistent workspace mapping behavior.
+- Multiple accidental local-state paths (`config/`, `skills/config/`) appeared alongside the canonical `{DEVOSKILL_ROOT}/skills/devoskill/config/workspace-map.local.json`, which risks repo pollution and inconsistent workspace mapping behavior.
 - The current entry prompt still spends too much early attention on background rules instead of first-step decisions, which weakens routing reliability because models remember the front of the prompt more strongly than the middle.
 - DevoSkill has no mechanism to capture user-stated corrections, style rules, or performance standards back into the skill system. Rules stated in chat vanish after the session and do not evolve the skill over time.
 - DevoSkill now has project-root `project-changelog.md` for non-default rationale, but reusable code-reading and architecture study material is still only an informal convention in downstream projects.
@@ -30,12 +30,12 @@
   - project-root `study/` as the non-default reusable system understanding surface for code-reading guides, domain studies, and flow maps,
   - engineering standards as mandatory review/development gates,
   - artifact hygiene and ownership/authorization checks as first-class review concerns.
-- Keep local workspace state canonical at `skills/devoskill/config/workspace-map.local.json` and treat any duplicate local-state path as legacy pollution to clean up rather than preserve.
+- Keep local workspace state canonical at `{DEVOSKILL_ROOT}/skills/devoskill/config/workspace-map.local.json` and treat any duplicate local-state path as legacy pollution to clean up rather than preserve.
 - Keep the lightweight trigger-testing skeleton, but treat it as only one slice of the product, not the whole effective architecture.
 - Make sibling skills phase-aware: they should assume a primary mode has already been chosen, but they must still self-check and reroute if the work changes phase.
 - Add an `Update` primary route to the router (same tier as Planning / Development / Review). The route is thin; all capture and writeback semantics live in a shared `skill-evolution` protocol, not in the phase skill itself.
 - Add a `skill-evolution.md` shared protocol that defines: what qualifies as a capturable rule (explicit user corrections, cross-session style/performance standards), the writeback format, and how to determine the target custom protocol file.
-- Add optional `custom-quality.md` and `custom-performance.md` protocol files under `skills/devoskill/protocols/`. These files do not exist until the first rule of that type is captured. Development and Review skills load them conditionally if they exist.
+- Add optional `custom-quality.md` and `custom-performance.md` protocol files under `{DEVOSKILL_ROOT}/skills/devoskill/protocols/`. These files do not exist until the first rule of that type is captured. Development and Review skills load them conditionally if they exist.
 - Add a Study Surface protocol that lets Inquiry and Planning create or consume durable code studies without making Study part of the default Development, Review, Quality, or Debug load surface.
 
 ## Boundaries
