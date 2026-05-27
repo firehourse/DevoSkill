@@ -39,6 +39,15 @@ If an unresolved item affects the current phase, it is not non-blocking. Return 
 - In Development: apply this gate before any file edit. If it fails, stop, report the blocking ambiguity, and reroute to Planning.
 - In Review: treat implementation that proceeded through a failed gate as a planning compliance failure.
 
+## Red Flags — The Gate Has Not Passed
+
+- "The user approved, so the ambiguity is fine now"
+- "This 'choose A or B' is small, I'll decide while coding"
+- "The docs are close enough to start"
+- "The TODO is just a note, not a real blocker"
+
+Each means: stop, classify the item, return to Planning if it touches the active phase.
+
 ## Fast Inspection Heuristics
 Search the active planning surface for:
 - `TODO`

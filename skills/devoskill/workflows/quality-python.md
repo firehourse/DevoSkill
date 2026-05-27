@@ -8,12 +8,12 @@ Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
 
 **Principle:** `uv` is the only allowed package manager. `pip install`, `poetry`, and `pipenv` are banned. Dependencies are declared in `pyproject.toml`; the lockfile must be committed. Virtual environments are managed by `uv`, not activated manually.
 
-| | Example |
-|---|---|
-| ❌ | `pip install requests` / `requirements.txt` as sole dependency declaration |
-| ✅ | `uv add requests` — updates `pyproject.toml` and `uv.lock` |
-| ❌ | `source .venv/bin/activate` in documentation or CI steps |
-| ✅ | `uv run python ...` or `uv run pytest` — uv manages the environment |
+| | Example | Why |
+|---|---|---|
+| ❌ | `pip install requests` / `requirements.txt` as sole dependency declaration | no lockfile, unreproducible |
+| ✅ | `uv add requests` — updates `pyproject.toml` and `uv.lock` | pinned, reproducible installs |
+| ❌ | `source .venv/bin/activate` in documentation or CI steps | manual env, drifts from lockfile |
+| ✅ | `uv run python ...` or `uv run pytest` — uv manages the environment | env resolved from lockfile |
 
 ---
 
@@ -21,12 +21,12 @@ Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
 
 **Principle:** Every function signature must carry type annotations. `Any` is banned except when wrapping third-party code that has no stubs. Return types must be explicit — `-> None` is required, not implied.
 
-| | Example |
-|---|---|
-| ❌ | `def process(data):` — no annotations |
-| ✅ | `def process(data: list[str]) -> None:` |
-| ❌ | `from typing import Any; def load(obj: Any) -> Any:` |
-| ✅ | Narrow the type or wrap in a typed dataclass/TypedDict |
+| | Example | Why |
+|---|---|---|
+| ❌ | `def process(data):` — no annotations | no static checking |
+| ✅ | `def process(data: list[str]) -> None:` | type checker catches misuse |
+| ❌ | `from typing import Any; def load(obj: Any) -> Any:` | `Any` disables checking |
+| ✅ | Narrow the type or wrap in a typed dataclass/TypedDict | precise contract enforced |
 
 ---
 
@@ -34,12 +34,12 @@ Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
 
 **Principle:** File handles, network connections, database sessions, and subprocess pipes must be opened with `with` statements. Manual `.close()` calls in finally blocks are acceptable only when `with` is genuinely not available for the resource type.
 
-| | Example |
-|---|---|
-| ❌ | `f = open(path); data = f.read(); f.close()` |
-| ✅ | `with open(path) as f: data = f.read()` |
-| ❌ | `session = db.Session(); ... session.close()` — skipped on exception |
-| ✅ | `with db.Session() as session: ...` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `f = open(path); data = f.read(); f.close()` | leaks handle on exception |
+| ✅ | `with open(path) as f: data = f.read()` | handle closed on every path |
+| ❌ | `session = db.Session(); ... session.close()` — skipped on exception | session leaks on error |
+| ✅ | `with db.Session() as session: ...` | session always cleaned up |
 
 ---
 
@@ -47,14 +47,14 @@ Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
 
 **Principle:** `asyncio.run()` is the only valid entry point for an async main. Never mix blocking I/O calls inside `async def` functions — use `asyncio.to_thread` or an executor for blocking operations. `asyncio.gather` errors must be caught per-task, not at the gather call only.
 
-| | Example |
-|---|---|
-| ❌ | `loop = asyncio.get_event_loop(); loop.run_until_complete(main())` |
-| ✅ | `asyncio.run(main())` |
-| ❌ | `async def fetch(): return requests.get(url)` — blocks the event loop |
-| ✅ | `async def fetch(): return await asyncio.to_thread(requests.get, url)` |
-| ❌ | `results = await asyncio.gather(*tasks)` — one failure swallows others silently |
-| ✅ | `results = await asyncio.gather(*tasks, return_exceptions=True)` then check each result |
+| | Example | Why |
+|---|---|---|
+| ❌ | `loop = asyncio.get_event_loop(); loop.run_until_complete(main())` | deprecated, leaks event loop |
+| ✅ | `asyncio.run(main())` | manages loop lifecycle |
+| ❌ | `async def fetch(): return requests.get(url)` — blocks the event loop | stalls all coroutines |
+| ✅ | `async def fetch(): return await asyncio.to_thread(requests.get, url)` | offloads blocking call to thread |
+| ❌ | `results = await asyncio.gather(*tasks)` — one failure swallows others silently | first error cancels rest silently |
+| ✅ | `results = await asyncio.gather(*tasks, return_exceptions=True)` then check each result | per-task errors inspectable |
 
 ---
 
@@ -62,13 +62,13 @@ Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
 
 **Principle:** Catch the narrowest exception type possible. Bare `except:` and `except Exception:` without re-raise or logging are banned. Errors must be logged with context before being swallowed. Use custom exception classes for domain errors — string matching on exception messages is banned.
 
-| | Example |
-|---|---|
-| ❌ | `try: ... except: pass` |
-| ❌ | `except Exception as e: print(e)` — no structured logging, swallowed |
-| ✅ | `except ValueError as e: logger.error("parse failed", extra={"input": raw, "error": str(e)}); raise` |
-| ❌ | `if "not found" in str(e):` — string matching on exception message |
-| ✅ | `except TaskNotFoundError:` — typed domain exception |
+| | Example | Why |
+|---|---|---|
+| ❌ | `try: ... except: pass` | swallows all errors silently |
+| ❌ | `except Exception as e: print(e)` — no structured logging, swallowed | error lost, no context |
+| ✅ | `except ValueError as e: logger.error("parse failed", extra={"input": raw, "error": str(e)}); raise` | logged with context, re-raised |
+| ❌ | `if "not found" in str(e):` — string matching on exception message | breaks on message change |
+| ✅ | `except TaskNotFoundError:` — typed domain exception | stable, intent-revealing match |
 
 ---
 
@@ -76,12 +76,12 @@ Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
 
 **Principle:** Use the standard `logging` module configured with a structured formatter (e.g. `python-json-logger`). `print()` is banned in production paths. Every log call in a request or job handler includes the request/job ID as an extra field.
 
-| | Example |
-|---|---|
-| ❌ | `print(f"processing task {task_id}")` |
-| ✅ | `logger.info("processing task", extra={"task_id": task_id})` |
-| ❌ | `logging.basicConfig(level=logging.DEBUG)` in library code |
-| ✅ | Logger configured only at application entry point; libraries use `logging.getLogger(__name__)` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `print(f"processing task {task_id}")` | unstructured, no log level |
+| ✅ | `logger.info("processing task", extra={"task_id": task_id})` | structured, queryable fields |
+| ❌ | `logging.basicConfig(level=logging.DEBUG)` in library code | hijacks app logging config |
+| ✅ | Logger configured only at application entry point; libraries use `logging.getLogger(__name__)` | app owns config, libs defer |
 
 ---
 
@@ -89,12 +89,12 @@ Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
 
 **Principle:** Never use mutable objects as default argument values — they are shared across all calls. Use `None` as the default and initialize inside the function body. Prefer dataclasses or TypedDict over plain dicts for structured data passed between layers.
 
-| | Example |
-|---|---|
-| ❌ | `def append_item(item, lst=[]):` — `lst` is shared across all calls |
-| ✅ | `def append_item(item, lst=None): if lst is None: lst = []` |
-| ❌ | `def configure(opts={}):` |
-| ✅ | `def configure(opts: dict[str, str] | None = None): opts = opts or {}` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `def append_item(item, lst=[]):` — `lst` is shared across all calls | shared mutable default leaks state |
+| ✅ | `def append_item(item, lst=None): if lst is None: lst = []` | fresh list per call |
+| ❌ | `def configure(opts={}):` | shared dict across calls |
+| ✅ | `def configure(opts: dict[str, str] | None = None): opts = opts or {}` | fresh dict, typed |
 
 ---
 
@@ -102,9 +102,9 @@ Apply after `05-quality.md`. Fix any failures before writing back to `task.md`.
 
 **Principle:** Each module has one coherent responsibility. `__init__.py` files export only the public API — implementation details are not re-exported. Circular imports are a structural failure, not something to work around with lazy imports inside functions.
 
-| | Example |
-|---|---|
-| ❌ | `from .service import *` in `__init__.py` |
-| ✅ | Explicit exports: `from .service import UserService` |
-| ❌ | `def get_user(): from .models import User` — lazy import hiding a cycle |
-| ✅ | Restructure to remove the cycle |
+| | Example | Why |
+|---|---|---|
+| ❌ | `from .service import *` in `__init__.py` | leaks implementation into public API |
+| ✅ | Explicit exports: `from .service import UserService` | controlled public surface |
+| ❌ | `def get_user(): from .models import User` — lazy import hiding a cycle | hides structural cycle |
+| ✅ | Restructure to remove the cycle | clean dependency graph |

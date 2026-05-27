@@ -175,9 +175,9 @@ If the feature spans multiple binaries or runtimes, split this into subsections 
   - Scope:
   - Compensating test or verification:
 
-## Multi-Binary Note
+## Multi-Boundary Note
 
-If this feature spans more than one executable boundary (for example API server + worker + gateway), one class diagram is usually not enough.
+If this feature spans more than one executable boundary or stack (for example API server + worker + gateway), one class diagram is usually not enough.
 
 Required approach:
 - one topology/system diagram for cross-binary boundaries

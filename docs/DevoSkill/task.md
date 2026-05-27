@@ -17,7 +17,7 @@
 - [x] Phase 6 (Update route + skill evolution) completed
 - [x] Phase 7 (project changelog surface) completed
 - [x] User confirmed the changelog mechanism should stay simple and timestamp-oriented
-- [x] User confirmed Study should primarily serve Inquiry and Planning, using downstream project `study/` folders as the model
+- [x] User confirmed Study should primarily serve Inquiry and Planning, using a downstream project's `study/` as the model
 
 ## 3. Execution Tasks
 

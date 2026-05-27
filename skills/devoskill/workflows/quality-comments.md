@@ -2,9 +2,18 @@
 
 Apply during development and review whenever code is added, modified, or refactored. Fix any failures before writing back to `task.md`.
 
-This workflow owns the executable contract for what makes a comment worth its line cost. The principles are language-neutral; the examples below are drawn from a Go HTTP service that exercises proxy chain walking, panic recovery, error-table middleware, cache lifetimes, and observability sequencing because those shapes repeatedly demonstrate each rule. Translate the syntactic shape to the target language when applying to Ruby, Node, Python, etc.
+This workflow owns the executable contract for what makes a comment worth its line cost. The principles are language-neutral; the examples below are drawn from a production Go HTTP service because real middleware and handler code repeatedly demonstrates each shape. Translate the syntactic shape to the target language when applying to Ruby, Node, Python, etc.
 
 When adding or revising rules in this file, follow `../protocols/standard-authoring.md`: state the principle, define concrete checks, and include positive/negative examples that a reviewer can match against a diff hunk.
+
+## Rationalizations — Skipping the Comment
+
+| Excuse | Reality |
+|--------|---------|
+| "The code is self-explanatory" | Code shows what; the comment owns why, the hazard, the fail-mode. |
+| "Comments rot, skip them" | Unwritten intent rots in your head too — write it, then maintain it. |
+| "No time, it's just a helper" | The helper with an unstated precondition is the one that panics in prod. |
+| "It's obvious to me" | You ≠ the reviewer six months out. |
 
 ---
 
@@ -16,12 +25,12 @@ Required check:
 - Cover (at least one of): a hidden constraint, an invariant, an ordering hazard, a trade-off, a cross-layer contract, a deliberately-rejected alternative, or a fail-mode policy decision.
 - Reject comments that paraphrase the next line ("increment counter", "loop over items", "return result").
 
-| | Example |
-|---|---|
-| ❌ | `// loop over parts and trim each` above a straightforward `for` over `strings.Split(...)` |
-| ✅ | `// Walk right-to-left, returning the first untrusted entry. Track the leftmost non-empty entry as we go: if every entry turns out to be trusted (intra-VPC traffic), the leftmost is the original-client claim added by the first trusted proxy.` |
-| ❌ | `// assign error` above `err = utils.ErrFromRecover(rec)` |
-| ✅ | `// Set err first so a panic in slog/rollbar below still leaves AccessLog with the original panic value to log.` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `// loop over parts and trim each` above a straightforward `for` over `strings.Split(...)` | restates the next line |
+| ✅ | `// Walk right-to-left, returning the first untrusted entry. Track the leftmost non-empty entry as we go: if every entry turns out to be trusted (intra-VPC traffic), the leftmost is the original-client claim added by the first trusted proxy.` | names the trust model behind the walk |
+| ❌ | `// assign error` above `err = utils.ErrFromRecover(rec)` | paraphrases the assignment |
+| ✅ | `// Set err first so a panic in slog/rollbar below still leaves AccessLog with the original panic value to log.` | names the ordering hazard |
 
 ---
 
@@ -34,12 +43,12 @@ Required check:
 - Doc comment that does not start with the identifier name (Go) or does not start with a verb describing the contract (other languages) → finding.
 - Doc comment that only restates the signature in prose → finding.
 
-| | Example |
-|---|---|
-| ❌ | `// gets the client ip` above `func ClientIPFromContext(ctx context.Context) string` |
-| ✅ | `// ClientIPFromContext returns the client IP previously stored in ctx by the ClientIP middleware. Returns "" if the middleware did not run.` |
-| ❌ | `// Recover function` above `func Recover(next bunrouter.HandlerFunc) bunrouter.HandlerFunc` |
-| ✅ | `// Recover catches a panic from the wrapped handler chain, writes a JSON 500 response (if nothing has been written yet), and propagates the panic value as the function's return error so AccessLog records it in the per-request log line at ERROR severity.` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `// gets the client ip` above `func ClientIPFromContext(ctx context.Context) string` | doesn't start with identifier |
+| ✅ | `// ClientIPFromContext returns the client IP previously stored in ctx by the ClientIP middleware. Returns "" if the middleware did not run.` | states return + missing-middleware case |
+| ❌ | `// Recover function` above `func Recover(next bunrouter.HandlerFunc) bunrouter.HandlerFunc` | restates the signature in prose |
+| ✅ | `// Recover catches a panic from the wrapped handler chain, writes a JSON 500 response (if nothing has been written yet), and propagates the panic value as the function's return error so AccessLog records it in the per-request log line at ERROR severity.` | states catch + wire + log contract |
 
 ---
 
@@ -52,12 +61,12 @@ Required check:
 - For functions that emit logs, metrics, or external reports (rollbar, datadog, slack): state which observability surfaces are touched and at what severity.
 - Reject doc comments that only describe loops, conditions, or local variable assignment.
 
-| | Example |
-|---|---|
-| ❌ | `// runs next then checks err and writes json` above an error-mapping middleware |
-| ✅ | `// ErrorJSON is a middleware factory. Given an ErrorTable, the produced middleware:\n//   - calls the next handler\n//   - on error, looks it up in the table and writes the corresponding JSON {"result": msg} response\n//   - on a missing entry, logs + reports to rollbar + writes a 500\n//   - in both cases marks the request "handled by ErrorJSON" so AccessLog can pick the appropriate log severity\n//   - returns the original raw error up the chain so AccessLog records the true cause, not the (possibly masked) wire message` |
-| ❌ | `// APIError type` above `type APIError struct { Code int; Msg string }` |
-| ✅ | `// APIError describes the wire response for a known handler error: the HTTP status code and the message that goes in the {"result": ...} body. APIError is the value type in an ErrorTable; handlers never construct or return one.` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `// runs next then checks err and writes json` above an error-mapping middleware | describes the body, not the contract |
+| ✅ | `// ErrorJSON is a middleware factory. Given an ErrorTable, the produced middleware:\n//   - calls the next handler\n//   - on error, looks it up in the table and writes the corresponding JSON {"result": msg} response\n//   - on a missing entry, logs + reports to rollbar + writes a 500\n//   - in both cases marks the request "handled by ErrorJSON" so AccessLog can pick the appropriate log severity\n//   - returns the original raw error up the chain so AccessLog records the true cause, not the (possibly masked) wire message` | states wire shape + observability side effects |
+| ❌ | `// APIError type` above `type APIError struct { Code int; Msg string }` | restates the type keyword |
+| ✅ | `// APIError describes the wire response for a known handler error: the HTTP status code and the message that goes in the {"result": ...} body. APIError is the value type in an ErrorTable; handlers never construct or return one.` | names wire role + usage constraint |
 
 ---
 
@@ -70,12 +79,12 @@ Required check:
 - Functions whose correctness depends on a prior call having run (cache populated, session resolved, config snapshot taken) → require the clause to name that prior call.
 - Comments that hand-wave with "assumed non-nil" without naming enforcement → finding.
 
-| | Example |
-|---|---|
-| ❌ | `func (e *EventBaseInfo) DuringRegisterIntentPeriod() bool { ... }` with no doc comment, body dereferences `e.Event.RegisterIntentStartAt` |
-| ✅ | `// DuringRegisterIntentPeriod reports whether the current time falls within the event's register-intent window.\n//\n// Precondition: e must be non-nil. Callers are expected to fail the request before reaching here when base_info is unavailable; this method intentionally does not nil-check the receiver so that a contract violation surfaces as a panic (caught by the Recover middleware in production, by tests in development).` |
-| ❌ | `// validate inventory` above a method that assumes `EventBaseInfo` is loaded |
-| ✅ | `// Precondition: es.EventBaseInfo is non-nil. doValidate fails the request before reaching here when base_info is missing.` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `func (e *EventBaseInfo) DuringRegisterIntentPeriod() bool { ... }` with no doc comment, body dereferences `e.Event.RegisterIntentStartAt` | unstated nil-receiver precondition |
+| ✅ | `// DuringRegisterIntentPeriod reports whether the current time falls within the event's register-intent window.\n//\n// Precondition: e must be non-nil. Callers are expected to fail the request before reaching here when base_info is unavailable; this method intentionally does not nil-check the receiver so that a contract violation surfaces as a panic (caught by the Recover middleware in production, by tests in development).` | names guarantee + enforcer + surfacing |
+| ❌ | `// validate inventory` above a method that assumes `EventBaseInfo` is loaded | hand-waves the precondition |
+| ✅ | `// Precondition: es.EventBaseInfo is non-nil. doValidate fails the request before reaching here when base_info is missing.` | names the prior call that enforces it |
 
 ---
 
@@ -88,12 +97,12 @@ Required check:
 - Defer placement that protects a later panic path → comment names the panic source it protects against.
 - Sequencing of response write vs. log/metric/report calls → comment names which side is the wire and which is observability.
 
-| | Example |
-|---|---|
-| ❌ | A `defer func() { ... }` whose body assigns to a named return AND calls slog/rollbar with no comment on why the assignment runs first |
-| ✅ | `// Set err first so a panic in slog/rollbar below still leaves AccessLog with the original panic value to log.\nerr = utils.ErrFromRecover(rec)\n\n// Write the response next. Only write if nothing has already been sent (e.g. handler wrote partial output before panicking).\n...\n\n// Observability last. If these panic, the secondary panic escapes to the outer Recover — by this point the wire is already consistent so there's nothing to corrupt.` |
-| ❌ | `// set content type and write status` above an HTTP write |
-| ✅ | `// JSON helper: set Content-Type: application/json before WriteHeader` — names the hazard (Go's `http.ResponseWriter` ignores header writes after `WriteHeader`) |
+| | Example | Why |
+|---|---|---|
+| ❌ | A `defer func() { ... }` whose body assigns to a named return AND calls slog/rollbar with no comment on why the assignment runs first | no hazard named for the order |
+| ✅ | `// Set err first so a panic in slog/rollbar below still leaves AccessLog with the original panic value to log.\nerr = utils.ErrFromRecover(rec)\n\n// Write the response next. Only write if nothing has already been sent (e.g. handler wrote partial output before panicking).\n...\n\n// Observability last. If these panic, the secondary panic escapes to the outer Recover — by this point the wire is already consistent so there's nothing to corrupt.` | labels each step's hazard, wire vs observability |
+| ❌ | `// set content type and write status` above an HTTP write | restates the calls in order |
+| ✅ | `// JSON helper: set Content-Type: application/json before WriteHeader` — names the hazard (Go's `http.ResponseWriter` ignores header writes after `WriteHeader`) | names the header-after-WriteHeader hazard |
 
 ---
 
@@ -106,14 +115,14 @@ Required check:
 - Any hard-stop on missing state → must say `fail-closed` (or `fail-fast` for startup-time bailouts) and name the alternative that was rejected.
 - Vague phrases like "just continue" / "skip if error" without a fail-mode label → finding.
 
-| | Example |
-|---|---|
-| ❌ | `// if cache fails just continue` above a `slog.Error(...)` plus continue |
-| ✅ | `// 庫存資料抓不到時 fail-open: 讓使用者照常排隊, 由後端 worker 真正建單時再回頭判斷.\n// 理由是 inventory upstream 短暫掛掉時不該全站擋下單; 後端建單仍會擋住超賣.` |
-| ❌ | `// require base info` above a `return err` on nil base_info |
-| ✅ | `// base_info 拿不到就直接失敗 — 後續的票券 / 庫存 / captcha / 登入需求檢查都依賴 base_info，不能在缺資料時假裝通過。` (implicit fail-closed; the next line returns an error) |
-| ❌ | `const writeTimeout = 30 * time.Second` |
-| ✅ | `// mustDuration reads a positive duration from viper or panics. viper's GetDuration silently returns 0 on parse failure or empty input, which would defeat the slowloris-protection timeouts; failing fast at startup surfaces a misconfigured env var loudly.` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `// if cache fails just continue` above a `slog.Error(...)` plus continue | "just continue" hides the fail-mode |
+| ✅ | `// 庫存資料抓不到時 fail-open: 讓使用者照常排隊, 由後端 worker 真正建單時再回頭判斷.\n// 理由是 inventory upstream 短暫掛掉時不該全站擋下單; 後端建單仍會擋住超賣.` | labels fail-open + names downstream guard |
+| ❌ | `// require base info` above a `return err` on nil base_info | no fail-mode, restates the guard |
+| ✅ | `// base_info 拿不到就直接失敗 — 後續的票券 / 庫存 / captcha / 登入需求檢查都依賴 base_info，不能在缺資料時假裝通過。` (implicit fail-closed; the next line returns an error) | labels fail-closed + names dependents |
+| ❌ | `const writeTimeout = 30 * time.Second` | bare value, no policy |
+| ✅ | `// mustDuration reads a positive duration from viper or panics. viper's GetDuration silently returns 0 on parse failure or empty input, which would defeat the slowloris-protection timeouts; failing fast at startup surfaces a misconfigured env var loudly.` | labels fail-fast + names rejected default |
 
 ---
 
@@ -125,14 +134,14 @@ Required check:
 - `fmt.Errorf("%w: %w", sentinel, cause)` (or equivalent in other languages) → require a comment naming (a) the sentinel-mapping consumer and the resulting wire shape, (b) the raw-cause consumer (log, debugger).
 - Raw sentinel return (no wrap) inside a chain that mostly wraps → require a one-line comment stating "Raw sentinel — the table maps to ...".
 
-| | Example |
-|---|---|
-| ❌ | `return fmt.Errorf("%w: %w", utils.InvalidRequestBody, err)` with no comment |
-| ✅ | `// Wrap so the wire response stays 403 InvalidRequestBody (via errors.Is lookup in ErrorJSON) while the access log carries the real cause (e.g. http.MaxBytesError, JSON parse error).\nreturn fmt.Errorf("%w: %w", utils.InvalidRequestBody, err)` |
-| ❌ | `return fmt.Errorf("%w: %w", utils.ErrUserInfoUnavailable, err)` returned alongside other sentinels with no rationale |
-| ✅ | `// 用 csrf token 失效的名義通知前端 reload 以回填 user cache.\n// ErrUserInfoUnavailable maps to the same 403 + "Can't verify CSRF token authenticity" wire shape as CsrfError (the frontend treats both the same way and reloads), but the dedicated sentinel keeps the access-log signal distinct from genuine CSRF failures. The wrapped err records the underlying cause (redis.Nil, network err, JSON parse err).` |
-| ❌ | `return utils.ErrCreditScoreCheckFailed` |
-| ✅ | `// Raw sentinel — the table maps to 200 "not available".\nreturn utils.ErrCreditScoreCheckFailed` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `return fmt.Errorf("%w: %w", utils.InvalidRequestBody, err)` with no comment | wrap looks accidental, not load-bearing |
+| ✅ | `// Wrap so the wire response stays 403 InvalidRequestBody (via errors.Is lookup in ErrorJSON) while the access log carries the real cause (e.g. http.MaxBytesError, JSON parse error).\nreturn fmt.Errorf("%w: %w", utils.InvalidRequestBody, err)` | names sentinel-wire vs raw-cause consumer |
+| ❌ | `return fmt.Errorf("%w: %w", utils.ErrUserInfoUnavailable, err)` returned alongside other sentinels with no rationale | no reason for the distinct sentinel |
+| ✅ | `// 用 csrf token 失效的名義通知前端 reload 以回填 user cache.\n// ErrUserInfoUnavailable maps to the same 403 + "Can't verify CSRF token authenticity" wire shape as CsrfError (the frontend treats both the same way and reloads), but the dedicated sentinel keeps the access-log signal distinct from genuine CSRF failures. The wrapped err records the underlying cause (redis.Nil, network err, JSON parse err).` | maps shared wire shape, distinct log signal |
+| ❌ | `return utils.ErrCreditScoreCheckFailed` | bare sentinel, no table mapping |
+| ✅ | `// Raw sentinel — the table maps to 200 "not available".\nreturn utils.ErrCreditScoreCheckFailed` | states the table's wire mapping |
 
 ---
 
@@ -145,10 +154,10 @@ Required check:
 - If a commonly-tempting alternative exists and was rejected → comment must name it and state the rejection reason in the same block.
 - Bullet-list-only or unstructured prose for ≥ 3-branch algorithms → finding.
 
-| | Example |
-|---|---|
-| ❌ | `// resolve client ip from xff header or remote addr` above a 30-line function with five branches |
-| ✅ | `// ClientIP resolves the client IP once per request and stows it in the request context. Read it via ClientIPFromContext(ctx).\n//\n// Algorithm (trusted-proxies, rightmost-untrusted):\n//  1. Parse RemoteAddr → connecting IP.\n//  2. If connecting IP is NOT in `trusted`, return it. Ignore XFF — an untrusted connection could forge any header it likes.\n//  3. Else walk X-Forwarded-For RIGHT → LEFT and return the first entry whose IP is not in `trusted`. That's the real client: the hop just past our trusted edge.\n//  4. If every XFF entry is trusted (e.g. intra-VPC traffic where the originating client is also inside the trusted CIDR), return the leftmost XFF entry — the original-client claim made by the first trusted proxy, which we trust by definition.\n//  5. If XFF is empty, fall back to the connecting IP.\n//\n// The leftmost XFF entry is intentionally NOT used: any client can set it before reaching the first proxy in the chain.` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `// resolve client ip from xff header or remote addr` above a 30-line function with five branches | prose hides the branch mapping |
+| ✅ | `// ClientIP resolves the client IP once per request and stows it in the request context. Read it via ClientIPFromContext(ctx).\n//\n// Algorithm (trusted-proxies, rightmost-untrusted):\n//  1. Parse RemoteAddr → connecting IP.\n//  2. If connecting IP is NOT in `trusted`, return it. Ignore XFF — an untrusted connection could forge any header it likes.\n//  3. Else walk X-Forwarded-For RIGHT → LEFT and return the first entry whose IP is not in `trusted`. That's the real client: the hop just past our trusted edge.\n//  4. If every XFF entry is trusted (e.g. intra-VPC traffic where the originating client is also inside the trusted CIDR), return the leftmost XFF entry — the original-client claim made by the first trusted proxy, which we trust by definition.\n//  5. If XFF is empty, fall back to the connecting IP.\n//\n// The leftmost XFF entry is intentionally NOT used: any client can set it before reaching the first proxy in the chain.` | numbers each branch, names rejected leftmost |
 
 ---
 
@@ -161,12 +170,12 @@ Required check:
 - Constants that are simple stable identifiers (cookie names, key prefixes, message types) → exempt; a one-line label is fine.
 - Comments that only repeat the value in words ("// 16 KB" above `16 * 1024`) → finding.
 
-| | Example |
-|---|---|
-| ❌ | `const maxRegistrationBodyBytes = 16 * 1024 // 16 KB cap` |
-| ✅ | `// maxRegistrationBodyBytes caps the request body for POST /queue/:slug.\n// A normal registration JSON is well under 1KB (a tickets array, a captcha token, a few flags); 16KB is generous headroom and small enough to cheaply reject abusive uploads before we allocate or parse.\nconst maxRegistrationBodyBytes = 16 * 1024` |
-| ❌ | `const writeTimeout = 60 * time.Second // http write timeout` |
-| ✅ | `// HTTP_WRITE_TIMEOUT defaults to 60s: long enough for legitimate slow clients on mobile networks to drain a queued response without tripping the slowloris cut, short enough that a stuck connection still releases the goroutine within one minute. Reconsider when add­ing endpoints that stream beyond this budget.` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `const maxRegistrationBodyBytes = 16 * 1024 // 16 KB cap` | repeats the value in words |
+| ✅ | `// maxRegistrationBodyBytes caps the request body for POST /queue/:slug.\n// A normal registration JSON is well under 1KB (a tickets array, a captcha token, a few flags); 16KB is generous headroom and small enough to cheaply reject abusive uploads before we allocate or parse.\nconst maxRegistrationBodyBytes = 16 * 1024` | names scenario + magnitude + headroom |
+| ❌ | `const writeTimeout = 60 * time.Second // http write timeout` | labels the field, not the policy |
+| ✅ | `// HTTP_WRITE_TIMEOUT defaults to 60s: long enough for legitimate slow clients on mobile networks to drain a queued response without tripping the slowloris cut, short enough that a stuck connection still releases the goroutine within one minute. Reconsider when add­ing endpoints that stream beyond this budget.` | states both bounds + revisit trigger |
 
 ---
 
@@ -179,10 +188,10 @@ Required check:
 - Same component registered at multiple positions → require a per-position responsibility list, otherwise the duplicate looks like a typo.
 - Components handled by an outer wrapper (e.g. CORS wrapping the entire router) → require an explicit "handled elsewhere" note in the inner chain's comment so a reviewer does not add a duplicate.
 
-| | Example |
-|---|---|
-| ❌ | `api := router.NewGroup("", bunrouter.Use(middleware.Recover, middleware.ClientIP, middleware.AccessLog, middleware.Recover, middleware.ErrorJSON(errorTable)))` with no comment on order or the duplicate `Recover` |
-| ✅ | `// API routes go through the full middleware chain. Order, outermost\n// → innermost: Recover, ClientIP, AccessLog, Recover, ErrorJSON.\n// CORS is handled by rs/cors wrapping the whole router below, so it\n// is not in this chain.\n//\n// Recover is registered at two positions, by design:\n//   * Inner Recover runs below AccessLog. It catches handler panics\n//     and assigns the recovered value to its named return err\n//     before AccessLog's defer reads err — so AccessLog logs the\n//     request at ERROR severity with the panic message intact.\n//   * Outer Recover sits at the chain edge. It catches panics from\n//     ClientIP / AccessLog itself, or secondary panics from inner\n//     Recover's own slog/rollbar calls.\n// Both positions share the same status-aware implementation: write\n// a JSON 500 only when the response writer hasn't been started,\n// otherwise leave the wire alone so we never corrupt a response\n// that someone else already wrote.` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `api := router.NewGroup("", bunrouter.Use(middleware.Recover, middleware.ClientIP, middleware.AccessLog, middleware.Recover, middleware.ErrorJSON(errorTable)))` with no comment on order or the duplicate `Recover` | duplicate Recover looks like a typo |
+| ✅ | `// API routes go through the full middleware chain. Order, outermost\n// → innermost: Recover, ClientIP, AccessLog, Recover, ErrorJSON.\n// CORS is handled by rs/cors wrapping the whole router below, so it\n// is not in this chain.\n//\n// Recover is registered at two positions, by design:\n//   * Inner Recover runs below AccessLog. It catches handler panics\n//     and assigns the recovered value to its named return err\n//     before AccessLog's defer reads err — so AccessLog logs the\n//     request at ERROR severity with the panic message intact.\n//   * Outer Recover sits at the chain edge. It catches panics from\n//     ClientIP / AccessLog itself, or secondary panics from inner\n//     Recover's own slog/rollbar calls.\n// Both positions share the same status-aware implementation: write\n// a JSON 500 only when the response writer hasn't been started,\n// otherwise leave the wire alone so we never corrupt a response\n// that someone else already wrote.` | names direction, per-position roles, CORS exclusion |
 
 ---
 
@@ -195,12 +204,12 @@ Required check:
 - Routes that skip auth, validation, or rate limiting → require a comment naming why the route is safe to bypass and what guards the path instead.
 - Carve-outs that do not name a specific actor (just "for ops") → finding.
 
-| | Example |
-|---|---|
-| ❌ | `router.GET("/ping", pong); router.HEAD("/ping", pong)` registered on the root group with no comment |
-| ✅ | `// /ping is registered on the root group (no middleware) so ALB\n// health checks skip the full chain — no log entries, no IP parsing.` |
-| ❌ | An internal admin endpoint registered without auth and no comment naming the perimeter |
-| ✅ | An internal endpoint with a comment naming the actor (e.g. "kubelet livenessProbe via cluster-internal IP") and the alternative perimeter protection (e.g. "network ACL is the auth boundary; do not expose this route through the public LB") |
+| | Example | Why |
+|---|---|---|
+| ❌ | `router.GET("/ping", pong); router.HEAD("/ping", pong)` registered on the root group with no comment | bypass scope undiscoverable |
+| ✅ | `// /ping is registered on the root group (no middleware) so ALB\n// health checks skip the full chain — no log entries, no IP parsing.` | names actor + what's bypassed |
+| ❌ | An internal admin endpoint registered without auth and no comment naming the perimeter | no actor, no replacement perimeter |
+| ✅ | An internal endpoint with a comment naming the actor (e.g. "kubelet livenessProbe via cluster-internal IP") and the alternative perimeter protection (e.g. "network ACL is the auth boundary; do not expose this route through the public LB") | names actor + replacement auth boundary |
 
 ---
 
@@ -213,16 +222,16 @@ Required check:
 - Wrapper code that compensates for a library default (manual drain, manual nil check, custom env validation) → require a comment naming the library protocol contract being respected.
 - Custom panic-or-bail logic around a third-party config parse → require a comment naming why the library's default behavior is insufficient.
 
-| | Example |
-|---|---|
-| ❌ | `if len(origins) == 0 { panic("CORS_ALLOW_ORIGIN must list at least one origin") }` with no comment on why the empty-list panic exists |
-| ✅ | `// rs/cors treats an empty allowlist as "allow all origins";\n// combined with AllowCredentials below, that would echo any\n// Origin back with credentials enabled. Refuse to start instead.\nif len(origins) == 0 { panic("CORS_ALLOW_ORIGIN must list at least one origin") }` |
-| ❌ | `func mustDuration(key string) time.Duration { d := viper.GetDuration(key); if d <= 0 { panic(...) }; return d }` with no comment |
-| ✅ | `// mustDuration reads a positive duration from viper or panics. viper's\n// GetDuration silently returns 0 on parse failure or empty input, which\n// would defeat the slowloris-protection timeouts; failing fast at\n// startup surfaces a misconfigured env var loudly.` |
-| ❌ | `io.Copy(io.Discard, resp.Body)` immediately after a non-2xx response, with no comment |
-| ✅ | `// Drain the body so the keepalive connection can be returned\n// to the pool; net/http only reuses connections after a full\n// read + Close. Without this, every non-2xx response causes\n// a TCP churn against the upstream.\nio.Copy(io.Discard, resp.Body)` |
-| ❌ | `Transport: newPooledTransport(20)` with no comment on the magic 20 |
-| ✅ | `// http.DefaultTransport keeps only 2 idle conns per host, which causes\n// TCP churn when many slugs refresh through the same upstream\n// concurrently. Bump to 20 so the keepalive pool actually covers the\n// expected peak of in-flight refreshes.` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `if len(origins) == 0 { panic("CORS_ALLOW_ORIGIN must list at least one origin") }` with no comment on why the empty-list panic exists | panic motive invisible |
+| ✅ | `// rs/cors treats an empty allowlist as "allow all origins";\n// combined with AllowCredentials below, that would echo any\n// Origin back with credentials enabled. Refuse to start instead.\nif len(origins) == 0 { panic("CORS_ALLOW_ORIGIN must list at least one origin") }` | names library default + compose hazard |
+| ❌ | `func mustDuration(key string) time.Duration { d := viper.GetDuration(key); if d <= 0 { panic(...) }; return d }` with no comment | why-panic over viper unstated |
+| ✅ | `// mustDuration reads a positive duration from viper or panics. viper's\n// GetDuration silently returns 0 on parse failure or empty input, which\n// would defeat the slowloris-protection timeouts; failing fast at\n// startup surfaces a misconfigured env var loudly.` | names viper's silent-zero default |
+| ❌ | `io.Copy(io.Discard, resp.Body)` immediately after a non-2xx response, with no comment | looks like a pointless read |
+| ✅ | `// Drain the body so the keepalive connection can be returned\n// to the pool; net/http only reuses connections after a full\n// read + Close. Without this, every non-2xx response causes\n// a TCP churn against the upstream.\nio.Copy(io.Discard, resp.Body)` | names net/http reuse protocol contract |
+| ❌ | `Transport: newPooledTransport(20)` with no comment on the magic 20 | magic 20 unexplained |
+| ✅ | `// http.DefaultTransport keeps only 2 idle conns per host, which causes\n// TCP churn when many slugs refresh through the same upstream\n// concurrently. Bump to 20 so the keepalive pool actually covers the\n// expected peak of in-flight refreshes.` | names the stingy default it overrides |
 
 ---
 
@@ -235,12 +244,12 @@ Required check:
 - Switch statements that intentionally omit a default branch → require a comment naming what makes the default unreachable (typed enum, exhaustive linter, prior validation).
 - Struct fields excluded from a serialization tag (`json:"-"`) by design → require a comment naming the omission and the reason.
 
-| | Example |
-|---|---|
-| ❌ | `var errorTable = middleware.ErrorTable{ ... }` that simply omits `GeneralServerError` with no comment |
-| ✅ | `// GeneralServerError is intentionally absent: it represents the\n// unhandled-error path, which ErrorJSON renders directly. Keeping\n// it out of the table forces every 500 through that path, where\n// rollbar + slog ERROR + access-log ERROR severity all fire.` |
-| ❌ | A switch on an enum with no `default:` branch and no comment on exhaustiveness |
-| ✅ | Switch closing with a comment naming the exhaustiveness guarantor (e.g. `// every CaptchaType is handled above; an unknown value would have been rejected at config parse time`) |
+| | Example | Why |
+|---|---|---|
+| ❌ | `var errorTable = middleware.ErrorTable{ ... }` that simply omits `GeneralServerError` with no comment | absence reads as oversight |
+| ✅ | `// GeneralServerError is intentionally absent: it represents the\n// unhandled-error path, which ErrorJSON renders directly. Keeping\n// it out of the table forces every 500 through that path, where\n// rollbar + slog ERROR + access-log ERROR severity all fire.` | names omission + the path that handles it |
+| ❌ | A switch on an enum with no `default:` branch and no comment on exhaustiveness | missing default looks like a gap |
+| ✅ | Switch closing with a comment naming the exhaustiveness guarantor (e.g. `// every CaptchaType is handled above; an unknown value would have been rejected at config parse time`) | names what makes default unreachable |
 
 ---
 
@@ -253,12 +262,12 @@ Required check:
 - Doc comments that say "treat as read-only" without naming forbidden operations → finding.
 - If callers may need a mutable copy, the doc comment names the cloning function.
 
-| | Example |
-|---|---|
-| ❌ | `// GetEventBaseInfoCache returns the cached base info for slug.` |
-| ✅ | `// 注意: 回傳的 *EventBaseInfo 可能與其他併發 caller 共用同一份指標\n// (來自 memorycache tier), 請當作 read-only 使用; 不要 mutate\n// Event 欄位或 append/modify Tickets/StopSellingTickets, 否則會\n// 造成 cache 汙染與 data race.` |
-| ❌ | A pooled `*bytes.Buffer` returned without comment on lifetime |
-| ✅ | Doc comment naming the pool (`sync.Pool`), the contract ("caller must not retain the buffer past handler return"), and the failure mode ("subsequent caller reads partially-overwritten bytes") |
+| | Example | Why |
+|---|---|---|
+| ❌ | `// GetEventBaseInfoCache returns the cached base info for slug.` | hides the shared-pointer hazard |
+| ✅ | `// 注意: 回傳的 *EventBaseInfo 可能與其他併發 caller 共用同一份指標\n// (來自 memorycache tier), 請當作 read-only 使用; 不要 mutate\n// Event 欄位或 append/modify Tickets/StopSellingTickets, 否則會\n// 造成 cache 汙染與 data race.` | names forbidden ops + failure mode |
+| ❌ | A pooled `*bytes.Buffer` returned without comment on lifetime | pooled lifetime unstated |
+| ✅ | Doc comment naming the pool (`sync.Pool`), the contract ("caller must not retain the buffer past handler return"), and the failure mode ("subsequent caller reads partially-overwritten bytes") | names pool, retention ban, failure mode |
 
 ---
 
@@ -271,12 +280,12 @@ Required check:
 - Background goroutines spawned with non-request ctx → require a comment naming the lifecycle owner (process root, worker pool, shutdown channel).
 - Comments that say "background ctx because async" without naming a duration bound → finding.
 
-| | Example |
-|---|---|
-| ❌ | `ctx := context.Background()` inside a `memorycache.Fetch` callback with no comment |
-| ✅ | `// Use a fresh background ctx so background refresh goroutines\n// (which outlive the request handler) aren't cancelled.\n// Note: redis ops here have no explicit deadline; they rely on\n// go-redis's default ReadTimeout (3s).\nctx := context.Background()` |
-| ❌ | A worker goroutine launched with `context.Background()` and no shutdown coupling |
-| ✅ | Worker goroutine launched with a ctx derived from `signal.NotifyContext` at process root, with a comment naming the signal-driven shutdown path and the `wg.Wait()` site that bounds process exit |
+| | Example | Why |
+|---|---|---|
+| ❌ | `ctx := context.Background()` inside a `memorycache.Fetch` callback with no comment | no reason request ctx rejected |
+| ✅ | `// Use a fresh background ctx so background refresh goroutines\n// (which outlive the request handler) aren't cancelled.\n// Note: redis ops here have no explicit deadline; they rely on\n// go-redis's default ReadTimeout (3s).\nctx := context.Background()` | names lifetime reason + duration bound |
+| ❌ | A worker goroutine launched with `context.Background()` and no shutdown coupling | no lifecycle owner named |
+| ✅ | Worker goroutine launched with a ctx derived from `signal.NotifyContext` at process root, with a comment naming the signal-driven shutdown path and the `wg.Wait()` site that bounds process exit | names shutdown owner + exit bound |
 
 ---
 
@@ -289,14 +298,14 @@ Required check:
 - Helpers without `t.Cleanup` / `defer` restore → finding.
 - Helpers that return a buffer / recorder driven by the swapped global → require the comment to name the read path.
 
-| | Example |
-|---|---|
-| ❌ | `func captureLog(t *testing.T) *bytes.Buffer { buf := &bytes.Buffer{}; slog.SetDefault(...); return buf }` with no comment |
-| ✅ | `// captureLog swaps slog.Default for a JSON handler writing to a\n// buffer. Returns the buffer; the handler is restored via t.Cleanup.` |
-| ❌ | `func lastLogEntry(t *testing.T, buf *bytes.Buffer) map[string]any { ... }` with no comment on the "last line" assumption |
-| ✅ | `// lastLogEntry decodes the final JSON object in buf. AccessLog emits\n// exactly one line per request via its defer, so this is the one we want.` |
-| ❌ | A helper that sets an env var without restoring |
-| ✅ | A helper that calls `os.Setenv` and registers `t.Cleanup(func() { os.Unsetenv(...) })`, with a comment naming the env key and the restore path |
+| | Example | Why |
+|---|---|---|
+| ❌ | `func captureLog(t *testing.T) *bytes.Buffer { buf := &bytes.Buffer{}; slog.SetDefault(...); return buf }` with no comment | global swap undiscoverable |
+| ✅ | `// captureLog swaps slog.Default for a JSON handler writing to a\n// buffer. Returns the buffer; the handler is restored via t.Cleanup.` | names global swapped + restore path |
+| ❌ | `func lastLogEntry(t *testing.T, buf *bytes.Buffer) map[string]any { ... }` with no comment on the "last line" assumption | hides the one-line assumption |
+| ✅ | `// lastLogEntry decodes the final JSON object in buf. AccessLog emits\n// exactly one line per request via its defer, so this is the one we want.` | justifies the last-line read |
+| ❌ | A helper that sets an env var without restoring | leaks state across tests |
+| ✅ | A helper that calls `os.Setenv` and registers `t.Cleanup(func() { os.Unsetenv(...) })`, with a comment naming the env key and the restore path | names env key + cleanup restore |
 
 ---
 
@@ -309,14 +318,14 @@ Required check:
 - Tests where the assertion is non-obvious without the contract → require a comment stating which contract is being pinned and the consequence of violation.
 - Test names that already encode the invariant (e.g. `TestRecover_SkipsWriteWhenResponseAlreadyStarted`) → satisfy this rule only if the body also carries a one-line "why this matters" comment.
 
-| | Example |
-|---|---|
-| ❌ | `func TestAccessLog_BodyTeeEmptyWhenHandlerDoesNotRead(t *testing.T) { ... }` with no inline comment explaining why this matters |
-| ✅ | `// This is the G3 invariant: handlers that short-circuit before\n// reading body (semaphore reject, guard reject, validation fail)\n// produce a log line with no body.` |
-| ❌ | A test that verifies "status remains 200, body not modified after panic" with no comment on why this is load-bearing |
-| ✅ | `// Pathological but possible: handler wrote a partial response,\n// then panicked. Recover must not slap a 500 JSON on top of it —\n// the status was already set, so the wire is already committed.` |
-| ❌ | `TestAccessLog_RemoteIPAndClientIP` with two indistinguishable IP fields and no comment on which is which |
-| ✅ | `// remote_ip is the literal connecting peer (host portion of\n// RemoteAddr). client_ip is the ClientIP-middleware-resolved value\n// (the real end-user IP after walking the trusted-proxy chain).` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `func TestAccessLog_BodyTeeEmptyWhenHandlerDoesNotRead(t *testing.T) { ... }` with no inline comment explaining why this matters | no contract named |
+| ✅ | `// This is the G3 invariant: handlers that short-circuit before\n// reading body (semaphore reject, guard reject, validation fail)\n// produce a log line with no body.` | labels the G3 invariant |
+| ❌ | A test that verifies "status remains 200, body not modified after panic" with no comment on why this is load-bearing | assertion looks arbitrary |
+| ✅ | `// Pathological but possible: handler wrote a partial response,\n// then panicked. Recover must not slap a 500 JSON on top of it —\n// the status was already set, so the wire is already committed.` | pins the no-double-write contract |
+| ❌ | `TestAccessLog_RemoteIPAndClientIP` with two indistinguishable IP fields and no comment on which is which | two fields ambiguous |
+| ✅ | `// remote_ip is the literal connecting peer (host portion of\n// RemoteAddr). client_ip is the ClientIP-middleware-resolved value\n// (the real end-user IP after walking the trusted-proxy chain).` | disambiguates the two IP fields |
 
 ---
 

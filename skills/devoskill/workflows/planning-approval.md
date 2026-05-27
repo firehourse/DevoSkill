@@ -15,3 +15,12 @@ Use this step when handing planning back to the user.
 - Keep the planning surface clean: default context is active phase plus effective architecture, not history.
 - Do not auto-switch into development because the docs now exist.
 - Do not begin "small safe edits" before approval.
+
+## Red Flags — Stay in Planning
+
+- "The docs exist now, so I can start"
+- "Just a small safe edit before approval"
+- "Approval is implied, the user saw the plan"
+- "I'll begin while planning wraps up"
+
+Each means: do not edit code. Ask explicitly whether implementation should begin.

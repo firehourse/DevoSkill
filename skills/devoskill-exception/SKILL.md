@@ -18,7 +18,7 @@ Do not use it once the next action becomes architecture planning, approved code 
 1. Read only the minimum local files needed to answer the question
 2. Use web lookup only when the request is latest-info, external research, or source verification work
 3. Read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/study-surface.md` only when the user asks for durable repository, subsystem, flow, or architecture learning
-4. If the inquiry is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent
+4. If the inquiry is project/domain-specific, such as a project-specific workflow or ticket handling, load the matching project skill just-in-time based on repo/path context or explicit user intent
 5. If that project skill exposes registry-based discovery, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rule-registry-routing.md` and follow its `phase -> project/domain or knowledge surface -> registry -> current action -> concern` model
 6. Do not load planning/development/review/debug workflows unless the task reroutes into one of those modes
 
@@ -26,5 +26,6 @@ Do not use it once the next action becomes architecture planning, approved code 
 - Stay lightweight: answer the question, clarify the situation, or gather the requested facts.
 - Do not create or rewrite `skilldocs` artifacts unless the task clearly becomes planning/execution work, or Study is explicitly selected for durable inquiry.
 - Prefer direct inspection over loading unrelated skills.
+- When the inquiry depends on project/domain workflow or rule knowledge, treat the matching project skill as the authority instead of guessing from the shared route alone.
 - Inquiry discovers and explains. Study preserves reusable understanding. It does not approve implementation.
 - If the inquiry resolves into a concrete project phase, return to the router mindset and enter the proper mode.

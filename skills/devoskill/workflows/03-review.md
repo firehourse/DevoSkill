@@ -2,42 +2,6 @@
 
 When tasked with verifying implemented code against its original plan, you act as the **Reviewer**. Your sole job is to assert compliance against the effective architecture and the active task phase.
 
-## Process Flowchart
-
-This flowchart is a visual index of the review protocol — the prose below remains the authoritative contract. Each diamond is a decision you must answer; each terminal node (doublecircle) is the only valid exit. Walking off the graph (skipping a check, cherry-picking which checks matter, signing off with discrepancies unresolved) is itself a discipline violation.
-
-Three terminal states exist:
-- **Sign-off** — all 18 checks pass with zero discrepancy.
-- **Itemized feedback** — one or more checks flagged a discrepancy; report findings and hand off to the user without writing code.
-- **Reroute to Planning** — a structural problem (architecture drift, incomplete design, abandoned scope, refactor required) requires Planning to re-approve before implementation can continue.
-
-```dot
-digraph review_compliance {
-    rankdir=TB;
-
-    Step1 [shape=box, label="Step 1: Reconcile Sources\n(diff, task.md, architecture.md,\ndesign.md, test.md, verification.md,\nproject-changelog.md)"];
-    Step2 [shape=box, label="Step 2: Run all 18 compliance checks\n(numbered list below)"];
-    Rationalize [shape=diamond, label="Tempted to skip,\ndowngrade, or rationalize\na check?"];
-    RedFlags [shape=box, style=dashed, label="Read the Red Flags table.\nInvoke discipline.\nRun the check anyway."];
-    AllPass [shape=diamond, label="All 18 checks pass\nwith zero discrepancy?"];
-    FailureKind [shape=diamond, label="Failure type?"];
-
-    Signoff [shape=doublecircle, label="Step 3a: Sign off\nReport: compliance pass"];
-    Feedback [shape=doublecircle, label="Step 3b: Itemized feedback\nHand off; do NOT write code"];
-    Reroute [shape=doublecircle, label="Step 3c: Reroute to Planning\n(structural refactor)"];
-
-    Step1 -> Step2;
-    Step2 -> Rationalize;
-    Rationalize -> RedFlags [label="yes"];
-    Rationalize -> AllPass [label="no, all 18 honestly checked"];
-    RedFlags -> Rationalize;
-    AllPass -> Signoff [label="yes"];
-    AllPass -> FailureKind [label="no"];
-    FailureKind -> Reroute [label="structural\n(checks 1, 7, 10, 12 typically)", style=dashed];
-    FailureKind -> Feedback [label="discrepancy\n(checks 2-6, 8-9, 11, 13-18 typically)", style=dashed];
-}
-```
-
 ## Execution Protocol
 
 ### Step 1: Reconcile Sources
@@ -51,7 +15,7 @@ digraph review_compliance {
 ### Step 2: Compliance Verification
 Perform the checks:
 1. **Scope Bleed**: Confirm the code does not introduce architectural paradigms unsaid in the blueprint. No new DBs, no new untracked frameworks, no crossing of declared human handoff boundaries.
-2. **Surgical Diff Check**: Compare the final diff against the surgical change boundary in `task.md`. Flag any changed file or hunk that cannot trace to the user request, an active task item, `architecture.md`, `design.md`, `test.md`, or cleanup caused by the current change. Flag drive-by formatting, comment rewrites, adjacent cleanup, and deletion of pre-existing dead code unless explicitly approved.
+2. **Surgical Diff Check**: Compare the final diff against the surgical change boundary in `task.md`. Flag any changed file or hunk that cannot trace to the user request, an active task item, `architecture.md`, `design.md`, `test.md`, or cleanup caused by the current change. Apply `protocols/surgical-change-boundary.md` to separate allowed cleanup from scope bleed: do not flag behavior-preserving readability within the touched surface, but treat cleanup reaching untouched files/regions or changing behavior/lifecycle/timing as a finding unless explicitly approved. Stack protocols (e.g. `protocols/rails-maintenance-mode.md` §2) add per-language bounds.
 3. **Planning Surface Size Check**: Confirm the effective DevoSkill markdown files (`architecture.md`, `task.md`, `design.md`, `test.md`, `verification.md`, project-root `project-changelog.md`, any loaded `study/*.md`, and any loaded `notes/*.md`) do not exceed 600 lines. Flag them if they do, since oversized planning docs pollute future context. Do not apply this check to implementation source files.
 4. **Change Rationale Check**: If implementation changed an existing project behavior, boundary, or surprising structure, inspect project-root `project-changelog.md` when present to determine whether there is recorded rationale before flagging the change as unexplained drift.
 5. **Task Writeback Check**: Confirm `task.md` reflects what actually happened in code:
@@ -97,6 +61,7 @@ Do not write or rewrite code directly. Provide the review report and hand off.
 | "The code works, so it passes review" | Working code can still violate architecture.md. Compliance is structural, not just functional. |
 | "The implementation needed more than the architecture said, so I'll assume that's fine" | If the architecture was insufficient, return to planning. Do not normalize drift. |
 | "This deviation is an improvement, I'll let it slide" | Improvements not in task.md are scope bleed. Flag it. |
+| "This changed line is harmless cleanup" | Behavior-preserving readability cleanup within the touched surface is allowed; cleanup that reaches unrelated regions or untouched files, or that changes behavior/lifecycle/timing, is still review feedback. |
 | "I'll fix this small issue myself instead of reporting it" | Reviewers do not write code. Report and hand off. |
 | "The code changed, but the docs are close enough" | Stale planning files are a review failure. Require writeback before sign-off. |
 | "The over-abstraction is cleaner, it's fine" | Cleaner is subjective. If task.md said follow existing patterns, over-abstraction is a violation. |

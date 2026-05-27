@@ -139,7 +139,7 @@ Document each meaningful request/job/stream as a numbered handoff chain:
   - Scope:
   - Compensating test or verification:
 
-## Multi-Runtime Note
+## Multi-Boundary Note
 
 If this feature spans more than one executable boundary or stack, one class diagram is usually not enough.
 

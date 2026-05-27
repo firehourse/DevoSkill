@@ -176,6 +176,7 @@ DevoSkill/
         │   ├── document-persistence.md       # Where durable state should be written
         │   ├── document-reviewability.md     # What makes the planning surface reusable
         │   ├── change-review-packet.md       # Behavior delta, review packet, sync/archive semantics
+        │   ├── surgical-change-boundary.md   # Allowed cleanup vs scope bleed (owner for dev + review)
         │   ├── implementation-readiness-gate.md # Decision-complete gate before implementation
         │   ├── thinking-phase.md             # Thin router for planning pre-write reasoning
         │   ├── thinking-classification.md    # Greenfield / Existing / Hybrid decision
@@ -188,6 +189,8 @@ DevoSkill/
         │   ├── planning-existing.md          # Planning rules for changes to existing systems
         │   ├── planning-hybrid.md            # Planning rules for new capability inside old systems
         │   ├── standard-authoring.md         # How DevoSkill standards and quality rules should be written
+        │   ├── go-implementation-mode.md     # Go: high-performance vs high-modularity implementation mode
+        │   ├── rails-maintenance-mode.md     # Rails: Conservative Maintenance vs Explicit Modernization (+ touched-surface readability)
         │   ├── subagent-orchestration.md     # Rules for the AI to delegate tasks
         │   ├── workspace-setup.md            # Thin router for workspace setup semantics
         │   ├── workspace-mapping.md          # Resolve SkillDocs base path

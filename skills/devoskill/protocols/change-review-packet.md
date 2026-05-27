@@ -52,12 +52,17 @@ Existing document protocols may reference this protocol. They must not copy thes
 - Record project-level rationale in `project-changelog.md` only when the decision matters beyond the feature.
 
 ## Forbidden
-- Do not introduce a mandatory `proposal.md` artifact.
+- Do not introduce a mandatory `proposal.md` artifact. No exceptions: not renamed to `spec.md`/`rfc.md`, not a separate "proposal" phase, not `architecture.md` retitled. Behavior intent lives in the `Behavior Delta` skeleton.
 - Do not replace DevoSkill primary routes with an OpenSpec-style lifecycle.
 - Do not expand router default context for packet semantics.
 - Do not perform broad template/runtime splitting under this protocol.
 - Do not label generated artifacts by audience. Shape each artifact for its job.
 - Do not store executed evidence in `architecture.md`, `design.md`, or `test.md`.
+
+| Excuse | Reality |
+|--------|---------|
+| "A proposal doc reads cleaner than the skeleton" | Cleaner-looking ≠ in-contract; the skeleton is where Review checks intent. |
+| "This rationale belongs next to the delta" | Rationale goes to `project-changelog.md`; the skeleton records behavior, not why. |
 
 ## Examples
 ### Good

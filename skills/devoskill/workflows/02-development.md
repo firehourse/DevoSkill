@@ -30,6 +30,7 @@ When tasked with implementing a feature based on a plan, you are the **Developer
 ### Step 2: Strict Adherence
 Follow the active-phase tasks linearly based on `task.md`.
 - **No Creativity in Architecture**: You are explicitly prohibited from unilaterally changing the architecture, adding third-party dependencies not mentioned in `task.md`, or reshaping the design scope.
+- **Surgical Change Discipline**: Before editing, identify the `task.md` surgical change boundary. Every changed hunk must trace to the user request, an active task item, the behavior/design contract, or allowed cleanup. Apply `protocols/surgical-change-boundary.md` to separate allowed cleanup from scope bleed — behavior-preserving readability within the touched surface is allowed; unrelated-file/region churn and any lifecycle/timing/behavior change are not.
 - **Engineering Standards**: All produced code must conform to `workflows/engineering-standards.md`. Layer hierarchy (Router → Controller → Service → Repository), primary flow clarity, naming clarity, error context, structured logging, no magic values, API response shape, and file discipline are non-negotiable regardless of what task.md says. Language-specific sections and stack-specific quality workflows also apply.
 - **Respect Human Handoffs**: If `task.md` marks a step as a user handoff, stop there. Do not guess through missing schema, missing contracts, sensitive credentials, or production-only operations.
 - **Respect the Approval Gate**: A finished `task.md` is necessary but not sufficient. No code edits begin until the user has explicitly authorized implementation.
@@ -52,6 +53,7 @@ When modifying or refactoring **existing** code (as opposed to greenfield develo
   - Do NOT introduce factory patterns, builder patterns, or indirection layers that did not exist.
   - Do NOT split a simple direct implementation into multi-layer calls "for cleanliness".
   - If the original code uses a flat array of key-value pairs, keep it as a flat array.
+- **Clean Only Your Own Orphans**: Remove imports, variables, functions, files, and generated artifacts only when the current change made them unused or invalid. If you notice unrelated dead code, record it as a note or review finding instead of deleting it.
 
 ### Step 4: Architecture Drift Handling
 If you discover that the effective architecture is missing a required decision:
@@ -75,6 +77,7 @@ Produce functionality matching the requirements.
 - **Verification File Is Mandatory**: Raw checks, command outputs, test execution results, negative-path results, ownership tests, and cleanup notes belong in `verification.md`. Do not compress them into `task.md`.
 - **Planning Reality Reconciliation**: Before marking the phase ready for review, compare `architecture.md`, `task.md`, `design.md`, `test.md`, `verification.md`, and the actual file tree. If any of them disagree about active scope, artifact locations, delivered state, or cleanup status, reconcile them first.
 - **File-Tree Reconciliation Is Concrete Work**: List the declared tree from `design.md`, inspect the actual tree, and record any unexpected artifacts in `verification.md`. Remove or relocate them before declaring the phase complete unless the contract explicitly allows them.
+- **Surgical Diff Reconciliation**: Before marking the phase ready for review, inspect the final diff and confirm every changed hunk maps to the surgical change boundary, applying `protocols/surgical-change-boundary.md`. Revert or hand back anything in its scope-bleed column; touched-surface readability that passes the Decision Test may stay.
 - **No Silent Completion**: If code changed but `task.md` still reads like the work has not started, the phase is not complete.
 - Once all tasks in the active phase are completed, writeback is done, and verification is recorded, trigger the Review phase by stating the phase is completed and awaiting review.
 
@@ -100,6 +103,7 @@ Before marking any implementation phase complete, load `{DEVOSKILL_ROOT}/skills/
 | "This dependency would be perfect, let me add it" | If it's not in task.md, it's forbidden. Period. |
 | "The planning doc is only 580 lines, I can keep stuffing context into it" | 580 lines = split phases or move history out now, before the planning surface becomes unusable. |
 | "Let me refactor this while I'm here" | Out-of-scope refactoring is scope bleed. Only touch what task.md says. |
+| "This nearby comment/formatting/dead code is annoying, I'll clean it up" | If the current change did not create it and the user did not ask for it, report it instead of editing it. |
 | "This code would be cleaner if I extracted it into a function" | Did the original code use that pattern? If not, you are over-abstracting. Stop. |
 | "I'll reorganize the data structures for better readability" | Structural changes require user approval via architecture.md. You cannot decide this. |
 | "I'll do a quick full rewrite, it's faster" | Chunk-based modifications only. Full rewrites cause silent regressions. |

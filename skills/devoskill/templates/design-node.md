@@ -160,9 +160,9 @@ If the feature spans multiple runtimes or apps, split this into subsections per 
   - Scope:
   - Compensating test or verification:
 
-## Multi-Runtime Note
+## Multi-Boundary Note
 
-If this feature spans more than one executable boundary (for example API + worker, gateway + webapp, multiple services), one class diagram is usually not enough.
+If this feature spans more than one executable boundary or stack (for example API + worker, gateway + webapp, multiple services), one class diagram is usually not enough.
 
 Required approach:
 - one topology/system diagram for cross-runtime boundaries

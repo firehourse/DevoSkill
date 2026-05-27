@@ -33,6 +33,15 @@ Subagent obligations:
 
 This is doctrine § 11 ("Router first, details later") applied to the subagent boundary. The same router invariant that governs the primary agent governs every delegated task.
 
+### Red Flags — Emit the Bootstrap Anyway
+
+- "It's just a small read task"
+- "The subagent already has the context"
+- "We're in a hurry, skip the preamble"
+- "It's read-only, the route doesn't matter"
+
+Each still produces a route-less subagent — a silent framework regression. The preamble is cheap; emit it.
+
 ## 1. Interaction Primitives
 
 When invoking a Subagent (e.g., `planner`, `developer`, `reviewer`), you must:

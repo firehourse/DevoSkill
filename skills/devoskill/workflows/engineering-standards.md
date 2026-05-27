@@ -16,16 +16,16 @@ This default does not override a language-specific mode:
 - High-Performance Go may keep direct, explicit flow when extra layers would hide hot-path behavior.
 - Conservative Rails Maintenance preserves the existing Rails boundary in the touched area unless Explicit Modernization is approved.
 
-| | Example |
-|---|---|
-| ❌ | Controller calls `db.query(...)` directly |
-| ✅ | Controller → `taskService.createTask()` → `taskRepo.insert()` |
-| ❌ | Service imports HTTP framework or references `req`/`res` |
-| ✅ | Service accepts plain domain types; controller translates HTTP ↔ domain |
-| ❌ | Business logic in a router callback |
-| ✅ | Router wires path + method to a controller only |
-| ❌ | `userTaskClaimService` imports `voicePostcardQueueWorkerService` directly |
-| ✅ | Queue worker class is not exported from the module index; `ttsService.enqueueVoicePostcard()` is the only public entry point — the worker is an internal implementation detail |
+| | Example | Why |
+|---|---|---|
+| ❌ | Controller calls `db.query(...)` directly | skips service layer, no reuse |
+| ✅ | Controller → `taskService.createTask()` → `taskRepo.insert()` | each layer calls only below |
+| ❌ | Service imports HTTP framework or references `req`/`res` | service coupled to transport |
+| ✅ | Service accepts plain domain types; controller translates HTTP ↔ domain | service stays transport-agnostic |
+| ❌ | Business logic in a router callback | untestable, bypasses layers |
+| ✅ | Router wires path + method to a controller only | thin routing boundary |
+| ❌ | `userTaskClaimService` imports `voicePostcardQueueWorkerService` directly | peer service coupling, hidden seam |
+| ✅ | Queue worker class is not exported from the module index; `ttsService.enqueueVoicePostcard()` is the only public entry point — the worker is an internal implementation detail | single public entry point |
 
 ## 2. Primary Flow Clarity
 
@@ -35,45 +35,45 @@ Extract concrete operations into helpers when doing so removes operational detai
 
 Stable product or protocol details should not distract from the primary path. Cookie names, Redis key prefixes, message types, and similar stable identifiers belong in named constants or focused helpers instead of inline string assembly scattered through the main logic.
 
-| | Example |
-|---|---|
-| ❌ | A handler interleaves cookie names, Redis key formatting, TTL math, request validation, session persistence, and response branching in one long block |
-| ✅ | The handler reads as `validate request -> resolve waiting-room session -> persist admission -> return redirect/allow response`, with cookie/key construction hidden behind named constants or focused helpers |
-| ❌ | `call` delegates to `enabled?`, `cookie_values`, `user_id`, `single_cookie?`, `binding_result`, and `allowed?` where each helper only wraps one obvious line, forcing readers to jump around to reconstruct one request path |
-| ✅ | Simple gate checks stay inline in `call`; extraction is reserved for meaningful boundaries such as raw cookie parsing, Redis binding, response construction, or error normalization |
-| ❌ | A two-line status assignment is extracted into `buildStatusContext()` even though the wrapper adds no domain meaning |
-| ✅ | A helper such as `check_waiting_room_binding` owns Redis/Lua interaction and returns a small decision value, while the caller keeps the business branch visible |
+| | Example | Why |
+|---|---|---|
+| ❌ | A handler interleaves cookie names, Redis key formatting, TTL math, request validation, session persistence, and response branching in one long block | primary flow buried in detail |
+| ✅ | The handler reads as `validate request -> resolve waiting-room session -> persist admission -> return redirect/allow response`, with cookie/key construction hidden behind named constants or focused helpers | flow readable in one pass |
+| ❌ | `call` delegates to `enabled?`, `cookie_values`, `user_id`, `single_cookie?`, `binding_result`, and `allowed?` where each helper only wraps one obvious line, forcing readers to jump around to reconstruct one request path | over-extraction hides the path |
+| ✅ | Simple gate checks stay inline in `call`; extraction is reserved for meaningful boundaries such as raw cookie parsing, Redis binding, response construction, or error normalization | extraction at real boundaries |
+| ❌ | A two-line status assignment is extracted into `buildStatusContext()` even though the wrapper adds no domain meaning | indirection with no payoff |
+| ✅ | A helper such as `check_waiting_room_binding` owns Redis/Lua interaction and returns a small decision value, while the caller keeps the business branch visible | helper owns detail, branch stays visible |
 
 ## 3. Naming Clarity
 
 Names express action and subject without requiring the reader to inspect the body. `data`, `result`, `info`, `handle`, `process` are banned as standalone exported names. Abbreviations only for universally-known terms (`ctx`, `id`, `err`, `i`).
 
-| | Example |
-|---|---|
-| ❌ | `func Process(data interface{})` / `handleMsg(m)` |
-| ✅ | `func ValidateUploadRequest(req UploadRequest)` / `enqueueTranscriptionJob(msg)` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `func Process(data interface{})` / `handleMsg(m)` | name reveals nothing, must read body |
+| ✅ | `func ValidateUploadRequest(req UploadRequest)` / `enqueueTranscriptionJob(msg)` | action and subject explicit |
 
 ## 4. Error Context
 
 Errors from multi-step functions carry the name of the step that failed. Callers distinguish error categories via typed checks, never string matching on `.message`.
 
-| | Example |
-|---|---|
-| ❌ | `return err` inside a function calling five sub-operations |
-| ✅ | `return fmt.Errorf("createSession: persist token: %w", err)` |
-| ❌ | `if (err.message === 'task not found')` in HTTP dispatch |
-| ✅ | Service throws `class TaskError { statusCode; code }`, controller checks `err instanceof TaskError` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `return err` inside a function calling five sub-operations | lost which step failed |
+| ✅ | `return fmt.Errorf("createSession: persist token: %w", err)` | caller sees failing step, wraps cause |
+| ❌ | `if (err.message === 'task not found')` in HTTP dispatch | brittle string matching |
+| ✅ | Service throws `class TaskError { statusCode; code }`, controller checks `err instanceof TaskError` | typed category check |
 
 ## 5. Structured Logging
 
 All log output goes through the project's structured logger. `fmt.Println` and `console.log` are banned in production paths. Every log line during a request or job includes the trace/request/job ID as a named field. Log levels match severity: DEBUG for diagnostic loops, INFO for state transitions, WARN for recoverable anomalies, ERROR for failures.
 
-| | Example |
-|---|---|
-| ❌ | `fmt.Println("got message", id)` / `console.log("task failed")` |
-| ✅ | `log.Info("message received", "id", id, "queue", q)` |
-| ❌ | `log.Error("task failed")` with no task ID or cause |
-| ✅ | `log.Error("task failed", "task_id", taskID, "error", err)` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `fmt.Println("got message", id)` / `console.log("task failed")` | unstructured, unsearchable |
+| ✅ | `log.Info("message received", "id", id, "queue", q)` | structured fields, queryable |
+| ❌ | `log.Error("task failed")` with no task ID or cause | unattributable failure |
+| ✅ | `log.Error("task failed", "task_id", taskID, "error", err)` | traceable to task and cause |
 
 ## 6. No Magic Values
 
@@ -83,25 +83,25 @@ Do not make a value configurable merely for speculative flexibility. Cookie name
 
 A bare literal in business logic is invisible to operators and breaks silently when the value changes.
 
-| | Example |
-|---|---|
-| ❌ | `case "stt":` / `Type: "summary"` inline |
-| ✅ | `case MsgTypeSTT:` / `Type: MsgTypeSummary` — constants at package level |
-| ❌ | SQL embeds `'processing'`, `'pending'` as raw strings |
-| ✅ | SQL parameters use `string(types.TaskStatusProcessing)` — one source of truth |
-| ❌ | `WAITING_ROOM_COOKIE_NAME` is sourced from config even though the cookie name is a stable product contract |
-| ✅ | `WAITING_ROOM_COOKIE_NAME` and `WAITING_ROOM_REDIS_KEY_PREFIX` are named constants; only the Redis endpoint or truly tunable TTL is config |
+| | Example | Why |
+|---|---|---|
+| ❌ | `case "stt":` / `Type: "summary"` inline | typo-prone, no single source |
+| ✅ | `case MsgTypeSTT:` / `Type: MsgTypeSummary` — constants at package level | compiler-checked, one definition |
+| ❌ | SQL embeds `'processing'`, `'pending'` as raw strings | drifts from type definition |
+| ✅ | SQL parameters use `string(types.TaskStatusProcessing)` — one source of truth | enum drives the literal |
+| ❌ | `WAITING_ROOM_COOKIE_NAME` is sourced from config even though the cookie name is a stable product contract | needless config surface |
+| ✅ | `WAITING_ROOM_COOKIE_NAME` and `WAITING_ROOM_REDIS_KEY_PREFIX` are named constants; only the Redis endpoint or truly tunable TTL is config | stable identifiers stay constant |
 
 ## 7. API Response Shape
 
 All endpoints return the same envelope. Error responses never include stack traces, file paths, or raw DB errors. The HTTP status code alone distinguishes caller errors (4xx) from server errors (5xx).
 
-| | Example |
-|---|---|
-| ❌ | Routes return `{ data }`, `{ result }`, or bare arrays inconsistently |
-| ✅ | All routes: `{ data, error: null }` on success; `{ data: null, error: { code, message } }` on failure |
-| ❌ | `res.json({ error: err.stack })` |
-| ✅ | `res.json({ error: { code: "INTERNAL_ERROR", message: "An unexpected error occurred" } })` |
+| | Example | Why |
+|---|---|---|
+| ❌ | Routes return `{ data }`, `{ result }`, or bare arrays inconsistently | clients special-case each route |
+| ✅ | All routes: `{ data, error: null }` on success; `{ data: null, error: { code, message } }` on failure | one envelope to parse |
+| ❌ | `res.json({ error: err.stack })` | leaks internals to clients |
+| ✅ | `res.json({ error: { code: "INTERNAL_ERROR", message: "An unexpected error occurred" } })` | safe, structured error shape |
 
 ## 8. File Discipline
 
@@ -116,11 +116,11 @@ Default thresholds:
 Hard rule:
 - A source file crossing the soft ceiling without an explicit documented exception is a review failure.
 
-| | Example |
-|---|---|
-| ❌ | `handlers.go` at 800 lines mixing auth, upload, and job logic |
-| ✅ | `handlers/auth.go`, `handlers/upload.go`, `handlers/jobs.go` each under 400 lines |
-| ✅ | `parser_tables.cpp` at 820 lines with an explicit documented exception because the table boundary is clearer than artificial splitting |
+| | Example | Why |
+|---|---|---|
+| ❌ | `handlers.go` at 800 lines mixing auth, upload, and job logic | mixed concerns, hard context recovery |
+| ✅ | `handlers/auth.go`, `handlers/upload.go`, `handlers/jobs.go` each under 400 lines | one responsibility per file |
+| ✅ | `parser_tables.cpp` at 820 lines with an explicit documented exception because the table boundary is clearer than artificial splitting | documented exception, strongest boundary |
 
 ## 9. Go Consumer-Defined Contracts
 
@@ -128,12 +128,12 @@ When Go packages use interfaces for dependency inversion, the interface belongs 
 
 Do not create interfaces just to satisfy this rule. First apply `../protocols/go-implementation-mode.md`: High-Performance Go often favors concrete structs and explicit dependency passing, while High-Modularity Go favors narrow consumer-defined contracts at real replacement boundaries.
 
-| | Example |
-|---|---|
-| ❌ | `task.go` contains both `type taskRepository interface` and `type TaskService struct` with all implementation methods |
-| ✅ | `task_contract.go` contains `type taskRepository interface`; `task.go` contains `type TaskService struct` and methods |
-| ❌ | Handler package imports a repository concrete type directly because the interface is buried in the implementation file |
-| ✅ | Handler depends on a handler-local or service-local contract type that is easy to inspect in isolation |
+| | Example | Why |
+|---|---|---|
+| ❌ | `task.go` contains both `type taskRepository interface` and `type TaskService struct` with all implementation methods | contract boundary blurred |
+| ✅ | `task_contract.go` contains `type taskRepository interface`; `task.go` contains `type TaskService struct` and methods | seam separated from impl |
+| ❌ | Handler package imports a repository concrete type directly because the interface is buried in the implementation file | concrete coupling, import-cycle risk |
+| ✅ | Handler depends on a handler-local or service-local contract type that is easy to inspect in isolation | narrow consumer-defined contract |
 
 ---
 
@@ -143,12 +143,12 @@ Do not create interfaces just to satisfy this rule. First apply `../protocols/go
 
 All TypeScript interfaces, types, and enums live in `types/`. No interface or type alias is declared inline inside a service, controller, or repository. String constants that would be `const` in PHP are TypeScript enums in `types/` or `config/`.
 
-| | Example |
-|---|---|
-| ❌ | `interface User { ... }` inside `user.service.ts` |
-| ✅ | `interface User { ... }` in `types/user.interface.ts`, imported everywhere |
-| ❌ | `if (role === 'admin')` — hardcoded string in business logic |
-| ✅ | `if (role === Role.Admin)` where `enum Role` lives in `types/role.enum.ts` |
+| | Example | Why |
+|---|---|---|
+| ❌ | `interface User { ... }` inside `user.service.ts` | type not reusable, scattered |
+| ✅ | `interface User { ... }` in `types/user.interface.ts`, imported everywhere | single shared definition |
+| ❌ | `if (role === 'admin')` — hardcoded string in business logic | typo-prone magic string |
+| ✅ | `if (role === Role.Admin)` where `enum Role` lives in `types/role.enum.ts` | compiler-checked enum |
 
 ### File Naming
 
@@ -193,9 +193,9 @@ src/
 測試（how correctness was verified）
 ```
 
-| | Example |
-|---|---|
-| ❌ | Single commit: 83 files, infrastructure + business logic + tests all bundled |
-| ✅ | Commit 1: testcontainer infra. Commit 2: reward flow. Commit 3: queue skeleton. Commit 4: worker impl + tests. |
-| ❌ | Message: `feat: voice postcard` — no context, no rationale |
-| ✅ | Message with 前情/做法/測試 sections: reader understands what was missing, what changed, how it was proven |
+| | Example | Why |
+|---|---|---|
+| ❌ | Single commit: 83 files, infrastructure + business logic + tests all bundled | unreviewable, mixed intent |
+| ✅ | Commit 1: testcontainer infra. Commit 2: reward flow. Commit 3: queue skeleton. Commit 4: worker impl + tests. | one reviewable unit each |
+| ❌ | Message: `feat: voice postcard` — no context, no rationale | reader cannot reconstruct why |
+| ✅ | Message with 前情/做法/測試 sections: reader understands what was missing, what changed, how it was proven | full why/what/proof |
