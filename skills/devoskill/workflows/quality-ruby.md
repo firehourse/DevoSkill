@@ -68,7 +68,29 @@ Required check:
 
 ---
 
-## 6. Background Jobs
+## 6. Optional Parameter Defaults
+
+**Principle:** When a Rails action reads an optional `ActionController::Parameters` key with a default, make the missing-key behavior explicit. Prefer `fetch(:key, default)` when the intended behavior is "missing means use this default"; use `key?` or `has_key?` only when the code must distinguish missing, submitted `nil`, and submitted empty values.
+
+Required check:
+- Review optional parameter reads for ambiguous `params[:key] || default` fallbacks that collapse valid falsey or empty submitted values into the default.
+- Prefer `fetch(:key, default)` for simple missing-key defaults, and add an explicit `|| normalized_value` only when a submitted `nil` should be normalized.
+- Keep `key?` / `has_key?` when the branch needs to treat missing keys differently from keys submitted with `nil`, `false`, an empty string, or an empty array.
+
+```ruby
+# ❌ BAD: hides whether :capacity was missing or submitted as nil.
+new_capacity = event_attrs[:capacity].to_i
+
+# ✅ GOOD: missing capacity means "unchanged"; submitted values are still processed.
+new_capacity = event_attrs.fetch(:capacity, original_capacity).to_i
+
+# ✅ GOOD: missing tags mean "unchanged"; submitted nil means "clear tags".
+new_tag_ids = event_attrs.fetch(:event_tag_ids, original_tag_ids) || []
+```
+
+---
+
+## 7. Background Jobs
 
 **Principle:** Jobs must be idempotent — running the same job twice must not cause duplicate side effects. Jobs accept only primitive IDs, not full objects. Enqueue from service objects, not from models or callbacks. `after_commit` is the correct hook for enqueuing — `after_save` runs inside the transaction.
 
@@ -81,7 +103,7 @@ Required check:
 
 ---
 
-## 7. Structured Logging
+## 8. Structured Logging
 
 **Principle:** Use `Rails.logger` with tagged or structured output. `puts` and `p` are banned in production paths. Log at the appropriate level — `debug` for diagnostic loops, `info` for state transitions, `warn` for recoverable anomalies, `error` for failures with context.
 
@@ -94,7 +116,7 @@ Required check:
 
 ---
 
-## 8. Error Handling and Rescue
+## 9. Error Handling and Rescue
 
 **Principle:** Preserve the existing Rails error boundary and make it explicit in `design.md`. Rescue the narrowest exception class. Centralized handlers such as `ApplicationController.rescue_from`, Grape/API error helpers, middleware, and job-level rescue blocks must render or report through the repository's established structured path.
 
@@ -113,7 +135,7 @@ Expected domain failures follow the approved Result / Exception Boundary from `d
 
 ---
 
-## 9. Database Migrations
+## 10. Database Migrations
 
 **Principle:** Migrations must be reversible. Every `change` migration that cannot be auto-reversed must implement `up` and `down`. Adding a `NOT NULL` column to a large table requires a default or a multi-step migration (add nullable → backfill → add constraint). Never remove a column that is still referenced in code.
 

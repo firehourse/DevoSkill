@@ -86,9 +86,27 @@ Perform the checks:
 18. **Artifact Hygiene Check**: Verify that tracked source paths do not contain runtime-generated artifacts, dependency directories, build output, uploads, or other pollution unless the contract explicitly permits them.
 
 ### Step 3: Actionable Output
-If discrepancies exist, write an itemized feedback list (e.g., "File api.py handles logic and db requests; this violates `architecture.md` API Gateway model.")
-If a refactor is required, declare the need to shift to the **Planning** workflow for module separation.
-Do not write or rewrite code directly. Provide the review report and hand off.
+
+Write an itemized feedback list. **Every finding carries a severity tag — `MUST` / `SHOULD` / `MAY`** — so the reader can separate a sign-off blocker from an optional cleanup. A finding with no severity tag is not a complete review.
+
+**Principle:** Severity encodes *urgency to act*, not *confidence in the finding*. Tag each finding by the cost of leaving it unfixed, then order the list MUST → SHOULD → MAY.
+
+Required check — assign exactly one tag per finding:
+- **MUST** — blocks sign-off. Correctness or security bug, architecture drift, scope bleed, phase-integrity break, contract or file-size violation, or a `task.md` claim with missing evidence. Any Step 2 check (1–18) that fails is at least MUST unless the docs explicitly downgrade it.
+- **SHOULD** — does not block sign-off but should be fixed this phase. Maintainability cost inside the touched surface: convoluted control flow a simpler shape would replace, unclear naming, missing error context, or unnecessary over-abstraction (Step 8). Name the simpler direction in one line.
+- **MAY** — optional. Preference-level style, or a nice-to-have simplification the reviewer noticed that is not required for this phase. Reviewer may point at a direction; the decision and implementation stay with the developer.
+
+For SHOULD / MAY findings about convoluted code, the reviewer is expected to name a simpler approach in one or two lines. **This is the one place the reviewer suggests a direction** — it still does not write or rewrite the code in place. If a finding needs real module separation, tag it and declare the shift to the **Planning** workflow.
+
+| | Example | Why |
+|---|---|---|
+| ❌ | "`order_service.rb:88` — this could be cleaner." | No severity, no direction. Reader cannot tell if it blocks sign-off or how to act. |
+| ❌ | Reviewer rewrites the convoluted block inline in the report and calls it done. | Reviewers report and hand off; rewriting in place crosses into Development. |
+| ✅ | "MUST — `api.py:40` handles request logic and DB access in one function; violates `architecture.md` API Gateway boundary." | Blocks sign-off; names file/line + doc section. |
+| ✅ | "SHOULD — `checkout.rb:120-155` nests three flag checks to pick a price; a guard-clause lookup over the flags would flatten it. Behavior-preserving, no new abstraction." | Recommended this phase; names the simpler direction; stays a suggestion. |
+| ✅ | "MAY — `report.go:30` concatenates with `+` in a loop; `strings.Builder` reads cleaner. Optional." | Optional; direction named; clearly not blocking. |
+
+Do not write or rewrite code directly. Provide the graded review report and hand off.
 
 ## Red Flags — If You Think This, You Are Violating Protocol
 
@@ -97,7 +115,9 @@ Do not write or rewrite code directly. Provide the review report and hand off.
 | "The code works, so it passes review" | Working code can still violate architecture.md. Compliance is structural, not just functional. |
 | "The implementation needed more than the architecture said, so I'll assume that's fine" | If the architecture was insufficient, return to planning. Do not normalize drift. |
 | "This deviation is an improvement, I'll let it slide" | Improvements not in task.md are scope bleed. Flag it. |
-| "I'll fix this small issue myself instead of reporting it" | Reviewers do not write code. Report and hand off. |
+| "This changed line is harmless cleanup" | Behavior-preserving readability cleanup within the touched surface is allowed; cleanup that reaches unrelated regions or untouched files, or that changes behavior/lifecycle/timing, is still review feedback. |
+| "I'll fix this small issue myself instead of reporting it" | Reviewers do not write code. Report and hand off (naming a simpler direction in 1–2 lines for a SHOULD/MAY finding is allowed; rewriting it in place is not). |
+| "Everything I found is equally important, a flat list is fine" | Tag every finding MUST/SHOULD/MAY. An untagged list hides which one actually blocks sign-off. |
 | "The code changed, but the docs are close enough" | Stale planning files are a review failure. Require writeback before sign-off. |
 | "The over-abstraction is cleaner, it's fine" | Cleaner is subjective. If task.md said follow existing patterns, over-abstraction is a violation. |
 | "Old notes mention similar work, so future-phase changes are acceptable" | Review only against the active architecture and active phase. |

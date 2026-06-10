@@ -71,7 +71,7 @@ Do not read planning or development workflows from review unless the work actual
 Re-read these on every reroute into Review and at any long-session re-anchor. If you remember nothing else from this route, remember these.
 
 1. **`architecture.md` + `task.md` are source of truth, not "working code".** If code disagrees with docs, the code is the deviation; do not normalize drift.
-2. **Return a concrete discrepancy list.** Each finding names the file/line on the code side and the section on the doc side. Vague "looks fine / looks off" is not a review.
+2. **Return a concrete, severity-tagged discrepancy list.** Each finding is tagged MUST/SHOULD/MAY and names the file/line on the code side and the section on the doc side. Vague "looks fine / looks off" is not a review.
 3. **Enumerate the feature folder with `ls`.** Do not assume `task.md` + `architecture.md` are exhaustive — read every `.md` in the folder unless the user explicitly scoped the review.
 4. **Trace every `task.md` claim to evidence.** If a claim cannot be traced to repo state or `verification.md`, the phase is not complete.
 5. **Project skill is the authority for project/domain rules.** Do not invent project rules from DevoSkill shared protocols when a dedicated project skill owns the concern.
