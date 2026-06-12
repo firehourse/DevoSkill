@@ -85,7 +85,9 @@ echo "total: $twin (migrate under legacy-migration.md when reopened)"
 
 # --- 6. CJK prose in DevoSkill skill files (allowlisted exceptions) ------------
 section "CJK content in skill files outside allowlist"
-ALLOW='kktix-development-workflow/(SKILL.md|references/|assets/)|kktix-ruby-rules/protocols/style-baseline.md|registry.md$|quality-comments.md$|engineering-standards.md$'
+ALLOW='registry.md$|quality-comments.md$|engineering-standards.md$'
+# Downstream skill repos may extend the allowlist for verbatim-evidence files:
+[ -n "${DEVOSKILL_LINT_CJK_ALLOW:-}" ] && ALLOW="$ALLOW|$DEVOSKILL_LINT_CJK_ALLOW"
 count=0
 while IFS= read -r f; do
   rel=${f#"$DEVOSKILL_ROOT"/}

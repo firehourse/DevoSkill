@@ -199,3 +199,22 @@ src/
 | ✅ | Commit 1: testcontainer infra. Commit 2: reward flow. Commit 3: queue skeleton. Commit 4: worker impl + tests. |
 | ❌ | Message: `feat: voice postcard` — no context, no rationale |
 | ✅ | Message with 前情/做法/測試 sections: reader understands what was missing, what changed, how it was proven |
+
+## 11. Variable Necessity And Call-Site Choice
+
+**Principle:** A variable earns its place only by carrying domain meaning, being reused, or isolating a boundary that must be named. A call site is judged by the worst case of the API it picks, not by whether it works — sibling APIs that achieve the same result often differ in hidden cost, authorization scope, or semantic precision.
+
+Required check (Development self-check and Review, per changed hunk):
+- Each new variable: used once AND the name adds no information beyond the expression → inline it. The same expression spelled twice without a name → extract and name it so the invariant cannot be spelled differently.
+- A name whose semantics have drifted from domain reality → rename across the full chain (comments and test labels included), not just one site.
+- Each call: does a sibling API avoid a hidden cost (allocation, full-model load, table scan), carry the correct authorization scope (query through the owning scope, never a global finder fed by request params), or state the intent more precisely (existence check instead of count comparison, fail-on-missing fetch instead of silent nil)?
+- Each non-trivial hunk: enumerate the 2-3 realistic alternative implementations and confirm the written one best satisfies the standards. If an enumerated alternative wins, that is a finding — state the alternative and which rule it satisfies better. Development applies this as a self-check while writing; Review applies it independently (decoupled), so the comparison happens twice with different eyes.
+
+| | Example | Why |
+|---|---|---|
+| ❌ | `vals = get_vals(ctx, event)` used once | name adds nothing; one more line of noise |
+| ✅ | `order_valid = validate_order_association(...)` then act on it | the name is the domain predicate; the variable documents the decision |
+| ❌ | Reading one request field through an API that parses the whole body | hidden worst-case cost paid on every request |
+| ✅ | The narrowest accessor that touches only what is needed | cost proportional to intent |
+| ❌ | `GlobalModel.find(params[:id])` in an authorized context | trusts caller input; bypasses the owning scope |
+| ✅ | `current_scope.models.find_by(id: params[:id])` | out-of-scope access becomes unfindable, not just forbidden |
