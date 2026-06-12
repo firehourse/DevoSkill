@@ -26,7 +26,7 @@ That file is untracked (`.gitignore`), the same pattern as `workspace-map.local.
 
 Each entry under `projects[]` describes one project that supports parallel worktrees:
 
-- `project_name` — short slug used to identify the project (`kktix`, `acme-monolith`, etc.).
+- `project_name` — short slug used to identify the project (`acme-monolith`, `my-app`, etc.).
 - `main_checkout` — absolute path to the project's primary checkout (the one that uses the normal branch flow).
 - `worktree_root` — absolute path to the parent directory that holds per-slug worktrees.
 - `scripts.spin_up` / `scripts.tear_down_flag` — the project's idempotent spin/teardown script and the flag that tears down (often `--down`).

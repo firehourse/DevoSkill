@@ -60,7 +60,7 @@ Before any code step that may touch operational boundaries (push, PR creation, e
 
 ### Step D7 — Project/domain skill (conditional)
 
-If the work is project/domain-specific (e.g. KKTIX), load the matching project skill just-in-time based on repo/path context or explicit user intent. If that project skill exposes registry-based discovery, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rule-registry-routing.md`.
+If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent. If that project skill exposes registry-based discovery, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rule-registry-routing.md`.
 
 ### Step D8 — Before declaring the phase complete
 

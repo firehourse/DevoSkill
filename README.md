@@ -26,7 +26,7 @@ When the agent detects what phase of development you are in, it first loads the 
 - **Review (`skills/devoskill-review/SKILL.md`)**
 - **Performance Debugging (`skills/devoskill-performance/SKILL.md`)**
 - **Exception / Inquiry (`skills/devoskill-exception/SKILL.md`)** — lightweight route for file lookup, question answering, latest-info research, and issue clarification before work becomes a project phase
-- **Update (`skills/devoskill-update/SKILL.md`)** — captures user-stated cross-session rules into `custom-*.md` plus `custom-INDEX.md`
+- **Update (`skills/devoskill-update/SKILL.md`)** — internalizes user-stated cross-session rules directly into the owning protocol/workflow/template file
 - **Doctrine / Maintenance (`skills/devoskill-doctrine/SKILL.md`)** — edits to DevoSkill itself: routes, protocols, workflows, templates, doctrine; respects extension rules in `docs/DevoSkill/doctrine.md § 9`
 - **Quality Gate (`skills/devoskill-quality/SKILL.md`)** — invoked as a pre-completion support module at the end of every development phase; contains language-neutral principles and positive/negative examples across resource lifecycle, configuration application, input validation, fault tolerance, operational hygiene, identity, frontend async patterns, and comment & doc style; automatically loads language-specific sub-skills for each language present in the implementation
   - **Ruby/Rails Quality (`skills/devoskill/workflows/quality-ruby.md`)** — Ruby/Rails-specific checks for conservative Rails maintenance, strong parameters, optional parameter defaults, jobs, logging, error handling, and migrations
@@ -170,7 +170,7 @@ DevoSkill/
         ├── config/
         │   └── workspace-map.example.json    # Example schema for local workspace mapping state
         ├── protocols/
-        │   ├── custom-INDEX.md               # Discovery index for shared/company-level custom-*.md rules (trigger -> file§section)
+        │   ├── operational-gates.md          # Workspace-wide approval gates: push, PR creation, external system updates
         │   ├── document-system.md            # Thin router for shared document semantics
         │   ├── document-authority.md         # Which document is allowed to claim what
         │   ├── document-loading-order.md     # Default read surface per phase

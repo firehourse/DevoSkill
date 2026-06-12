@@ -25,7 +25,7 @@ Internalize the rule at its narrowest stable owner (same ladder as `standard-aut
 
 | Rule content | Owner |
 |---|---|
-| Project/domain-specific workflow or code concern | the matching dedicated skill (e.g. `kktix-*-rules`), via its registry |
+| Project/domain-specific workflow or code concern | the matching dedicated skill, via its registry |
 | Shared language-neutral engineering structure | `workflows/engineering-standards.md` |
 | Language-specific quality | the matching `workflows/quality-*.md` |
 | Phase procedure (how review/development/planning behaves) | the matching `workflows/0*-*.md` |

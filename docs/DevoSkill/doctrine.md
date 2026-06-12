@@ -216,6 +216,7 @@ When extending DevoSkill:
 - do not hide new execution requirements in README prose only,
 - do not treat verification evidence as a substitute for a proper design or test contract.
 - do not use Study as a shortcut around Planning approval or Development scoping.
+- write all skill prompt files (SKILL.md, protocols, workflows, templates, registries) in English — English instructions get better model adherence. Exceptions: verbatim evidence quotes, repo-template skeletons preserved as-is, and registry trigger terms (bilingual so non-English user phrasing still matches).
 
 Any change that affects the default document system should update:
 
@@ -256,6 +257,7 @@ A bad change usually has one of these smells:
 - Design and test contracts must exist before serious implementation.
 - Active development documents must be decision-complete; unresolved implementation choices belong to Planning.
 - Verification evidence is not the same thing as test design.
-- Review judges compliance against persisted contracts, not remembered conversation.
+- Review judges compliance against persisted contracts, not remembered conversation — and compliance is the review floor, not the goal; the independent defect hunt comes first.
+- Legacy material is never exempt from current standards; it is migrated under the `legacy-migration.md` contract, not grandfathered.
 
 Future maintainers may extend the system, but should not violate these invariants without intentionally redesigning DevoSkill itself.

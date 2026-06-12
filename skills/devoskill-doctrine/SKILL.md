@@ -47,4 +47,4 @@ Re-read these on every reroute back into Doctrine/Maintenance and at any long-se
 3. **Standards need Principle + Required check + ❌-✅.** Adjective-only standards ("write clean code") are not executable and must not be merged.
 4. **Attention anchoring is the only allowed duplication.** Any other repeated rule across files is drift; consolidate into a protocol.
 5. **Subagents run the router.** Any change that delegates work to a subagent must be checked against `protocols/subagent-orchestration.md § 0`.
-6. **Cherry-pickability matters.** If the change is intended for general DevoSkill main, it must not reference any specific downstream project (KKTIX, customer X, internal repo names). Project bindings live in a separate downstream skill.
+6. **Cherry-pickability matters.** If the change is intended for general DevoSkill main, it must not reference any specific downstream project (customer X, internal repo names). Project bindings live in a separate downstream skill.

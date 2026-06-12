@@ -10,7 +10,7 @@
 - Multiple accidental local-state paths (`config/`, `skills/config/`) appeared alongside the canonical `{DEVOSKILL_ROOT}/skills/devoskill/config/workspace-map.local.json`, which risks repo pollution and inconsistent workspace mapping behavior.
 - The current entry prompt still spends too much early attention on background rules instead of first-step decisions, which weakens routing reliability because models remember the front of the prompt more strongly than the middle.
 - DevoSkill has no mechanism to capture user-stated corrections, style rules, or performance standards back into the skill system. Rules stated in chat vanish after the session and do not evolve the skill over time.
-- DevoSkill now has project-root `project-changelog.md` for non-default rationale, but reusable code-reading and architecture study material is still only an informal convention in downstream projects such as KKTIX.
+- DevoSkill now has project-root `project-changelog.md` for non-default rationale, but reusable code-reading and architecture study material is still only an informal convention in downstream projects.
 
 ## Approved Target Shape
 - Keep the existing router and phase model intact.
