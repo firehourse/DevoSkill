@@ -37,13 +37,13 @@ Just before changing any code, read:
 - Go: `{DEVOSKILL_ROOT}/skills/devoskill/protocols/go-implementation-mode.md`. Default measured hot paths to high-performance mode unless the architecture explicitly chooses modularity.
 - Ruby / Rails: `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rails-maintenance-mode.md` before changing transaction, callback, cache, job, or integration lifecycle behavior.
 
-### Step PF5 — Cross-project / shared rules (conditional)
+### Step PF5 — Operational gates (conditional)
 
-Before any optimization step that may touch cross-project / company-level operational boundaries, consult `{DEVOSKILL_ROOT}/skills/devoskill/protocols/custom-INDEX.md`.
+Before any optimization step that may touch operational boundaries (push, PR creation, external system updates), read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/operational-gates.md`.
 
 ### Step PF6 — Project/domain skill (conditional)
 
-If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent. If that project skill exposes registry-based discovery, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rule-registry-routing.md`.
+If the work is project/domain-specific (e.g. KKTIX), load the matching project skill just-in-time based on repo/path context or explicit user intent. If that project skill exposes registry-based discovery, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rule-registry-routing.md`.
 
 ---
 

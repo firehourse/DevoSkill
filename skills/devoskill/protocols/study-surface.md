@@ -16,6 +16,20 @@ Do not use Study when:
 - implementation is already approved and scoped,
 - the work is measured debugging or performance diagnosis.
 
+## Placement
+
+**Principle:** place durable learning by who will come back to read it, not by where it was produced.
+
+Required check:
+- Understanding bound to one repo's code or workflow (code-reading guides, flow maps, deploy runbooks for that repo) -> that project's `docs/<project>/study/`.
+- Understanding any project might reuse (tool fundamentals, platform curricula, generic technique notes) -> a workspace-level knowledge topic folder `docs/<topic>/` containing topic files plus a `registry.md` index. A knowledge topic folder is not a feature project; it never holds `task.md` or feature folders.
+- Never park durable learning in feature-level `notes/` or as ad-hoc project-root files because no `study/` folder exists yet; create the folder.
+
+| | Example | Why |
+|---|---|---|
+| ❌ | `docs/<project>/notes/source-tour-….md` holding an 887-line reusable source tour | notes/ is excluded from the default load surface, so future sessions never find the learning. |
+| ✅ | `docs/<project>/study/source-tour-….md` plus a `registry.md` row | Future Inquiry/Planning loads it through the documented surface. |
+
 ## Authority
 - Project-root `study/` owns reusable system understanding.
 - Project-root `study/registry.md`, when present, is only a thin selector for study files. It advertises filenames, scopes, trigger terms, and use moments; it does not own the durable understanding itself.
@@ -53,7 +67,7 @@ Every study document should include:
 
 ## Persistence Rules
 - Inquiry may create or update `study/*.md` only when the user requested durable learning or the result is clearly reusable.
-- Inquiry may create or update `study/registry.md` when `study/` grows enough that filenames alone no longer provide cheap discovery.
+- Inquiry may create or update `study/registry.md` when filenames alone no longer provide cheap discovery. `registry.md` is mandatory once `study/` exceeds 10 files; creating the 11th file without one is a protocol violation.
 - Planning may read relevant `study/*.md` selectively, then promote only change-specific facts into feature planning documents.
 - Development, Review, Quality, and Debug/Performance do not load Study by default.
 - Raw search logs do not belong in Study. Preserve effective conclusions and evidence pointers only.

@@ -136,9 +136,10 @@ List any steps the agent must not guess through.
 - [ ] Human executes sensitive environment step
 
 ## 9. Forbidden Shortcuts
-- Do not change files, hunks, comments, formatting, or dead code outside the surgical change boundary unless the user explicitly approves the expansion.
+- Do not change files, hunks, or regions outside the surgical change boundary unless the user explicitly approves the expansion. Behavior-preserving readability improvements within the touched surface are allowed; lifecycle, timing, or behavior changes are not.
 - Do not mark a task "verified" without durable evidence or a directly inspectable surface.
 - Do not treat `task.md` as the storage location for raw verification output; write the proof to `verification.md` and summarize it here.
+- Writeback updates only status fields (`Execution status`, checkboxes, `Status / writeback note`, timestamps). Never overwrite or delete planned content (Scope, Action, Expected output, constraints) — later review must still see what was planned, not only what happened.
 - Do not leave build output, dependency directories, uploads, or generated artifacts in tracked source paths unless the contract explicitly allows them.
 - Do not assume CRUD authorization automatically covers streams, replay, or cancel flows.
 - Do not reconcile planning drift in chat only; update the documents.

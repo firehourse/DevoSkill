@@ -41,9 +41,9 @@ DevoSkill has five primary project-phase modes and one lightweight exception rou
 - `Exception / Inquiry` -> `{DEVOSKILL_ROOT}/skills/devoskill-exception/SKILL.md`
   Use when the immediate next action is lightweight lookup, question answering, latest-info research, source verification, or problem clarification without entering a project phase yet.
 - `Update` -> `{DEVOSKILL_ROOT}/skills/devoskill-update/SKILL.md`
-  Use when the immediate next action is capturing a user-stated correction, style rule, or performance standard into custom skill protocols.
+  Use when the immediate next action is internalizing a user-stated correction, style rule, or performance standard into the owning DevoSkill file.
 - `Doctrine/Maintenance` -> `{DEVOSKILL_ROOT}/skills/devoskill-doctrine/SKILL.md`
-  Use when the immediate next action is editing DevoSkill itself — auditing or refactoring its routes, protocols, workflows, templates, or doctrine. Distinct from `Update`: Update captures a short user-stated rule into `custom-*.md`; Doctrine/Maintenance changes the framework's load order, route taxonomy, standard shape, or anchoring mechanism.
+  Use when the immediate next action is editing DevoSkill itself — auditing or refactoring its routes, protocols, workflows, templates, or doctrine. Distinct from `Update`: Update internalizes a short user-stated rule into an existing owning file; Doctrine/Maintenance changes the framework's load order, route taxonomy, standard shape, or anchoring mechanism.
 
 Reroute rule:
 - when the current route no longer matches the immediate next action, stop and return to this router mindset

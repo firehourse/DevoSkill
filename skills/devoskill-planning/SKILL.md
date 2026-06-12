@@ -59,13 +59,13 @@ Before finalizing `design.md` or `task.md`, read the matching language quality +
 
 Stack-specific quality constraints that affect naming, error boundaries, lifecycle behavior, test seams, or file/module structure must land in `design.md` — not deferred to the post-implementation quality gate.
 
-### Step P8 — Cross-project / shared rules (conditional)
+### Step P8 — Operational gates (conditional)
 
-Before any plan step that may touch cross-project / company-level operational boundaries (push, PR creation, external system updates, shared naming/style), consult `{DEVOSKILL_ROOT}/skills/devoskill/protocols/custom-INDEX.md`. Only open a `custom-*.md` file when the index points to a relevant section.
+Before any plan step that may touch operational boundaries (push, PR creation, external system updates), read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/operational-gates.md`.
 
 ### Step P9 — Project/domain skill (conditional)
 
-If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent. If that project skill exposes registry-based discovery, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rule-registry-routing.md` and follow its `phase -> project/domain or knowledge surface -> registry -> current action -> concern` model.
+If the work is project/domain-specific (e.g. KKTIX), load the matching project skill just-in-time based on repo/path context or explicit user intent. If that project skill exposes registry-based discovery, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rule-registry-routing.md` and follow its `phase -> project/domain or knowledge surface -> registry -> current action -> concern` model.
 
 ---
 
@@ -81,8 +81,8 @@ Do not read development, review, quality, or performance workflows from planning
 - Do not maintain planning state through conversational summaries. Persist effective state in `architecture.md`, `task.md`, `design.md`, `verification.md`, or `notes/` only when needed.
 - Externalize harness behavior into durable natural-language artifacts: inputs, allowed read surface, stop conditions, verification contract, and writeback contract must be explicit in the planning docs rather than implied in chat.
 - Use Study as the reusable reality-acquisition layer when planning needs broad existing-system understanding. Promote only change-specific facts from Study into the active planning surface.
-- Include shared/company-level operational boundaries from custom protocols in planning docs when they affect execution.
-- Load project/domain rules from the matching skill when the plan depends on them; do not treat DevoSkill shared custom files as the default home for project-specific concerns.
+- Include operational boundaries from `operational-gates.md` in planning docs when they affect execution.
+- Load project/domain rules from the matching skill when the plan depends on them.
 
 ---
 

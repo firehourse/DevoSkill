@@ -20,3 +20,6 @@ If that is not possible, planning is incomplete.
 - Human/operator convenience may be local, but it belongs in `notes/local.md` or another explicitly local note. Local notes are non-authoritative and must not be required for review.
 - If a reviewer needs evidence, put the portable proof in `verification.md`; local reproduction hints may link out to local notes only as optional operator context.
 - Generated artifacts should not label their audience. Their section shape should match their job: architecture states boundaries and deltas, task drives execution, test maps proof, and verification stores evidence.
+
+## Diagram Rendering
+- Mermaid flowcharts in Markdown documents use ELK layout: add `%%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%` before the `flowchart` declaration when the renderer supports it. Do not add this to Mermaid diagram types that do not use flowchart layout (e.g. sequence diagrams).

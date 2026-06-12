@@ -15,5 +15,6 @@ The document system is organized like bounded contexts:
 2. Read `document-loading-order.md`
 3. Read `document-persistence.md`
 4. Read `document-reviewability.md`
+5. Read `feature-streams.md` only when one feature spans multiple repos or work streams (for example product fix plus separate integration testing).
 
 Do not treat this file as the full rule body. It is the thin router for document semantics.

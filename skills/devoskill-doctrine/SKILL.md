@@ -1,6 +1,6 @@
 ---
 name: devoskill-doctrine
-description: Doctrine and maintenance module for DevoSkill. Use when the immediate next action is auditing or modifying DevoSkill itself — its routes, protocols, workflows, templates, standards, or doctrine. Distinct from Update, which captures user-stated cross-session rules into custom-*.md.
+description: Doctrine and maintenance module for DevoSkill. Use when the immediate next action is auditing or modifying DevoSkill itself — its routes, protocols, workflows, templates, standards, or doctrine. Distinct from Update, which internalizes a user-stated rule into an existing owning file.
 ---
 
 # DevoSkill Doctrine / Maintenance
@@ -8,7 +8,7 @@ description: Doctrine and maintenance module for DevoSkill. Use when the immedia
 Use this skill when the task is to change DevoSkill itself: refactor a router, add or remove a route, audit cross-skill consistency, revise the doctrine, change the standard-authoring contract, modify document-system protocols, or extend the parallel-worktree / subagent / hook anchoring layers.
 
 Do not use it for:
-- capturing a short user-stated rule into `custom-*.md` (use `Update` instead);
+- internalizing a short user-stated rule into an existing owning file (use `Update` instead);
 - repairing workspace mapping or `.devoskill` symlinks (use `Workspace Setup`);
 - writing or modifying a user project's planning docs (use `Planning`).
 
@@ -47,4 +47,4 @@ Re-read these on every reroute back into Doctrine/Maintenance and at any long-se
 3. **Standards need Principle + Required check + ❌-✅.** Adjective-only standards ("write clean code") are not executable and must not be merged.
 4. **Attention anchoring is the only allowed duplication.** Any other repeated rule across files is drift; consolidate into a protocol.
 5. **Subagents run the router.** Any change that delegates work to a subagent must be checked against `protocols/subagent-orchestration.md § 0`.
-6. **Cherry-pickability matters.** If the change is intended for general DevoSkill main, it must not reference any specific downstream project, customer, or internal repo name. Project bindings live in a separate downstream skill.
+6. **Cherry-pickability matters.** If the change is intended for general DevoSkill main, it must not reference any specific downstream project (KKTIX, customer X, internal repo names). Project bindings live in a separate downstream skill.

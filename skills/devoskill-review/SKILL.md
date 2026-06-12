@@ -43,13 +43,13 @@ Read the matching mode protocol + quality workflow just before reviewing each st
 - Go: `{DEVOSKILL_ROOT}/skills/devoskill/protocols/go-implementation-mode.md` (was the implementation mode chosen correctly?)
 - Ruby / Rails: `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rails-maintenance-mode.md` + `{DEVOSKILL_ROOT}/skills/devoskill/workflows/quality-ruby.md` (did the change preserve existing style, lifecycle, error boundaries, and Ruby/Rails quality rules?)
 
-### Step R6 — Cross-project / shared rules (conditional)
+### Step R6 — Operational gates (conditional)
 
-Before judging any cross-project / company-level operational boundary (push, PR creation, external system updates), consult `{DEVOSKILL_ROOT}/skills/devoskill/protocols/custom-INDEX.md` and open only the section the index points to.
+Before judging any operational boundary (push, PR creation, external system updates), read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/operational-gates.md`.
 
 ### Step R7 — Project/domain skill (conditional)
 
-If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent. If that project skill exposes registry-based discovery, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rule-registry-routing.md`.
+If the work is project/domain-specific (e.g. KKTIX), load the matching project skill just-in-time based on repo/path context or explicit user intent. If that project skill exposes registry-based discovery, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rule-registry-routing.md`.
 
 ---
 
@@ -62,7 +62,7 @@ Do not read planning or development workflows from review unless the work actual
 - Treat `architecture.md` and `task.md` as the source of truth, not "working code".
 - If code and architecture diverge, return a concrete discrepancy list instead of normalizing the drift.
 - Verify the durable evidence surface as part of review. A phase is not complete if claims in `task.md` cannot be traced to repository state or persisted verification artifacts.
-- When a review depends on project/domain rules, treat the project skill as the authority instead of searching DevoSkill shared custom files for that concern.
+- When a review depends on project/domain rules, treat the project skill as the authority for that concern.
 
 ---
 

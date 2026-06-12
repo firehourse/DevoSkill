@@ -54,13 +54,13 @@ Before choosing abstractions or package boundaries:
 
 Load only the active phase in `task.md` and the effective architecture sections it references. Do not load past phases or non-referenced architecture sections.
 
-### Step D6 — Cross-project / shared rules (conditional)
+### Step D6 — Operational gates (conditional)
 
-Before any code step that may touch cross-project / company-level operational boundaries (branch creation, commits, push, PR creation, external system updates), consult `{DEVOSKILL_ROOT}/skills/devoskill/protocols/custom-INDEX.md` and open only the section the index points to.
+Before any code step that may touch operational boundaries (push, PR creation, external system updates), read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/operational-gates.md`.
 
 ### Step D7 — Project/domain skill (conditional)
 
-If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent. If that project skill exposes registry-based discovery, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rule-registry-routing.md`.
+If the work is project/domain-specific (e.g. KKTIX), load the matching project skill just-in-time based on repo/path context or explicit user intent. If that project skill exposes registry-based discovery, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rule-registry-routing.md`.
 
 ### Step D8 — Before declaring the phase complete
 
@@ -79,7 +79,7 @@ Do not read planning, review, or performance workflows from development unless t
 - For existing code, obey maintenance constraints, style conformance rules, and anti-over-abstraction rules.
 - Do not write code without an explicit `task.md`.
 - Treat `design.md`, `task.md`, verification artifacts, and repository state as a single implementation contract. If they diverge, stop and reconcile instead of coding through the inconsistency.
-- Do not use DevoSkill shared custom files as a catch-all source for project/domain concerns; load the relevant project skill when the implementation depends on domain-specific rules.
+- Load the relevant project skill when the implementation depends on domain-specific rules.
 
 ---
 

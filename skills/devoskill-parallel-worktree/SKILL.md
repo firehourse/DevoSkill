@@ -26,7 +26,7 @@ That file is untracked (`.gitignore`), the same pattern as `workspace-map.local.
 
 Each entry under `projects[]` describes one project that supports parallel worktrees:
 
-- `project_name` — short slug used to identify the project (e.g. `acme-monolith`, `frontend-app`).
+- `project_name` — short slug used to identify the project (`kktix`, `acme-monolith`, etc.).
 - `main_checkout` — absolute path to the project's primary checkout (the one that uses the normal branch flow).
 - `worktree_root` — absolute path to the parent directory that holds per-slug worktrees.
 - `scripts.spin_up` / `scripts.tear_down_flag` — the project's idempotent spin/teardown script and the flag that tears down (often `--down`).
@@ -94,7 +94,7 @@ These apply regardless of the specific project's config. Project-specific non-ne
 - **Read-only overlay mounts.** Files in `overlay_files` are bind-mounted from `main_checkout` into the sidecar. Do not edit them inside the worktree expecting the sidecar to pick the change up — edit the main checkout copy, or extend the spin script's overlay list if a new gitignored runtime file is needed.
 - **No direct DB writes for work-unit setup.** If the work unit needs a runtime flag or fixture toggle, prefer the project's HTTP admin flow. If a single-column toggle is the only realistic option, record the toggle plus the reverse statement in the work unit's `verification.md` before running the reproducer.
 - **Narrow sudo scope on hosts helper.** If `host.hosts_helper_path` is used, its sudoers grant must be scoped to that helper only, and the helper must enforce `slug_pattern` before touching `/etc/hosts`. Do not expand the grant; do not invoke other sudo commands from the helper.
-- **DevoSkill workflow gates still apply.** Worktree presence does not bypass Planning / Development routing, project ticket discipline, or the explicit-approval gates for `git push`, PR creation, or any external-state action. See `custom-INDEX.md`.
+- **DevoSkill workflow gates still apply.** Worktree presence does not bypass Planning / Development routing, project ticket discipline, or the explicit-approval gates for `git push`, PR creation, or any external-state action. See `protocols/operational-gates.md`.
 
 ## Multi-agent coordination
 
@@ -109,7 +109,7 @@ When two or more agents (separate sessions, separate subagent invocations) work 
 
 - Project-specific git / branch / commit / PR rules: the project skill listed in this entry's `git_rules_reference`.
 - Operator manual (commands, port table, troubleshooting): the path in this entry's `operator_manual`.
-- DevoSkill cross-cutting operational boundaries (push, PR, external system updates): `{DEVOSKILL_ROOT}/skills/devoskill/protocols/custom-INDEX.md`.
+- DevoSkill cross-cutting operational boundaries (push, PR, external system updates): `{DEVOSKILL_ROOT}/skills/devoskill/protocols/operational-gates.md`.
 
 ---
 
@@ -120,5 +120,5 @@ Re-read these on every reroute that brings parallel-worktree into scope.
 1. **No hardcoded paths.** Everything project-specific comes from `parallel-worktree.local.json`. If the project isn't in the config, ask the user to add it — do not invent paths.
 2. **Validate the slug against `slug_pattern`.** Hostnames, container names, and `/etc/hosts` writes derive from the slug; an unvalidated slug is a command-injection seam.
 3. **Distinct slug per concurrent agent.** Two agents on the same slug share a working tree and will clobber each other's edits.
-4. **Worktree does not bypass DevoSkill gates.** Push, PR, ticket discipline, and explicit-approval rules all still apply per the active route + `custom-INDEX.md`.
+4. **Worktree does not bypass DevoSkill gates.** Push, PR, ticket discipline, and explicit-approval rules all still apply per the active route + `protocols/operational-gates.md`.
 5. **Read-only overlays.** Files in `overlay_files` are edited in `main_checkout`, never inside a worktree.
