@@ -76,11 +76,30 @@ Produce functionality matching the requirements.
 - **Planning Reality Reconciliation**: Before marking the phase ready for review, compare `architecture.md`, `task.md`, `design.md`, `test.md`, `verification.md`, and the actual file tree. If any of them disagree about active scope, artifact locations, delivered state, or cleanup status, reconcile them first.
 - **File-Tree Reconciliation Is Concrete Work**: List the declared tree from `design.md`, inspect the actual tree, and record any unexpected artifacts in `verification.md`. Remove or relocate them before declaring the phase complete unless the contract explicitly allows them.
 - **No Silent Completion**: If code changed but `task.md` still reads like the work has not started, the phase is not complete.
-- Once all tasks in the active phase are completed, writeback is done, and verification is recorded, trigger the Review phase by stating the phase is completed and awaiting review.
+- Once all tasks in the active phase are completed, writeback is done, and verification is recorded, run the Plan Conformance Checkpoint (Step 6), the Quality Gate (Step 7), and Closeout (Step 8). Only after those pass do you declare the phase completed and awaiting review.
 
-### Step 6: Pre-phase Completion Quality Gate
+### Step 6: Plan Conformance Checkpoint (self-check, mid + at completion)
+
+Conformance to the approved plan is the Developer's own responsibility, not the Reviewer's — Review hunts code defects, it does not match the diff against the plan. Run this checkpoint **twice**: periodically mid-implementation (so drift is caught early, not at the end) and once at phase completion before the quality gate. These checks are already enforced piecewise in Steps 2/3/5; this step consolidates them into one named pass so nothing is silently skipped. Findings here are **fixed by you**, not just flagged — you are the author.
+
+Required check:
+- **Scope bleed**: every changed hunk traces to the user request, an active `task.md` item, the behavior/design contract, or allowed cleanup. No unauthorized paradigms, dependencies, or boundary crossings. Apply `protocols/surgical-change-boundary.md`.
+- **Surgical-diff boundary**: inspect the diff against the `task.md` boundary; revert scope-bleed, keep only touched-surface readability that passes the Decision Test.
+- **Style conformance**: if `task.md` said "Follow Existing Patterns", the code matches surrounding conventions; if "Adopt New Patterns", approval is recorded in `architecture.md`.
+- **Architecture alignment**: the resulting code still matches the effective `architecture.md`; if it diverged intentionally, the doc was updated (Step 4 / Step 5).
+- **Phase integrity**: no work pulled in from future phases or abandoned plans.
+- **Design / test / behavior contract completeness**: every documented class/flow, planned test, ownership/authorization boundary, and negative path is implemented and traceable.
+- **Change-packet match** (when the planning surface uses `Behavior Delta` / change-packet terms): implemented behavior matches `Added`/`Changed`, removed behavior is handled, `Non-Goals` were not implemented (`protocols/change-review-packet.md`).
+
+Note: **scope bleed and architecture drift get a decoupled re-verification at closeout** (`workflows/closeout-review.md` C8). A self-check cannot independently catch its own blind spots, so the fresh-eyes pass at handoff is intentional — do not treat this self-check as the last word on those two.
+
+### Step 7: Pre-phase Completion Quality Gate
 
 Before marking any implementation phase complete, load `{DEVOSKILL_ROOT}/skills/devoskill-quality/SKILL.md` and apply every relevant category in `workflows/05-quality.md` against the produced code. Fix any failures before writing back to `task.md`.
+
+### Step 8: Closeout
+
+After the conformance checkpoint and quality gate pass, run `{DEVOSKILL_ROOT}/skills/devoskill/workflows/closeout-review.md` before declaring the phase ready for review or handoff. It verifies doc-sync, evidence surface, task completion, and hygiene, and independently re-verifies scope bleed / architecture drift. Resolve its MUST findings before declaring ready.
 
 ---
 

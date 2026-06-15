@@ -33,6 +33,15 @@ Use this protocol when deciding the default read surface for a phase.
 4. `verification.md`
 5. Relevant `architecture.md` sections only when required by a category
 
+## Closeout
+Invoked by Development (Step 8) at phase completion and optionally by Review (R8) as the final decoupled pass; runnable standalone. Load surface:
+1. Active phase in `task.md` (completion + writeback state)
+2. `verification.md` (evidence surface)
+3. The final `git diff` (scope-bleed / architecture-drift re-verify)
+4. Relevant `architecture.md` sections (drift check)
+5. `project-changelog.md` only when behavior/boundary changed
+6. `protocols/change-review-packet.md` only when the surface uses `Behavior Delta` / closeout terms
+
 Registries are selectors, not default context. Read a registry before detailed files only when the active phase has already justified that surface.
 
 Do not load `study/`, `project-changelog.md`, notes, old phases, abandoned plans, or `change-review-packet.md` unless the current step explicitly needs them.

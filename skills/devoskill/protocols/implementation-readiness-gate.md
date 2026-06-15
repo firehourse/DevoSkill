@@ -37,7 +37,7 @@ If an unresolved item affects the current phase, it is not non-blocking. Return 
 ## Required Behavior
 - In Planning: do not ask for implementation approval until this gate passes. Ask the next high-value question or rewrite the documents so the active phase has one selected path.
 - In Development: apply this gate before any file edit. If it fails, stop, report the blocking ambiguity, and reroute to Planning.
-- In Review: treat implementation that proceeded through a failed gate as a planning compliance failure.
+- In Closeout / conformance re-verify: treat implementation that proceeded through a failed gate as a conformance failure — Development's Plan Conformance Checkpoint (`workflows/02-development.md` Step 6) and `workflows/closeout-review.md` C8 flag it as scope/architecture drift. (Code-quality Review does not match the diff against the plan; it will not catch this.)
 
 ## Fast Inspection Heuristics
 Search the active planning surface for:

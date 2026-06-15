@@ -35,7 +35,7 @@ DevoSkill has five primary project-phase modes and one lightweight exception rou
 - `Development` -> `{DEVOSKILL_ROOT}/skills/devoskill-development/SKILL.md`
   Use when the immediate next action is changing code for approved work.
 - `Review` -> `{DEVOSKILL_ROOT}/skills/devoskill-review/SKILL.md`
-  Use when the immediate next action is validating code against approved documents.
+  Use when the immediate next action is an independent code-quality defect hunt over implemented code. Plan-conformance is Development's own checkpoint; doc-sync/evidence/hygiene closeout is the `closeout-review` module.
 - `Debug/Performance` -> `{DEVOSKILL_ROOT}/skills/devoskill-performance/SKILL.md`
   Use when the immediate next action is diagnosing a measured failure, regression, or bottleneck.
 - `Exception / Inquiry` -> `{DEVOSKILL_ROOT}/skills/devoskill-exception/SKILL.md`

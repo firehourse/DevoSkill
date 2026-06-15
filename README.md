@@ -203,7 +203,8 @@ DevoSkill/
         │   ├── planning-design-contract.md   # Binding design + test traceability rules
         │   ├── planning-approval.md          # Approval gate and clean handoff
         │   ├── 02-development.md             # Active-phase execution rules
-        │   ├── 03-review.md                  # Effective-architecture compliance checks
+        │   ├── 03-review.md                  # Independent code-quality defect hunt
+        │   ├── closeout-review.md            # Doc-sync/evidence/hygiene + scope/arch re-verify at handoff
         │   ├── 04-performance-debugging.md   # Profiling, baselining, and benchmark-driven refactoring
         │   ├── 05-quality.md                 # Thin router for quality categories
         │   ├── quality-resource-safety.md    # Resource/config/input categories

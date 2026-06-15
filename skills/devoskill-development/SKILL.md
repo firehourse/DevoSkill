@@ -62,9 +62,13 @@ Before any code step that may touch operational boundaries (push, PR creation, e
 
 If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent. If that project skill exposes registry-based discovery, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rule-registry-routing.md`.
 
-### Step D8 — Before declaring the phase complete
+### Step D8 — Conformance checkpoint, quality gate, closeout (before declaring complete)
 
-Before writing back to `task.md`, reroute through `{DEVOSKILL_ROOT}/skills/devoskill-quality/SKILL.md`. Quality is a pre-completion gate, not optional.
+Plan conformance is the Developer's own responsibility — Review no longer matches the diff against the plan. Run, in order, before declaring the phase ready for review:
+
+1. **Plan Conformance Checkpoint** (`workflows/02-development.md` Step 6) — also run it periodically mid-implementation, not only at the end, so drift is caught early. Fix scope bleed, surgical-diff, style, architecture alignment, phase integrity, and contract-completeness findings yourself.
+2. **Quality gate** — reroute through `{DEVOSKILL_ROOT}/skills/devoskill-quality/SKILL.md`. Not optional.
+3. **Closeout** — run `{DEVOSKILL_ROOT}/skills/devoskill/workflows/closeout-review.md`: doc-sync, evidence, task completion, hygiene, plus a decoupled re-verify of scope bleed / architecture drift. Resolve its MUST findings before writeback.
 
 ---
 
@@ -91,4 +95,4 @@ Re-read these on every reroute into Development and at any long-session re-ancho
 2. **Active phase is the unit of work.** Follow it linearly; do not jump ahead.
 3. **Design + task + repo state are one contract.** If any two diverge, stop and reconcile in docs before continuing.
 4. **Stop at human handoff boundaries** — missing schema, credentials, production state, sensitive flags. Do not guess through.
-5. **Quality gate is mandatory before writeback.** Do not mark a phase complete until `devoskill-quality` has run and any failures are fixed.
+5. **Conformance → quality → closeout, all mandatory before writeback.** Plan conformance is your self-check (Review won't do it); run it mid-implementation and at completion. Do not mark a phase complete until the conformance checkpoint, `devoskill-quality`, and `closeout-review` have run and their MUST findings are fixed.
