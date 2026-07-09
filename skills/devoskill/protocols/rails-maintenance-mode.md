@@ -15,7 +15,41 @@ Default to **Conservative Rails Maintenance** for existing Rails code:
 
 Use **Explicit Modernization** only when the task or architecture document says to change style, boundaries, framework idioms, or lifecycle behavior.
 
-## 2. Routing Examples
+## 2. Readability Allowance Within The Touched Surface
+
+`protocols/surgical-change-boundary.md` owns the general rule (Decision Test + allowed-vs-scope-bleed examples). This section adds the Rails-specific bounds; it is still Conservative Rails Maintenance, not Explicit Modernization, so it needs no extra task/architecture authorization.
+
+**Principle:** Conservative does not mean copying legacy idiom you are already rewriting — touched-surface readability is welcome. But in Rails the behavior-invariant half of the Decision Test is strict: callback order, `after_commit`/`after_save` timing, transaction and lock boundaries, validation order, cache keys, TTLs, and job-enqueue points are behavior, not style. Leave them exactly as-is unless §1 plus explicit approval says otherwise.
+
+Required check:
+- Apply the `surgical-change-boundary.md` Decision Test first.
+- Treat any move that changes when data becomes visible, or when a job/callback observes state, as lifecycle change rather than cleanup — even if it "reads better".
+- Keep readability edits to naming, guard clauses, and nesting inside the method you are already touching; do not extract a concern/service to look modern (see `standard-authoring.md §4`).
+
+| | Example | Why |
+|---|---|---|
+| ✅ | Early-return guard replacing the nested `if/else` in the action you are already editing. | behavior-preserving readability |
+| ❌ | Reordering `after_commit` enqueues or merging two transactions because it "flows better". | changes lifecycle timing |
+| ❌ | Extracting a concern or service out of a controller you only needed to touch one line in. | scope bleed, new boundary unapproved |
+
+## 3. Refactor Scope Means Re-Evaluate Shape
+
+**Principle:** Conservative Rails Maintenance preserves unapproved behavior and lifecycle semantics; it does not require preserving redundant control-flow shape. When the user or `task.md` explicitly asks for refactoring, simplification, or readability improvement, the agent must challenge unnecessary branches instead of stacking new `if/else` blocks around legacy shape.
+
+Required check:
+- Before adding a defensive branch, classify the existing branch as one of: caller-visible contract, compatibility shim, lifecycle guard, duplicate/redundant branch, or obsolete behavior.
+- Collapse duplicate branches when they return the same caller-visible contract or one guard fully subsumes another.
+- Delete branches made unreachable by the approved change; do not keep them as "safety" unless the compatibility contract is named in `design.md` or `task.md`.
+- If simplifying changes caller-visible behavior, stop and get the behavior change recorded in Planning. If the simplification only changes internal shape while preserving the contract, perform it inside the touched surface.
+
+| | Example | Why |
+|---|---|---|
+| ❌ | Add a new guard inside the old nested `if/else` tree because moving existing branches feels risky, leaving three branches that return the same response. | Caution turned into branch bloat; reviewers must now reason through dead distinction. |
+| ✅ | Convert the touched flow to guard clauses, remove the unreachable `else`, and leave the success path as a straight line while preserving the same responses and side effects. | The visible policy is simpler without changing the contract. |
+| ❌ | Keep both the old config gate and the new runtime gate active, with precedence branches for every combination, when the approved design selected the runtime gate as the owner. | Preserving an obsolete decision source creates contradictory behavior. |
+| ✅ | Route all gating through the selected owner, keep only an explicit compatibility branch for legacy stored values if required, and document that branch's removal condition. | The code has one authority and one bounded compatibility path. |
+
+## 4. Routing Examples
 
 | Code area | Mode | Reason |
 |---|---|---|
@@ -25,7 +59,7 @@ Use **Explicit Modernization** only when the task or architecture document says 
 | Isolated new feature folder with approved design.md structure | Explicit Modernization | The planning contract authorized a new boundary. |
 | Framework upgrade, RuboCop migration, service extraction task | Explicit Modernization | The requested work is style or architecture change. |
 
-## 3. Planning Design Gate
+## 5. Planning Design Gate
 
 When planning Rails work, classify the touched area before writing `design.md` or drawing diagrams:
 
@@ -34,8 +68,9 @@ When planning Rails work, classify the touched area before writing `design.md` o
 - Include error handling as an explicit boundary when the feature depends on `rescue_from`, API error helpers, custom exception classes, result objects, or shared exception reporting.
 - Do not invent class diagrams that imply a new object model for legacy Rails code. A class diagram is useful only when it reflects real implementation boundaries or an explicitly approved modernization.
 - Record whether expected business failures are result-based or exception-based, where system exceptions are rescued, and which layer normalizes the caller-visible response.
+- When refactoring is in scope, record which existing behaviors are must-preserve contracts and which branches, guards, or decision sources are approved simplification candidates.
 
-## 4. Review Gate
+## 6. Review Gate
 
 Wrong mode choice is a quality issue:
 
@@ -43,3 +78,4 @@ Wrong mode choice is a quality issue:
 - Flag changes that alter transaction, locking, callback, cache, job enqueue, or integration timing without explicit approval.
 - Require the task or architecture document to name the modernization boundary before accepting new architectural layers in legacy Rails code.
 - Flag Rails designs or implementations that hide error handling behind generic prose when the touched flow depends on a concrete rescue handler, API error helper, custom exception class, result object, or exception reporting path.
+- Flag patch-stacked `if/else` branches when the active task is a refactor and the branches are duplicate, unreachable, or preserving an obsolete decision source without a documented compatibility contract.

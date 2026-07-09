@@ -52,6 +52,7 @@ When modifying or refactoring **existing** code (as opposed to greenfield develo
   - Do NOT introduce factory patterns, builder patterns, or indirection layers that did not exist.
   - Do NOT split a simple direct implementation into multi-layer calls "for cleanliness".
   - If the original code uses a flat array of key-value pairs, keep it as a flat array.
+- **Refactor Is Not Patch-Stacking**: When the current user request or active `task.md` explicitly includes refactoring, simplification, or readability improvement, do not treat the existing control-flow shape as immutable. Classify existing branches as must-preserve contract, compatibility shim, lifecycle guard, duplicate/redundant branch, or obsolete behavior. Collapse duplicate branches and remove unreachable or superseded code inside the approved touched surface. If the cleanup changes caller-visible behavior, stop and return to Planning so the behavior change is approved instead of hiding it inside implementation.
 
 ### Step 4: Architecture Drift Handling
 If you discover that the effective architecture is missing a required decision:

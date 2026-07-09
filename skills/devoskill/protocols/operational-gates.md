@@ -6,7 +6,8 @@ Use this protocol whenever a step plans, prepares, or executes an action that le
 
 ## Gates
 
-- **`git push` (any branch, any remote)**: agents may create local branches and commits for development work, but must not push unless the user explicitly asks for it in the current turn. Approval in an earlier turn or for a different ref does not carry over.
+- **`git commit`**: agents may create local branches and stage/edit files for development work, but do not commit unless the user explicitly asks for it in the current turn. Implementation approval is not commit approval — finish the work, leave the tree uncommitted, and let the user decide when history gets written.
+- **`git push` (any branch, any remote)**: must not push unless the user explicitly asks for it in the current turn. Approval in an earlier turn or for a different ref does not carry over.
 - **PR creation or update against a shared remote**: same explicit, same-turn approval requirement as push.
 - **External system updates** (ticket systems, deployment triggers, third-party APIs that mutate state): explicit approval in the current turn, named per action.
 - Plans must call out push / PR creation / external updates as human-approved boundaries, especially when credentials or signing are not ready.
