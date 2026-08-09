@@ -32,7 +32,8 @@ When the agent detects what phase of development you are in, it first loads the 
   - **Ruby/Rails Quality (`skills/devoskill/workflows/quality-ruby.md`)** — Ruby/Rails-specific checks for conservative Rails maintenance, strong parameters, optional parameter defaults, jobs, logging, error handling, and migrations
   - **Go Quality (`skills/devoskill-quality-go/SKILL.md`)** — Go-specific checks: signal handling, context propagation, goroutine lifecycle, concurrency patterns, deferred cleanup
   - **Node.js Quality (`skills/devoskill-quality-node/SKILL.md`)** — Node.js/TypeScript-specific checks: async error boundaries, HTTP status codes, RabbitMQ connection management, top-level await sequencing, ioredis patterns
-- **Parallel Worktree (`skills/devoskill-parallel-worktree/SKILL.md`)** — support module for concurrent / multi-agent work on a single project; reads per-machine paths and container settings from `config/parallel-worktree.local.json` so the skill itself is project-agnostic and cherry-pickable
+- **Git Worktree Isolation (`skills/devoskill/protocols/git-worktree-isolation.md`)** — default task-level isolation for every code-changing Git work unit; the primary checkout stays untouched
+- **Parallel Worktree (`skills/devoskill-parallel-worktree/SKILL.md`)** — optional runtime-sidecar support for task worktrees that also need per-branch containers, hostnames, shared-service wiring, or concurrent-session coordination
 - **Workspace Setup (`skills/devoskill-workspace-setup/SKILL.md`)**
 - **Thinking Phase (`skills/devoskill-thinking-phase/SKILL.md`)**
 
@@ -177,6 +178,8 @@ DevoSkill/
         │   ├── document-persistence.md       # Where durable state should be written
         │   ├── document-reviewability.md     # What makes the planning surface reusable
         │   ├── change-review-packet.md       # Behavior delta, review packet, sync/archive semantics
+        │   ├── git-worktree-isolation.md     # Dedicated task worktree before code mutation
+        │   ├── surgical-change-boundary.md   # Allowed cleanup vs scope bleed (owner for dev + review)
         │   ├── implementation-readiness-gate.md # Decision-complete gate before implementation
         │   ├── thinking-phase.md             # Thin router for planning pre-write reasoning
         │   ├── thinking-classification.md    # Greenfield / Existing / Hybrid decision
@@ -238,7 +241,7 @@ DevoSkill/
     ├── devoskill-grill/
     │   └── SKILL.md                          # Planning support module for user grilling
     ├── devoskill-parallel-worktree/
-    │   ├── SKILL.md                          # Concurrent / multi-agent worktree support module
+    │   ├── SKILL.md                          # Runtime sidecars and concurrent-worktree support module
     │   └── config/
     │       ├── parallel-worktree.example.json # Example local-config schema (per-project paths and container settings)
     │       └── parallel-worktree.local.json   # (gitignored) per-machine project entries

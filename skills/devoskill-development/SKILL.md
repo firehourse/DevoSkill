@@ -7,14 +7,15 @@ description: Development module for DevoSkill. Use when implementing approved ta
 
 ## Entry Gate (check before anything else)
 
-**STOP. Do not proceed until both conditions are met:**
+**STOP. Do not proceed until all conditions are met:**
 
 1. A `task.md` exists in the active project skilldocs.
-2. The user has explicitly approved implementation in this session, or `task.md` has an active phase with approved status.
+2. Its active goal matches the user's current request and the selected repository/worktree; an old approved task for another feature does not qualify.
+3. The user has explicitly approved implementation in this session, or `task.md` has an active phase with approved status.
 
-If either condition is not met:
+If any condition is not met:
 - Do not load any workflow or read any file below.
-- Route back to `Planning` and tell the user exactly what is missing (no task.md / no explicit approval).
+- Route back to `Planning` and tell the user exactly what is missing (no task.md / stale or mismatched task / no explicit approval).
 
 ---
 
@@ -39,30 +40,34 @@ If workspace mapping is missing or broken, read `{DEVOSKILL_ROOT}/skills/devoski
 
 Before opening the active phase in `task.md`, read `{DEVOSKILL_ROOT}/skills/devoskill/workflows/02-development.md`. This file owns the development workflow contract.
 
-### Step D3 — Load engineering standards for the touched stack
+### Step D3 — Establish Git isolation
+
+Before the first code or tracked-file mutation in a Git repository, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/git-worktree-isolation.md` and create or resume the task's dedicated worktree. Read-only work does not require one.
+
+### Step D4 — Load engineering standards for the touched stack
 
 Before writing or modifying any code, read `{DEVOSKILL_ROOT}/skills/devoskill/workflows/engineering-standards.md` — focus on the language-specific section matching the implementation stack.
 
-### Step D4 — Load language-specific implementation mode (conditional)
+### Step D5 — Load language-specific implementation mode (conditional)
 
 Before choosing abstractions or package boundaries:
 
 - If Go code is in scope, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/go-implementation-mode.md`.
 - If Ruby/Rails code is in scope, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rails-maintenance-mode.md` before changing style, callbacks, service boundaries, or lifecycle behavior.
 
-### Step D5 — Open the active phase
+### Step D6 — Open the active phase
 
 Load only the active phase in `task.md` and the effective architecture sections it references. Do not load past phases or non-referenced architecture sections.
 
-### Step D6 — Operational gates (conditional)
+### Step D7 — Operational gates (conditional)
 
 Before any code step that may touch operational boundaries (push, PR creation, external system updates), read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/operational-gates.md`.
 
-### Step D7 — Project/domain skill (conditional)
+### Step D8 — Project/domain skill (conditional)
 
 If the work is project/domain-specific, load the matching project skill just-in-time based on repo/path context or explicit user intent. If that project skill exposes registry-based discovery, read `{DEVOSKILL_ROOT}/skills/devoskill/protocols/rule-registry-routing.md`.
 
-### Step D8 — Conformance checkpoint, quality gate, closeout (before declaring complete)
+### Step D9 — Conformance checkpoint, quality gate, closeout (before declaring complete)
 
 Plan conformance is the Developer's own responsibility — Review no longer matches the diff against the plan. Run, in order, before declaring the phase ready for review:
 
@@ -77,12 +82,13 @@ Do not read planning, review, or performance workflows from development unless t
 ## Required Behavior
 
 - Do not begin code changes without explicit implementation approval.
+- Run code-changing work in a dedicated task worktree; keep the primary checkout untouched.
 - Keep checking that the work is still active implementation. If the user asks for planning, drift validation, or performance diagnosis, reroute.
-- Follow the active phase in `task.md` linearly.
+- Treat the active phase as the outcome and boundary contract, not an immutable implementation script. Reconcile it against repository reality at every new session and meaningful discovery.
 - Respect human handoff points and do not guess through missing schema, contracts, or credentials.
-- For existing code, obey maintenance constraints, style conformance rules, and anti-over-abstraction rules.
+- For existing code, preserve external contracts and project conventions while improving the touched design when a focused refactor makes it simpler, more modular, more readable, or easier to test.
 - Do not write code without an explicit `task.md`.
-- Treat `design.md`, `task.md`, verification artifacts, and repository state as a single implementation contract. If they diverge, stop and reconcile instead of coding through the inconsistency.
+- Treat `design.md`, `task.md`, verification artifacts, and repository state as one living contract. Reconcile local implementation-detail drift in the documents and continue; reroute only when the better path changes approved behavior, boundaries, dependencies, risk, or scope.
 - Load the relevant project skill when the implementation depends on domain-specific rules.
 
 ---
@@ -91,8 +97,9 @@ Do not read planning, review, or performance workflows from development unless t
 
 Re-read these on every reroute into Development and at any long-session re-anchor. If you remember nothing else from this route, remember these.
 
-1. **No code without `task.md` + explicit approval.** The Entry Gate at the top of this file is the hard contract.
-2. **Active phase is the unit of work.** Follow it linearly; do not jump ahead.
-3. **Design + task + repo state are one contract.** If any two diverge, stop and reconcile in docs before continuing.
-4. **Stop at human handoff boundaries** — missing schema, credentials, production state, sensitive flags. Do not guess through.
-5. **Conformance → quality → closeout, all mandatory before writeback.** Plan conformance is your self-check (Review won't do it); run it mid-implementation and at completion. Do not mark a phase complete until the conformance checkpoint, `devoskill-quality`, and `closeout-review` have run and their MUST findings are fixed.
+1. **No code without a matching `task.md` + explicit approval.** A stale task for another feature is not authority to continue it.
+2. **Worktree before mutation.** Create or resume the task's dedicated worktree and leave the primary checkout untouched.
+3. **The plan defines intent and constraints, not the prettiest code shape.** Re-anchor to current code, choose the best in-contract implementation, and write it back.
+4. **Design + task + repo state are one living contract.** Reconcile implementation-detail drift; stop only for changes to approved behavior, boundaries, dependencies, risk, or scope.
+5. **Stop at human handoff boundaries** — missing schema, credentials, production state, sensitive flags. Do not guess through.
+6. **Conformance → quality → closeout, all mandatory before writeback.** Plan conformance is your self-check (Review won't do it); run it mid-implementation and at completion. Do not mark a phase complete until the conformance checkpoint, `devoskill-quality`, and `closeout-review` have run and their MUST findings are fixed.

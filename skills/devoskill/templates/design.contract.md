@@ -28,7 +28,7 @@ If a feature spans multiple stacks, runtimes, binaries, apps, or independently d
 
 Required shape:
 - one topology or system diagram showing cross-boundary traffic and ownership
-- one Mermaid `classDiagram` per Go, Node.js/TypeScript, Python, or other method-signature-driven runtime boundary, with concrete classes, structs, interfaces, protocols, functions, and method/function signatures that shape implementation
+- one Mermaid `classDiagram` per Go, Node.js/TypeScript, Python, or other method-signature-driven runtime boundary, showing the concrete public or architecturally significant classes, structs, interfaces, protocols, functions, and signatures that shape the contract; omit incidental private helpers
 - one responsibility subsection per diagram node or Rails boundary
 - flow mapping steps that trace to the concrete method, function, class, interface, protocol, struct, or Rails boundary that owns each step
 
@@ -49,11 +49,11 @@ This section records where the design came from. Keep it short and typed.
 Reviewer-facing source inputs must be portable. Local operator notes are convenience references only and do not approve implementation behavior.
 
 ## Completion Rules
-- A future developer can answer which component handles the next implementation step from `Responsibilities` and `Flow Mapping`.
+- A future developer can answer which component or boundary owns the next implementation step from `Responsibilities` and `Flow Mapping` without being forced into incidental private code shape.
 - A future reviewer can compare code against explicit boundaries without inferring intent from chat.
 - For multi-stack or multi-binary features, a future developer can identify the owning method/function or Rails boundary for each meaningful flow step.
-- The active phase contains one selected implementation path. Alternatives are either rejected, deferred to a named future phase, or marked out of scope.
-- `design.md` does not ask the Developer to choose between active implementation options.
+- The active phase selects consequential behavior, boundaries, dependencies, risk controls, and evidence. Consequential alternatives are rejected, deferred, or out of scope.
+- `design.md` may leave equivalent private implementation choices to Development when they preserve the selected contract.
 - `Test Derivation Hooks` are specific enough to create or validate `test.md`.
 - `Verification Artifacts` are specific enough to create or validate `verification.md`.
 - Every local-only reference is isolated to local notes and excluded from reviewer-facing proof.

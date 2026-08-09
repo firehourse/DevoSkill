@@ -11,7 +11,7 @@ Use this step when generating or rewriting planning artifacts.
 - For changes that add, change, or remove observable behavior or agent workflow behavior, add a skeletal `Behavior Delta` section to feature-level `architecture.md` with `Added`, `Changed`, `Removed`, `Non-Goals`, and `Review Evidence`.
 - Keep `Behavior Delta` skeletal. Do not put execution rules or rationale there.
 - Do not leave active-phase architecture as a menu of possible designs. If an option is selected, write it as the target shape. If an option is rejected or deferred, mark it out of scope or future phase.
-- Open questions that can change active implementation mean planning is incomplete.
+- Open questions that can change behavior, boundaries, dependencies, security/data rules, risk, scope, or verification mean planning is incomplete. Equivalent private implementation choices may remain adaptive.
 
 ## Task
 - Write only the active executable phase.
@@ -19,7 +19,7 @@ Use this step when generating or rewriting planning artifacts.
 - Link task groups to behavior-delta entries when a behavior delta drives implementation.
 - Include verification expectations, stop points, and forbidden shortcuts.
 - Large changes must be phase-based instead of one monolithic checklist.
-- `task.md` must be decision-complete for the active phase. It may contain stop conditions, but it must not contain instructions that require the Developer to choose between implementation alternatives.
+- `task.md` must be decision-complete for consequential active-phase choices. It may contain stop conditions and may delegate equivalent private implementation choices to the Developer's Better Path Check.
 - If `User inputs still required`, `Current blocker`, or `Next user handoff` must be resolved before coding, the phase is still Planning-only.
 
 ## Test

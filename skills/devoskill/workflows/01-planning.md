@@ -16,6 +16,7 @@ When tasked with designing a new feature, analyzing a project, or creating a blu
 
 ## Core Rule
 - Planning is not complete until architecture, task, design, test contract, verification intent, and approval boundary are all explicit enough that a later session does not need to replay the whole chat.
+- Planning specifies outcomes and consequential decisions. It does not prescribe incidental private code structure merely to remove all developer judgment.
 
 ## Red Flags — If You Think This, You Are Violating Protocol
 
@@ -26,6 +27,7 @@ When tasked with designing a new feature, analyzing a project, or creating a blu
 | "I'll record all the discussion so future sessions have context" | Overloaded context is harmful. Preserve only effective decisions in the main files. |
 | "This feels like both greenfield and maintenance, I'll just freestyle it" | Use the proper planning mode. If needed, classify it as Hybrid explicitly. |
 | "I'll write one big plan and let the developer figure out the order" | Large deltas require phased architecture and phased tasks. |
+| "I should preselect every helper, class, and file so Development cannot deviate" | Freeze consequential boundaries, not incidental code shape. Development must still adapt the implementation to current repository reality. |
 | "I'll generate task.md later once I understand the codebase better" | task.md is part of planning, not an afterthought. |
 | "The user will probably want X too, let me include it" | Do not assume. Ask. Scope creep starts with 'probably'. |
 | "The docs are done, I'll just start implementing" | Planning output is not execution approval. Stop and wait for the user's go-ahead. |

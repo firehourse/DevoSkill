@@ -77,6 +77,7 @@ Do not read development, review, quality, or performance workflows from planning
 - Keep checking that the task is still in planning mode. If the user pivots to code changes, review, or runtime debugging, reroute.
 - Use the canonical workspace mapping state and `.devoskill` symlink rules only when actually needed.
 - Keep planning output limited to the effective architecture, explicit contracts, and the active executable phase.
+- Make behavior, boundaries, dependencies, risk, and stop conditions decision-complete. Do not freeze incidental helper names, private class shapes, or line-by-line implementation order when multiple in-contract implementations are valid.
 - Write planning documents in the user's language. Section headings may stay in English as structural anchors, but the body should match the user's language.
 - Do not maintain planning state through conversational summaries. Persist effective state in `architecture.md`, `task.md`, `design.md`, `verification.md`, or `notes/` only when needed.
 - Externalize harness behavior into durable natural-language artifacts: inputs, allowed read surface, stop conditions, verification contract, and writeback contract must be explicit in the planning docs rather than implied in chat.
@@ -92,6 +93,6 @@ Re-read these on every reroute into Planning and at any long-session re-anchor. 
 
 1. **Thinking Phase before architecture writes.** Do not write or rewrite `architecture.md` or `task.md` before the thinking phase closes.
 2. **One question at a time during grilling.** Do not dump a batch of clarifying questions; expose assumptions iteratively.
-3. **Decision-complete output.** The active phase must contain one selected path. Do not hand the developer an "A or B" choice.
+3. **Decision-complete contracts, adaptive implementation.** Select user-visible behavior, boundaries, dependencies, risk controls, and verification. Leave local code shape to Development when the choices remain inside that contract.
 4. **Stop and wait for explicit user approval before implementation.** Planning ends at approval, not at "docs look good".
 5. **600-line cap on DevoSkill markdown artifacts** (`architecture.md`, `task.md`, `design.md`, `test.md`, `verification.md`, `notes/*.md`). Split, demote to `notes/`, or move rationale to `project-changelog.md` before crossing the limit.

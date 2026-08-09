@@ -8,7 +8,7 @@ Use this step when generating `design.md`.
 - Existing-system and hybrid work may adapt to the real codebase, but must still satisfy the required design contract sections.
 - For greenfield work, combine `design.contract.md` with the stack-specific template.
 - Before drawing class diagrams or boundary maps, apply the relevant stack-specific planning skill or protocol so the diagram shape reflects the real implementation style. For Rails, `../protocols/rails-maintenance-mode.md` decides whether the Rails segment uses a prose Boundary Map or a concrete class diagram.
-- When a stack-specific quality workflow exists, pull the implementation-shaping constraints into `design.md` up front. Naming, error boundaries, lifecycle rules, and file/module structure must be explicit during planning rather than discovered only at the final quality gate.
+- When a stack-specific quality workflow exists, pull consequential constraints into `design.md` up front. Public naming, error/lifecycle ownership, and architecturally significant module boundaries must be explicit; incidental helper names and private decomposition stay adaptive.
 - Keep reviewer-facing design content portable across environments. Use repo-relative paths and stable symbols; put machine-local paths or operator conveniences only in feature-level `notes/local.md` or another explicitly local note.
 - For existing/hybrid work, scan only the minimum useful surface:
   - dependency manifest
@@ -19,7 +19,7 @@ Use this step when generating `design.md`.
 
 ## Required Sections
 - source inputs
-- actual file/folder structure
+- relevant existing structure and planned stable boundaries
 - one or more diagrams covering all implementation boundaries
 - `Class Responsibilities`
 - `Flow Mapping`
@@ -44,5 +44,6 @@ Use this step when generating `design.md`.
 - Rails `Boundary Map` prose used to replace required non-Rails runtime Mermaid `classDiagram` sections is insufficient
 - stack-specific quality constraints that materially shape implementation are missing from `design.md`
 - one merged multi-runtime diagram that hides ownership boundaries is insufficient
-- if a future developer cannot answer "which class handles this next?" from `design.md`, planning is incomplete
+- if a future developer cannot answer "which component or boundary owns this next?" from `design.md`, planning is incomplete
+- if `design.md` freezes private helper/class/file details that do not affect the approved contract, it is over-specified and should be reduced
 - if a future developer cannot derive a concrete `test.md` from `design.md`, planning is incomplete

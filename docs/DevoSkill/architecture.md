@@ -11,6 +11,7 @@
 - The current entry prompt still spends too much early attention on background rules instead of first-step decisions, which weakens routing reliability because models remember the front of the prompt more strongly than the middle.
 - DevoSkill has no mechanism to capture user-stated corrections, style rules, or performance standards back into the skill system. Rules stated in chat vanish after the session and do not evolve the skill over time.
 - DevoSkill now has project-root `project-changelog.md` for non-default rationale, but reusable code-reading and architecture study material is still only an informal convention in downstream projects.
+- Development historically treated `task.md` as a linear implementation script and ordinary single-task work used the primary checkout, making new sessions vulnerable to stale plans and checkout collisions.
 
 ## Approved Target Shape
 - Keep the existing router and phase model intact.
@@ -36,6 +37,8 @@
 - Add an `Update` primary route to the router (same tier as Planning / Development / Review). The route is thin; all capture and writeback semantics live in a shared `skill-evolution` protocol, not in the phase skill itself.
 - Add a `skill-evolution.md` shared protocol that defines: what qualifies as a capturable rule (explicit user corrections, cross-session style/performance standards), ownership resolution, and direct internalization into the owning protocol/workflow/template. There is no separate `custom-*.md` capture layer: captured rules land in the file future sessions already load for that concern. Workspace-wide operational approval boundaries live in `protocols/operational-gates.md`.
 - Add a Study Surface protocol that lets Inquiry and Planning create or consume durable code studies without making Study part of the default Development, Review, Quality, or Debug load surface.
+- Make task worktrees the default mutation surface for Git repositories; keep the primary checkout read-only during implementation and reserve the parallel-worktree skill for runtime sidecars/concurrent topology.
+- Treat plans as consequential contracts rather than frozen private code shapes. Development re-anchors to repository reality, runs a Better Path Check, and may improve local structure inside the approved behavior/boundary/dependency/risk envelope.
 
 ## Boundaries
 - Do not redesign the overall DevoSkill workflow model.

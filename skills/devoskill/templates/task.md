@@ -25,6 +25,7 @@ This document contains only the currently active executable work. It is the sour
 - Verification artifact location: `[feature-folder]/verification.md`
 - Test contract location: `[feature-folder]/test.md`
 - Planning reality last reconciled at:
+- Task worktree / branch:
 
 ## 2. Implementation Readiness Gate
 - Active-phase decisions complete: `[Yes | No]`
@@ -39,7 +40,8 @@ If any required readiness value is not `Yes` or `None`, this task is Planning-on
 ## 3. Setup and Preconditions
 - [ ] `.devoskill` symlink verified if required
 - [ ] Required schema / contract / sample payload from user collected
-- [ ] Existing pattern decision confirmed: `[Follow Existing Patterns | Adopt New Patterns]`
+- [ ] Task worktree / branch verified
+- [ ] Consequential contracts fixed; private implementation details may adapt within them
 - [ ] Environment prerequisites confirmed
 - [ ] Implementation Readiness Gate passed
 - [ ] Explicit implementation go-ahead recorded from the user
@@ -136,14 +138,14 @@ List any steps the agent must not guess through.
 - [ ] Human executes sensitive environment step
 
 ## 9. Forbidden Shortcuts
-- Do not change files, hunks, or regions outside the surgical change boundary unless the user explicitly approves the expansion. Behavior-preserving readability improvements within the touched surface are allowed; lifecycle, timing, or behavior changes are not.
+- Do not change files, hunks, or regions outside the surgical change boundary unless the user explicitly approves the expansion. Focused, proportionate improvements to the active flow are allowed when they pass `protocols/surgical-change-boundary.md`; unrelated cleanup and unapproved behavior/lifecycle changes are not.
 - Do not mark a task "verified" without durable evidence or a directly inspectable surface.
 - Do not treat `task.md` as the storage location for raw verification output; write the proof to `verification.md` and summarize it here.
-- Writeback updates only status fields (`Execution status`, checkboxes, `Status / writeback note`, timestamps). Never overwrite or delete planned content (Scope, Action, Expected output, constraints) — later review must still see what was planned, not only what happened.
+- Preserve the approved goal, consequential contracts, and original task intent during writeback. Status fields may change, and Better Path decisions may reconcile private implementation detail when the old and effective shapes remain inspectable; never silently rewrite behavior, boundaries, dependencies, risk, or scope as if they were originally approved.
 - Do not leave build output, dependency directories, uploads, or generated artifacts in tracked source paths unless the contract explicitly allows them.
 - Do not assume CRUD authorization automatically covers streams, replay, or cancel flows.
 - Do not reconcile planning drift in chat only; update the documents.
-- Do not choose between active implementation alternatives during Development; return to Planning if the selected path is missing.
+- Do not choose between consequential active alternatives during Development; return to Planning when behavior, boundaries, dependencies, security/data rules, operational risk, scope, or required evidence is not selected.
 
 ## 10. Out of Scope for This Phase
 - [Item]
